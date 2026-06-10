@@ -1,19 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, Search, ArrowRight, X, ChevronDown } from 'lucide-react';
 import { HERO_SLIDES, HOLDING_NAV } from '../mock/mock';
 
+const SLIDE_COUNT = HERO_SLIDES.length;
+
 export default function LandingPage() {
   const [active, setActive] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const slides = HERO_SLIDES;
 
   useEffect(() => {
-    const t = setInterval(() => setActive((p) => (p + 1) % slides.length), 6000);
+    const t = setInterval(() => setActive((p) => (p + 1) % SLIDE_COUNT), 6000);
     return () => clearInterval(t);
-  }, [slides.length]);
+  }, []);
+
+  const goToSlide = useCallback((i) => setActive(i), []);
+  const openMenu = useCallback(() => setMenuOpen(true), []);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
+  const openSearch = useCallback(() => setSearchOpen(true), []);
+  const closeSearch = useCallback(() => setSearchOpen(false), []);
+  const slides = HERO_SLIDES;
 
   return (
     <main className="relative h-screen w-full overflow-hidden flex flex-col-reverse md:flex-row bg-dark">
@@ -32,13 +40,13 @@ export default function LandingPage() {
 
         {/* Vertical pagination dots */}
         <div className="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-3 z-20">
-          {slides.map((_, i) => (
+          {slides.map((s, i) => (
             <button
-              key={i}
-              onClick={() => setActive(i)}
+              key={`dot-${s.tag}`}
+              onClick={() => goToSlide(i)}
               aria-label={`slide-${i + 1}`}
               className={`rounded-full transition-all duration-500 ${
-                i === active ? 'w-2 h-7 bg-gold' : 'w-2 h-2 bg-white/30 hover:bg-white/60'
+                i === active ? 'w-2 h-7 bg-pomegranate' : 'w-2 h-2 bg-white/30 hover:bg-white/60'
               }`}
             />
           ))}
@@ -46,8 +54,8 @@ export default function LandingPage() {
 
         {/* Mobile horizontal pagination */}
         <div className="flex md:hidden gap-2 absolute top-4 left-1/2 -translate-x-1/2 z-20">
-          {slides.map((_, i) => (
-            <button key={i} onClick={() => setActive(i)} className={`rounded-full transition-all duration-500 ${i === active ? 'w-7 h-1.5 bg-gold' : 'w-1.5 h-1.5 bg-white/30'}`} />
+          {slides.map((s, i) => (
+            <button key={`mdot-${s.tag}`} onClick={() => goToSlide(i)} className={`rounded-full transition-all duration-500 ${i === active ? 'w-7 h-1.5 bg-pomegranate' : 'w-1.5 h-1.5 bg-white/30'}`} />
           ))}
         </div>
 
@@ -142,7 +150,7 @@ export default function LandingPage() {
 
       {/* === HEADER === */}
       <header className="absolute top-0 left-0 w-full z-40 flex items-center justify-between px-6 md:px-10 h-16">
-        <button onClick={() => setMenuOpen(true)} className="text-white/85 hover:text-gold transition-colors" aria-label="menu">
+        <button onClick={openMenu} className="text-white/85 hover:text-gold transition-colors" aria-label="menu">
           <Menu size={22} />
         </button>
 
@@ -155,7 +163,7 @@ export default function LandingPage() {
         </Link>
 
         <div className="flex items-center gap-5">
-          <button onClick={() => setSearchOpen(true)} className="text-white/70 hover:text-gold transition-colors" aria-label="search">
+          <button onClick={openSearch} className="text-white/70 hover:text-gold transition-colors" aria-label="search">
             <Search size={18} />
           </button>
           <Link to="/iletisim" className="hidden sm:inline-block text-white/70 hover:text-white text-[11px] tracking-[0.25em] uppercase border-b border-transparent hover:border-gold transition-all pb-0.5">
@@ -179,7 +187,7 @@ export default function LandingPage() {
                 <span className="font-black text-lg tracking-[0.15em] uppercase">
                   <span className="text-gold">STAR</span><span className="text-white">LİFE</span>
                 </span>
-                <button onClick={() => setMenuOpen(false)} className="text-white/85 hover:text-gold"><X size={22} /></button>
+                <button onClick={closeMenu} className="text-white/85 hover:text-gold"><X size={22} /></button>
               </div>
               <motion.nav
                 initial="hidden"
@@ -193,7 +201,7 @@ export default function LandingPage() {
                     variants={{ hidden: { opacity: 0, x: -30 }, visible: { opacity: 1, x: 0 } }}
                   >
                     {item.href ? (
-                      <Link to={item.href} onClick={() => setMenuOpen(false)} className="text-white text-3xl md:text-5xl font-black hover:text-gold transition-colors block py-2">
+                      <Link to={item.href} onClick={closeMenu} className="text-white text-3xl md:text-5xl font-black hover:text-gold transition-colors block py-2">
                         {item.label}
                       </Link>
                     ) : (
@@ -204,7 +212,7 @@ export default function LandingPage() {
                         </summary>
                         <div className="pl-6 mt-3 space-y-2">
                           {item.children.map((c) => (
-                            <Link key={c.href} to={c.href} onClick={() => setMenuOpen(false)} className="block text-white/60 text-lg hover:text-gold transition-colors py-1">
+                            <Link key={c.href} to={c.href} onClick={closeMenu} className="block text-white/60 text-lg hover:text-gold transition-colors py-1">
                               {c.label}
                             </Link>
                           ))}
@@ -229,13 +237,13 @@ export default function LandingPage() {
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 z-[70] bg-dark/97 backdrop-blur-md flex items-center justify-center px-6"
-            onClick={() => setSearchOpen(false)}
+            onClick={closeSearch}
           >
             <div className="w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center gap-4 border-b border-gold/40 pb-4">
                 <Search size={20} className="text-gold" />
                 <input autoFocus placeholder="Aramak istediğinizi yazın..." className="flex-1 bg-transparent outline-none text-white text-2xl placeholder:text-white/30" />
-                <button onClick={() => setSearchOpen(false)}><X size={20} className="text-white/60 hover:text-white" /></button>
+                <button onClick={closeSearch}><X size={20} className="text-white/60 hover:text-white" /></button>
               </div>
               <p className="mt-6 text-white/40 text-xs tracking-widest uppercase">Popüler: Konut Projeleri · Deprem Dayanıklılığı · Hakkımızda</p>
             </div>

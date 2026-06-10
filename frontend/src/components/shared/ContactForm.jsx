@@ -1,13 +1,16 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send } from 'lucide-react';
 
+function generateCaptcha() {
+  const a = Math.floor(Math.random() * 8) + 1;
+  const b = Math.floor(Math.random() * 8) + 1;
+  return { a, b, answer: a + b };
+}
+
 export default function ContactForm({ darkMode = true }) {
-  const captcha = useMemo(() => {
-    const a = Math.floor(Math.random() * 8) + 1;
-    const b = Math.floor(Math.random() * 8) + 1;
-    return { a, b, answer: a + b };
-  }, []);
+  // Lazy state initializer: captcha is computed once on mount and remains stable.
+  const [captcha] = useState(generateCaptcha);
 
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '', captcha: '' });
   const [status, setStatus] = useState(null);

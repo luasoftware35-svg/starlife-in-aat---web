@@ -19,7 +19,7 @@ export default function SubsiteAbout({ navItems, brandPrefix, brandSuffix, baseP
             <h2 className="text-4xl md:text-5xl font-black mt-3 leading-tight">{title}</h2>
           </motion.div>
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="space-y-5 text-dark/70 leading-relaxed">
-            {paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+          {paragraphs.map((p, i) => <p key={`p-${i}-${p.slice(0, 20)}`}>{p}</p>)}
           </motion.div>
         </div>
       </section>

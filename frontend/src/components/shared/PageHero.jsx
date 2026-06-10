@@ -26,9 +26,9 @@ export default function PageHero({ title, breadcrumb = [], image, height = '45vh
             className="text-white/50 text-xs tracking-widest uppercase mb-3"
           >
             {breadcrumb.map((b, i) => (
-              <span key={i}>
+              <span key={`bc-${b.label}-${i}`}>
                 {b.href ? (
-                  <Link to={b.href} className="hover:text-gold transition-colors">{b.label}</Link>
+                  <Link to={b.href} className="hover:text-pomegranate transition-colors">{b.label}</Link>
                 ) : (
                   <span>{b.label}</span>
                 )}
@@ -49,7 +49,7 @@ export default function PageHero({ title, breadcrumb = [], image, height = '45vh
           initial={{ width: 0 }}
           animate={{ width: 48 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="h-[3px] bg-gold mt-5"
+          className="h-[3px] bg-pomegranate mt-5"
         />
       </div>
     </section>
