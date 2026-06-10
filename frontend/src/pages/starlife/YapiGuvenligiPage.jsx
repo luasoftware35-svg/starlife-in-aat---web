@@ -23,7 +23,7 @@ export default function YapiGuvenligiPage() {
   const Icon = ICONS[item.slug] || Shield;
 
   return (
-    <div className="bg-dark text-white min-h-screen">
+    <div className="bg-white text-dark min-h-screen">
       <SubsiteHeader navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" contactHref="/starlife-insaat/iletisim" />
       <PageHero title={item.title} breadcrumb={[{ label: 'Anasayfa', href: '/starlife-insaat' }, { label: 'Yapı Güvenliği' }, { label: item.title }]} image="https://images.pexels.com/photos/31197870/pexels-photo-31197870.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600" />
 

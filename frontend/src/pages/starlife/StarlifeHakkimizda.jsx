@@ -9,7 +9,7 @@ import { fadeUp } from '../../lib/animations';
 
 export default function StarlifeHakkimizda() {
   return (
-    <div className="bg-dark text-white min-h-screen">
+    <div className="bg-white text-dark min-h-screen">
       <SubsiteHeader navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" contactHref="/starlife-insaat/iletisim" />
       <PageHero title="Hakkımızda" breadcrumb={[{ label: 'Anasayfa', href: '/starlife-insaat' }, { label: 'Kurumsal' }, { label: 'Hakkımızda' }]} image="https://images.pexels.com/photos/5403840/pexels-photo-5403840.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600" />
 
@@ -41,12 +41,12 @@ export default function StarlifeHakkimizda() {
         </div>
       </section>
 
-      <section className="bg-navy py-20 px-6 md:px-16">
+      <section className="bg-pomegranate py-20 px-6 md:px-16">
         <div className="max-w-[1200px] mx-auto grid md:grid-cols-3 gap-8 text-center">
           {[{ v: '2009', l: 'Kuruluş' }, { v: '50+', l: 'Tamamlanan Proje' }, { v: '%100', l: 'Müşteri Memnuniyeti' }].map((s) => (
             <div key={s.l}>
-              <div className="text-gold font-black text-4xl md:text-5xl">{s.v}</div>
-              <p className="text-white/60 text-sm tracking-widest uppercase mt-2">{s.l}</p>
+              <div className="text-white font-black text-4xl md:text-5xl">{s.v}</div>
+              <p className="text-white/85 text-sm tracking-widest uppercase mt-2">{s.l}</p>
             </div>
           ))}
         </div>

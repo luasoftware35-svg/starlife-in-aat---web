@@ -8,7 +8,7 @@ import { fadeUp } from '../lib/animations';
 
 export default function SubsiteAbout({ navItems, brandPrefix, brandSuffix, basePath, label, title, paragraphs, image, vizyon, misyon }) {
   return (
-    <div className="bg-dark text-white min-h-screen">
+    <div className="bg-white text-dark min-h-screen">
       <SubsiteHeader navItems={navItems} brandPrefix={brandPrefix} brandSuffix={brandSuffix} contactHref={`${basePath}/iletisim`} />
       <PageHero title="Hakkımızda" breadcrumb={[{ label: 'Anasayfa', href: basePath }, { label: 'Kurumsal' }, { label }]} image={image} />
 

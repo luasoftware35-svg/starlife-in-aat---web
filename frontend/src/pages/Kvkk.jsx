@@ -5,7 +5,7 @@ import PageHero from '../components/shared/PageHero';
 
 export default function Kvkk() {
   return (
-    <div className="bg-dark text-white min-h-screen">
+    <div className="bg-white text-dark min-h-screen">
       <HoldingHeader />
       <PageHero title="KVKK Metni" breadcrumb={[{ label: 'Ana Sayfa', href: '/' }, { label: 'Politika' }, { label: 'KVKK Metni' }]} />
 

@@ -11,7 +11,7 @@ import { fadeUp, staggerContainer } from '../../lib/animations';
 
 export default function StarlifeHome() {
   return (
-    <div className="bg-dark text-white">
+    <div className="bg-white text-dark">
       <SubsiteHeader navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" contactHref="/starlife-insaat/iletisim" />
 
       {/* HERO */}
@@ -23,7 +23,7 @@ export default function StarlifeHome() {
         </div>
 
         <div className="absolute left-6 top-1/2 -translate-y-1/2 hidden md:block">
-          <SocialLinks vertical />
+          <SocialLinks vertical theme="dark" />
         </div>
 
         <div className="relative z-10 h-full max-w-[1400px] mx-auto px-6 md:px-20 flex flex-col justify-end pb-24">
@@ -155,22 +155,23 @@ export default function StarlifeHome() {
       </section>
 
       {/* CTA Banner */}
-      <section className="bg-navy py-20 px-6 md:px-16 text-center">
-        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="max-w-3xl mx-auto">
+      <section className="bg-pomegranate py-20 px-6 md:px-16 text-center relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 60%)' }} />
+        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="max-w-3xl mx-auto relative z-10">
           <h2 className="text-white text-3xl md:text-5xl font-black leading-tight">Mutlu, huzurlu ve güvenli bir yaşam için</h2>
-          <Link to="/starlife-insaat/iletisim" className="inline-flex items-center gap-3 bg-gold text-black font-bold px-10 py-5 mt-10 tracking-widest text-sm uppercase hover:bg-white transition-colors duration-300">
+          <Link to="/starlife-insaat/iletisim" className="inline-flex items-center gap-3 bg-white text-pomegranate font-bold px-10 py-5 mt-10 tracking-widest text-sm uppercase hover:bg-dark hover:text-white transition-colors duration-300">
             Bize Ulaşın <ArrowRight size={16} />
           </Link>
         </motion.div>
       </section>
 
       {/* Contact Form */}
-      <section className="bg-dark py-24 px-6 md:px-16">
+      <section className="bg-cream py-24 px-6 md:px-16">
         <div className="max-w-[900px] mx-auto">
-          <span className="text-gold text-xs tracking-[0.4em] uppercase">BİZE ULAŞIN</span>
-          <h3 className="text-white font-black text-3xl md:text-4xl mt-3">En kısa sürede sizinle irtibata geçeceğiz</h3>
+          <span className="text-pomegranate text-xs tracking-[0.4em] uppercase font-semibold">BİZE ULAŞIN</span>
+          <h3 className="text-dark font-black text-3xl md:text-4xl mt-3">En kısa sürede sizinle irtibata geçeceğiz</h3>
           <div className="mt-10">
-            <ContactForm darkMode />
+            <ContactForm darkMode={false} />
           </div>
         </div>
       </section>

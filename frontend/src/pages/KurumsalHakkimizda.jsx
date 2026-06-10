@@ -10,7 +10,7 @@ import { COMPANIES } from '../mock/mock';
 
 export default function KurumsalHakkimizda() {
   return (
-    <div className="bg-dark text-white min-h-screen">
+    <div className="bg-white text-dark min-h-screen">
       <HoldingHeader />
       <PageHero title="Hakkımızda" breadcrumb={[{ label: 'Ana Sayfa', href: '/' }, { label: 'Kurumsal' }, { label: 'Hakkımızda' }]} image="https://images.pexels.com/photos/34700467/pexels-photo-34700467.png?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600" />
 
@@ -45,7 +45,7 @@ export default function KurumsalHakkimizda() {
         </motion.div>
       </section>
 
-      <section className="bg-navy py-20 px-6 md:px-16">
+      <section className="bg-pomegranate py-20 px-6 md:px-16">
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }} className="max-w-[1200px] mx-auto grid md:grid-cols-3 gap-8 text-center">
           {[
             { value: '2009', label: 'Kuruluş' },
@@ -53,8 +53,8 @@ export default function KurumsalHakkimizda() {
             { value: '3', label: 'Grup Şirketi' },
           ].map((s) => (
             <motion.div key={s.label} variants={fadeUp}>
-              <div className="text-gold font-black text-4xl md:text-5xl">{s.value}</div>
-              <p className="text-white/60 text-sm tracking-widest uppercase mt-2">{s.label}</p>
+              <div className="text-white font-black text-4xl md:text-5xl">{s.value}</div>
+              <p className="text-white/85 text-sm tracking-widest uppercase mt-2">{s.label}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -63,8 +63,8 @@ export default function KurumsalHakkimizda() {
       <section className="bg-dark py-24 px-6 md:px-16">
         <div className="max-w-[1400px] mx-auto">
           <div className="text-center mb-14">
-            <span className="text-gold text-xs tracking-[0.4em] uppercase">Grup Şirketlerimiz</span>
-            <h2 className="font-black text-3xl md:text-5xl mt-3">3 Şirket, Tek Vizyon</h2>
+            <span className="text-pomegranate-light text-xs tracking-[0.4em] uppercase font-semibold">Grup Şirketlerimiz</span>
+            <h2 className="font-black text-3xl md:text-5xl mt-3 text-white">3 Şirket, Tek Vizyon</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {COMPANIES.map((c) => (
@@ -74,7 +74,7 @@ export default function KurumsalHakkimizda() {
                 <div className="absolute bottom-0 left-0 right-0 p-7">
                   <h3 className="text-white font-black text-2xl">{c.name}</h3>
                   <p className="text-white/60 text-sm mt-1">{c.desc}</p>
-                  <span className="inline-flex items-center gap-2 text-gold text-xs tracking-[0.3em] uppercase mt-4 group-hover:gap-3 transition-all">İncele <ArrowRight size={14} /></span>
+                  <span className="inline-flex items-center gap-2 text-pomegranate-light text-xs tracking-[0.3em] uppercase mt-4 group-hover:gap-3 transition-all font-semibold">İncele <ArrowRight size={14} /></span>
                 </div>
               </Link>
             ))}

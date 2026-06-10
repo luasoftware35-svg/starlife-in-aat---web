@@ -18,7 +18,7 @@ export default function StarlifeTaahhutIsleri() {
   ];
 
   return (
-    <div className="bg-dark text-white min-h-screen">
+    <div className="bg-white text-dark min-h-screen">
       <SubsiteHeader navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" contactHref="/starlife-insaat/iletisim" />
       <PageHero title="Taahhüt İşleri" breadcrumb={[{ label: 'Anasayfa', href: '/starlife-insaat' }, { label: 'Taahhüt İşleri' }]} image="https://images.pexels.com/photos/3818947/pexels-photo-3818947.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600" />
 

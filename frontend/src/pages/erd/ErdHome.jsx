@@ -10,7 +10,7 @@ import { fadeUp, staggerContainer } from '../../lib/animations';
 
 export default function ErdHome() {
   return (
-    <div className="bg-dark text-white">
+    <div className="bg-white text-dark">
       <SubsiteHeader navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" contactHref="/erd-insaat/iletisim" />
 
       <section className="relative h-screen overflow-hidden">
@@ -66,11 +66,11 @@ export default function ErdHome() {
         </div>
       </section>
 
-      <section className="bg-dark py-24 px-6 md:px-16">
+      <section className="bg-cream py-24 px-6 md:px-16">
         <div className="max-w-[900px] mx-auto">
-          <span className="text-gold text-xs tracking-[0.4em] uppercase">BİZE ULAŞIN</span>
-          <h3 className="text-white font-black text-3xl md:text-4xl mt-3">Projelerimiz hakkında bilgi alın</h3>
-          <div className="mt-10"><ContactForm darkMode /></div>
+          <span className="text-pomegranate text-xs tracking-[0.4em] uppercase font-semibold">BİZE ULAŞIN</span>
+          <h3 className="text-dark font-black text-3xl md:text-4xl mt-3">Projelerimiz hakkında bilgi alın</h3>
+          <div className="mt-10"><ContactForm darkMode={false} /></div>
         </div>
       </section>
 

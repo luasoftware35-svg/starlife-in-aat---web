@@ -10,25 +10,25 @@ import { fadeUp } from '../lib/animations';
 
 export default function Iletisim() {
   return (
-    <div className="bg-dark text-white min-h-screen">
+    <div className="bg-white text-dark min-h-screen">
       <HoldingHeader />
       <PageHero title="Bize Ulaşın" breadcrumb={[{ label: 'Ana Sayfa', href: '/' }, { label: 'İletişim' }]} image="https://images.pexels.com/photos/3818947/pexels-photo-3818947.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600" />
 
       <section className="grid lg:grid-cols-2 min-h-[600px]">
-        <div className="bg-dark p-10 md:p-16">
+        <div className="bg-cream p-10 md:p-16">
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <span className="text-gold text-xs tracking-[0.4em] uppercase">BİZE ULAŞIN</span>
-            <h2 className="text-white text-3xl md:text-4xl font-black mt-3">En kısa sürede sizinle irtibata geçeceğiz</h2>
-            <p className="text-white/60 text-sm mt-3">Sorularınız, talepleriniz veya proje fikirleriniz için formu doldurun.</p>
+            <span className="text-pomegranate text-xs tracking-[0.4em] uppercase font-semibold">BİZE ULAŞIN</span>
+            <h2 className="text-dark text-3xl md:text-4xl font-black mt-3">En kısa sürede sizinle irtibata geçeceğiz</h2>
+            <p className="text-dark/60 text-sm mt-3">Sorularınız, talepleriniz veya proje fikirleriniz için formu doldurun.</p>
             <div className="mt-10">
-              <ContactForm darkMode />
+              <ContactForm darkMode={false} />
             </div>
           </motion.div>
         </div>
 
-        <div className="bg-white text-dark p-10 md:p-16">
+        <div className="bg-white text-dark p-10 md:p-16 border-l border-black/5">
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <span className="text-gold text-xs tracking-[0.4em] uppercase">İletişim Bilgileri</span>
+            <span className="text-pomegranate text-xs tracking-[0.4em] uppercase font-semibold">İletişim Bilgileri</span>
             <h3 className="font-black text-2xl md:text-3xl mt-3">Sizinle tanışmak isteriz</h3>
 
             <div className="mt-10 space-y-8">
@@ -38,13 +38,13 @@ export default function Iletisim() {
                 { icon: Phone, label: 'TEL', value: COMPANY.phone, href: `tel:${COMPANY.phone.replace(/\s/g, '')}` },
               ].map((i) => (
                 <div key={i.label} className="flex gap-5 items-start">
-                  <div className="w-12 h-12 bg-gold/10 flex items-center justify-center text-gold shrink-0">
+                  <div className="w-12 h-12 bg-pomegranate/10 flex items-center justify-center text-pomegranate shrink-0">
                     <i.icon size={20} />
                   </div>
                   <div>
-                    <p className="text-gold text-[10px] tracking-[0.3em] uppercase">{i.label}</p>
+                    <p className="text-pomegranate text-[10px] tracking-[0.3em] uppercase font-semibold">{i.label}</p>
                     {i.href ? (
-                      <a href={i.href} className="text-dark text-base mt-1 block hover:text-gold transition-colors">{i.value}</a>
+                      <a href={i.href} className="text-dark text-base mt-1 block hover:text-pomegranate transition-colors">{i.value}</a>
                     ) : (
                       <p className="text-dark text-base mt-1">{i.value}</p>
                     )}

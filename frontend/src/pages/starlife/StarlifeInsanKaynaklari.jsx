@@ -11,7 +11,7 @@ export default function StarlifeInsanKaynaklari() {
   const [submitted, setSubmitted] = useState(false);
 
   return (
-    <div className="bg-dark text-white min-h-screen">
+    <div className="bg-white text-dark min-h-screen">
       <SubsiteHeader navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" contactHref="/starlife-insaat/iletisim" />
       <PageHero title="İnsan Kaynakları" breadcrumb={[{ label: 'Anasayfa', href: '/starlife-insaat' }, { label: 'Kurumsal' }, { label: 'İ.K.' }]} image="https://images.pexels.com/photos/6082416/pexels-photo-6082416.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600" />
 

@@ -10,7 +10,7 @@ import { fadeUp, staggerContainer } from '../lib/animations';
 
 export default function Blog() {
   return (
-    <div className="bg-dark text-white min-h-screen">
+    <div className="bg-white text-dark min-h-screen">
       <HoldingHeader />
       <PageHero title="Bizden Haberler" breadcrumb={[{ label: 'Ana Sayfa', href: '/' }, { label: 'Bizden Haberler' }]} image="https://images.pexels.com/photos/4458205/pexels-photo-4458205.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600" />
 

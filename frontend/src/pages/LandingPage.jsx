@@ -21,13 +21,13 @@ export default function LandingPage() {
       <aside className="relative w-full md:w-[38%] h-[55vh] md:h-full flex flex-col justify-between
                         bg-gradient-to-b from-[#1a1a1a] via-[#111111] to-[#080808] z-10
                         overflow-hidden shrink-0">
-        {/* Light leak verticals */}
+        {/* Light leak verticals - pomegranate tones */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-[15%] w-[1px] h-full bg-gradient-to-b from-transparent via-orange-900/25 to-transparent" />
-          <div className="absolute top-0 left-[40%] w-[1px] h-full bg-gradient-to-b from-transparent via-red-900/15 to-transparent" />
-          <div className="absolute top-0 left-[70%] w-[1px] h-full bg-gradient-to-b from-transparent via-amber-900/10 to-transparent" />
-          {/* subtle grain */}
-          <div className="absolute inset-0 opacity-[0.04] mix-blend-overlay" style={{ backgroundImage: 'radial-gradient(circle at 30% 20%, rgba(212,175,55,0.5) 0%, transparent 50%)' }} />
+          <div className="absolute top-0 left-[15%] w-[1px] h-full bg-gradient-to-b from-transparent via-pomegranate/30 to-transparent" />
+          <div className="absolute top-0 left-[40%] w-[1px] h-full bg-gradient-to-b from-transparent via-pomegranate-light/20 to-transparent" />
+          <div className="absolute top-0 left-[70%] w-[1px] h-full bg-gradient-to-b from-transparent via-pomegranate/15 to-transparent" />
+          {/* subtle pomegranate grain */}
+          <div className="absolute inset-0 opacity-[0.08] mix-blend-overlay" style={{ backgroundImage: 'radial-gradient(circle at 30% 20%, rgba(200,16,46,0.5) 0%, transparent 50%)' }} />
         </div>
 
         {/* Vertical pagination dots */}

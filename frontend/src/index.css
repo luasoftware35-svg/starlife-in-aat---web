@@ -8,7 +8,7 @@ html, body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: #0d0d0d;
+    background: #ffffff;
 }
 
 code {
@@ -21,20 +21,20 @@ code {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0d0d0d;
+  background: #faf7f2;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2a2a2a;
+  background: #d6d6d6;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #D4AF37;
+  background: #C8102E;
 }
 
 /* Selection */
 ::selection {
-  background: #D4AF37;
-  color: #0d0d0d;
+  background: #C8102E;
+  color: #ffffff;
 }
 
 @layer base {
@@ -107,7 +107,7 @@ code {
     text-wrap: balance;
   }
   .clip-text-gold {
-    background: linear-gradient(135deg, #E5C76B 0%, #D4AF37 50%, #B8951F 100%);
+    background: linear-gradient(135deg, #E63946 0%, #C8102E 50%, #9A0C24 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;

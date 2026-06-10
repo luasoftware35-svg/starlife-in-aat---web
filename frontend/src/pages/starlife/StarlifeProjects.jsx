@@ -18,7 +18,7 @@ export default function StarlifeProjects({ filter, title, breadcrumbLabel }) {
   const tags = ['Hepsi', 'Konut', 'Ticari', 'Karma'];
 
   return (
-    <div className="bg-dark text-white min-h-screen">
+    <div className="bg-white text-dark min-h-screen">
       <SubsiteHeader navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" contactHref="/starlife-insaat/iletisim" />
       <PageHero
         title={title}
