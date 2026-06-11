@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,6 +9,7 @@ html, body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: #ffffff;
+    color: #141414;
 }
 
 code {
@@ -21,20 +22,32 @@ code {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #faf7f2;
+  background: #f8f5f0;
 }
 ::-webkit-scrollbar-thumb {
-  background: #d6d6d6;
+  background: #c5c0b8;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #C8102E;
+  background: #9D1F2C;
 }
 
 /* Selection */
 ::selection {
-  background: #C8102E;
+  background: #9D1F2C;
   color: #ffffff;
+}
+
+/* Smoother scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Mobile-friendly tap targets */
+@media (max-width: 768px) {
+  button, a {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
 @layer base {
@@ -107,9 +120,32 @@ code {
     text-wrap: balance;
   }
   .clip-text-gold {
-    background: linear-gradient(135deg, #E63946 0%, #C8102E 50%, #9A0C24 100%);
+    background: linear-gradient(135deg, #C8102E 0%, #9D1F2C 50%, #5C1219 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+  }
+  .font-serif-display {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-feature-settings: 'liga', 'kern';
+    letter-spacing: -0.01em;
+  }
+  /* Subtle noise texture for premium feel */
+  .bg-noise {
+    position: relative;
+  }
+  .bg-noise::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+  /* Hairline divider with gradient */
+  .divider-gold {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(157,31,44,0.4) 50%, transparent 100%);
   }
 }

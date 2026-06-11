@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Send } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 function generateCaptcha() {
   const a = Math.floor(Math.random() * 8) + 1;
@@ -9,9 +9,7 @@ function generateCaptcha() {
 }
 
 export default function ContactForm({ darkMode = true }) {
-  // Lazy state initializer: captcha is computed once on mount and remains stable.
   const [captcha] = useState(generateCaptcha);
-
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '', captcha: '' });
   const [status, setStatus] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -33,37 +31,54 @@ export default function ContactForm({ darkMode = true }) {
   };
 
   const inputBase = darkMode
-    ? 'w-full bg-transparent border-b border-white/25 py-3 text-white text-sm focus:border-gold outline-none placeholder:text-white/30 transition-colors'
-    : 'w-full bg-transparent border-b border-black/15 py-3 text-dark text-sm focus:border-gold outline-none placeholder:text-black/30 transition-colors';
+    ? 'w-full bg-transparent border-b border-white/20 py-4 text-white text-[14px] focus:border-pomegranate-light outline-none placeholder:text-white/35 transition-colors font-light'
+    : 'w-full bg-transparent border-b border-charcoal/15 py-4 text-charcoal text-[14px] focus:border-pomegranate outline-none placeholder:text-charcoal/35 transition-colors font-light';
+
+  const labelColor = darkMode ? 'text-white/65' : 'text-charcoal/65';
 
   return (
-    <form onSubmit={onSubmit} className="w-full space-y-5">
-      <div className="grid md:grid-cols-2 gap-5">
+    <form onSubmit={onSubmit} className="w-full space-y-7">
+      <div className="grid md:grid-cols-2 gap-7">
         <input required name="name" value={form.name} onChange={onChange} placeholder="Ad Soyad *" className={inputBase} />
         <input required type="email" name="email" value={form.email} onChange={onChange} placeholder="Mail Adresiniz *" className={inputBase} />
       </div>
       <input required name="phone" value={form.phone} onChange={onChange} placeholder="Telefon *" className={inputBase} />
       <textarea required name="message" value={form.message} onChange={onChange} placeholder="Mesajınız *" rows={4} className={inputBase + ' resize-none'} />
 
-      <div className="grid md:grid-cols-2 gap-5 items-center">
-        <div className={darkMode ? 'text-white/70 text-sm' : 'text-dark/70 text-sm'}>
-          Soru *: <span className="font-semibold">{captcha.a} + {captcha.b} = ?</span>
+      <div className="grid md:grid-cols-2 gap-7 items-center pt-2">
+        <div className={`${labelColor} text-[13px] font-light`}>
+          Soru *: <span className="font-medium text-pomegranate-light">{captcha.a} + {captcha.b} = ?</span>
         </div>
         <input required name="captcha" value={form.captcha} onChange={onChange} placeholder="Cevap *" className={inputBase} />
       </div>
 
       <motion.button
-        whileHover={{ scale: 1.01 }}
-        whileTap={{ scale: 0.99 }}
+        whileHover={{ scale: 1.005 }}
+        whileTap={{ scale: 0.995 }}
         type="submit"
         disabled={submitting}
-        className="bg-gold text-black font-bold px-10 py-4 mt-2 w-full hover:bg-white transition-colors duration-300 flex items-center justify-center gap-3 tracking-widest text-sm uppercase disabled:opacity-60"
+        className={`group inline-flex items-center justify-center gap-3 w-full md:w-auto px-12 py-4 mt-4 tracking-[0.3em] text-[11px] uppercase font-medium transition-colors duration-300 disabled:opacity-60 ${
+          darkMode
+            ? 'bg-pomegranate-light text-white hover:bg-white hover:text-charcoal'
+            : 'bg-pomegranate text-white hover:bg-charcoal'
+        }`}
       >
-        {submitting ? 'Gönderiliyor...' : (<><span>Gönder</span> <Send size={16} /></>)}
+        {submitting ? 'Gönderiliyor...' : (
+          <>
+            <span>Gönder</span>
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+          </>
+        )}
       </motion.button>
 
-      {status === 'success' && <p className="text-gold text-sm mt-2">Mesajınızı Aldık</p>}
-      {status === 'error' && <p className="text-red-400 text-sm mt-2">Hata! Tekrar Deneyin</p>}
+      {status === 'success' && (
+        <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+          className="text-pomegranate-light text-sm font-light">Mesajınızı Aldık · Teşekkür ederiz.</motion.p>
+      )}
+      {status === 'error' && (
+        <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+          className="text-pomegranate-light text-sm font-light">Doğrulama hatası. Lütfen captcha cevabınızı kontrol edin.</motion.p>
+      )}
     </form>
   );
 }

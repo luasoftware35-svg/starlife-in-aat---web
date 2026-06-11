@@ -9,7 +9,8 @@ module.exports = {
   	extend: {
   		fontFamily: {
   			sans: ['Inter', 'system-ui', 'sans-serif'],
-  			display: ['Inter', 'system-ui', 'sans-serif'],
+  			display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+  			heading: ['"Cormorant Garamond"', 'Georgia', 'serif'],
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -17,14 +18,19 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
-  			gold: '#C8102E',
-  			'gold-light': '#E63946',
-  			pomegranate: '#C8102E',
-  			'pomegranate-light': '#E63946',
-  			'pomegranate-dark': '#9A0C24',
-  			cream: '#FAF7F2',
-  			dark: '#1A1A1A',
-  			navy: '#FAF7F2',
+  			gold: '#9D1F2C',
+  			'gold-light': '#C8102E',
+  			pomegranate: '#9D1F2C',
+  			'pomegranate-light': '#C8102E',
+  			'pomegranate-dark': '#5C1219',
+  			'pomegranate-deep': '#3D0B12',
+  			cream: '#F8F5F0',
+  			'cream-warm': '#EFEAE0',
+  			charcoal: '#141414',
+  			'charcoal-soft': '#1F1F1F',
+  			'warm-gray': '#6B6560',
+  			dark: '#141414',
+  			navy: '#F8F5F0',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
