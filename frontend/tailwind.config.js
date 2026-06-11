@@ -9,8 +9,9 @@ module.exports = {
   	extend: {
   		fontFamily: {
   			sans: ['Inter', 'system-ui', 'sans-serif'],
-  			display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-  			heading: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+  			display: ['"Instrument Serif"', 'Georgia', 'serif'],
+  			heading: ['"Instrument Serif"', 'Georgia', 'serif'],
+  			mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -18,19 +19,20 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
-  			gold: '#9D1F2C',
+  			gold: '#8B1538',
   			'gold-light': '#C8102E',
-  			pomegranate: '#9D1F2C',
+  			pomegranate: '#8B1538',
   			'pomegranate-light': '#C8102E',
   			'pomegranate-dark': '#5C1219',
   			'pomegranate-deep': '#3D0B12',
-  			cream: '#F8F5F0',
-  			'cream-warm': '#EFEAE0',
-  			charcoal: '#141414',
-  			'charcoal-soft': '#1F1F1F',
+  			cream: '#FAF8F4',
+  			'cream-warm': '#F2EDE3',
+  			charcoal: '#0A0A0A',
+  			'charcoal-soft': '#171717',
+  			'charcoal-mid': '#1F1F1F',
   			'warm-gray': '#6B6560',
-  			dark: '#141414',
-  			navy: '#F8F5F0',
+  			dark: '#0A0A0A',
+  			navy: '#FAF8F4',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
