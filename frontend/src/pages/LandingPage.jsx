@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, Search, ArrowUpRight, X, ChevronDown, Phone, Mail } from 'lucide-react';
-import { HERO_SLIDES, HOLDING_NAV, COMPANY } from '../mock/mock';
+import { Menu, Search, ArrowUpRight, X } from 'lucide-react';
+import { HERO_SLIDES } from '../mock/mock';
+import MegaMenu from '../components/holding/MegaMenu';
 
 const SLIDE_COUNT = HERO_SLIDES.length;
 const SLIDE_INTERVAL_MS = 7500;
@@ -227,86 +228,8 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* Hamburger Menu Overlay */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-[70] bg-charcoal/98 backdrop-blur-xl bg-noise overflow-y-auto"
-          >
-            <div className="max-w-[1400px] mx-auto min-h-[100dvh] px-6 md:px-16 flex flex-col">
-              <div className="flex justify-between items-center h-14 md:h-20 shrink-0">
-                <span className="font-black text-[15px] md:text-lg tracking-[0.22em] uppercase">
-                  <span className="text-pomegranate-light">STAR</span><span className="text-white">LİFE</span>
-                </span>
-                <button onClick={closeMenu} className="flex items-center gap-3 text-white/85 hover:text-pomegranate-light p-2 -mr-2" aria-label="Close">
-                  <span className="hidden md:inline font-mono-ui text-[10px] tracking-[0.35em] uppercase">Kapat</span>
-                  <X size={22} strokeWidth={1.5} />
-                </button>
-              </div>
-              <motion.nav
-                initial="hidden"
-                animate="visible"
-                variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
-                className="flex-1 flex flex-col justify-center gap-1 md:gap-2 py-10"
-              >
-                {HOLDING_NAV.map((item, idx) => (
-                  <motion.div
-                    key={item.label}
-                    variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
-                    transition={{ duration: 0.6, ease: EASE }}
-                    className="flex items-baseline gap-4 md:gap-7"
-                  >
-                    <span className="font-mono-ui text-pomegranate-light/60 text-[10px] tracking-widest">
-                      {String(idx + 1).padStart(2, '0')}
-                    </span>
-                    {item.href ? (
-                      <Link
-                        to={item.href}
-                        onClick={closeMenu}
-                        className="block font-serif-display text-white text-4xl md:text-7xl leading-tight hover:text-pomegranate-light hover:italic transition-all duration-300 py-1"
-                      >
-                        {item.label}
-                      </Link>
-                    ) : (
-                      <details className="group flex-1">
-                        <summary className="font-serif-display text-white text-4xl md:text-7xl leading-tight cursor-pointer list-none flex items-baseline gap-3 md:gap-5 hover:text-pomegranate-light hover:italic transition-all duration-300 py-1">
-                          {item.label}
-                          <ChevronDown size={22} strokeWidth={1.5} className="text-pomegranate-light/60 group-open:rotate-180 transition-transform translate-y-1" />
-                        </summary>
-                        <div className="pl-4 md:pl-8 mt-3 mb-4 space-y-1.5 border-l border-white/10 ml-2">
-                          {item.children.map((c) => (
-                            <Link
-                              key={c.href}
-                              to={c.href}
-                              onClick={closeMenu}
-                              className="block text-white/55 text-base md:text-lg font-light hover:text-pomegranate-light hover:translate-x-1 transition-all duration-300 py-1.5 pl-4"
-                            >
-                              {c.label}
-                            </Link>
-                          ))}
-                        </div>
-                      </details>
-                    )}
-                  </motion.div>
-                ))}
-              </motion.nav>
-              <div className="py-6 border-t border-white/8 flex flex-col md:flex-row gap-3 md:gap-10 md:items-center font-mono-ui text-white/40 text-[11px] tracking-[0.15em] shrink-0">
-                <a href={`tel:${COMPANY.phone.replace(/\s/g, '')}`} className="flex items-center gap-2.5 hover:text-pomegranate-light transition-colors">
-                  <Phone size={13} strokeWidth={1.5} /> {COMPANY.phone}
-                </a>
-                <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-2.5 hover:text-pomegranate-light transition-colors">
-                  <Mail size={13} strokeWidth={1.5} /> {COMPANY.email}
-                </a>
-                <span className="text-white/30 md:ml-auto">Diyarbakır · Türkiye</span>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Hamburger Menu Overlay — premium split-panel mega menu */}
+      <MegaMenu open={menuOpen} onClose={closeMenu} />
 
       {/* Search overlay */}
       <AnimatePresence>
