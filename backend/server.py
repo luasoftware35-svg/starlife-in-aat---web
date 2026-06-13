@@ -14,10 +14,12 @@ from datetime import datetime, timezone
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+# MongoDB connection. Vercel may import this service during build before
+# optional backend environment variables are configured.
+mongo_url = os.environ.get('MONGO_URL')
+db_name = os.environ.get('DB_NAME')
+client = AsyncIOMotorClient(mongo_url) if mongo_url else None
+db = client[db_name] if client and db_name else None
 
 # Create the main app without a prefix
 app = FastAPI()
@@ -44,6 +46,9 @@ async def root():
 
 @api_router.post("/status", response_model=StatusCheck)
 async def create_status_check(input: StatusCheckCreate):
+    if db is None:
+        return StatusCheck(client_name=input.client_name)
+
     status_dict = input.model_dump()
     status_obj = StatusCheck(**status_dict)
     
@@ -56,6 +61,9 @@ async def create_status_check(input: StatusCheckCreate):
 
 @api_router.get("/status", response_model=List[StatusCheck])
 async def get_status_checks():
+    if db is None:
+        return []
+
     # Exclude MongoDB's _id field from the query results
     status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
     
@@ -86,4 +94,5 @@ logger = logging.getLogger(__name__)
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
-    client.close()
+    if client:
+        client.close()
