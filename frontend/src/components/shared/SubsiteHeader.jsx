@@ -20,11 +20,11 @@ function MobileNav({ navItems, brandPrefix, brandSuffix, accentClass, onClose, o
       animate={MOBILE_VARIANTS.animate}
       exit={MOBILE_VARIANTS.exit}
       transition={MOBILE_TRANSITION}
-      className="fixed inset-0 bg-white z-[60] flex flex-col"
+      className="fixed inset-0 bg-white z-[100] flex flex-col"
     >
       <div className="flex justify-between items-center h-16 px-6 border-b border-stone-200/60">
         <BrandLogo variant="dark" width={140} height={40} />
-        <button onClick={onClose} className="text-stone-700 hover:text-gold transition-colors" aria-label="Close menu"><X size={24} /></button>
+        <button type="button" onClick={onClose} className="grid h-11 w-11 place-items-center text-stone-700 hover:text-gold transition-colors" aria-label="Close menu"><X size={24} /></button>
       </div>
       <div className="flex-1 overflow-y-auto p-6 space-y-2">
         {navItems.map((item) => (
@@ -54,6 +54,11 @@ export default function SubsiteHeader({ navItems, brandPrefix, brandSuffix, cont
   const location = useLocation();
   const { scrolled, mobileOpen, openMobile, closeMobile } = useHeaderState(location.pathname);
   const isActive = (href) => location.pathname === href;
+  const handleOpenMobile = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    openMobile();
+  };
 
   return (
     <header className={`fixed top-0 left-0 w-full z-50 h-16 transition-all duration-300 ${
@@ -74,7 +79,13 @@ export default function SubsiteHeader({ navItems, brandPrefix, brandSuffix, cont
           <Link to={contactHref} className="hidden md:inline-block border border-gold text-gold text-[11px] tracking-[0.25em] font-medium px-5 py-2 hover:bg-gold hover:text-white transition-all duration-300">
             Bize Ulaşın
           </Link>
-          <button className="xl:hidden text-stone-700 hover:text-gold transition-colors" onClick={openMobile} aria-label="menu">
+          <button
+            type="button"
+            className="relative z-[95] grid h-11 w-11 place-items-center xl:hidden text-stone-700 hover:text-gold transition-colors"
+            onClick={handleOpenMobile}
+            onPointerDown={handleOpenMobile}
+            aria-label="menu"
+          >
             <Menu size={24} />
           </button>
         </div>
