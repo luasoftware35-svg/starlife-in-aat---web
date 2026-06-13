@@ -93,7 +93,13 @@ export const YAPI_GUVENLIGI = [
 ];
 
 export const HOLDING_NAV = [
-  { label: 'Kurumsal', children: [{ label: 'Hakkımızda', href: '/kurumsal/hakkimizda' }] },
+  {
+    label: 'Kurumsal', children: [
+      { label: 'Hakkımızda', href: '/kurumsal/hakkimizda' },
+      { label: 'Yönetim Kurulu', href: '/kurumsal/yonetim' },
+      { label: 'Operasyon Haritası', href: '/kurumsal/operasyon-haritasi' },
+    ]
+  },
   {
     label: 'Grup Şirketlerimiz', children: [
       { label: 'Starlife İnşaat', href: '/starlife-insaat' },

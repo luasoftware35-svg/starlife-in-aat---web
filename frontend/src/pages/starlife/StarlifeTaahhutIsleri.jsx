@@ -18,15 +18,15 @@ export default function StarlifeTaahhutIsleri() {
   ];
 
   return (
-    <div className="bg-white text-dark min-h-screen">
+    <div className="bg-white text-ink min-h-screen">
       <SubsiteHeader navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" contactHref="/starlife-insaat/iletisim" />
       <PageHero title="Taahhüt İşleri" breadcrumb={[{ label: 'Anasayfa', href: '/starlife-insaat' }, { label: 'Taahhüt İşleri' }]} image="https://images.pexels.com/photos/3818947/pexels-photo-3818947.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600" />
 
-      <section className="bg-white text-dark py-20 px-6 md:px-16">
+      <section className="bg-white text-ink py-20 px-6 md:px-16">
         <div className="max-w-[1100px] mx-auto text-center">
           <span className="text-gold text-xs tracking-[0.4em] uppercase">Hizmetlerimiz</span>
           <h2 className="text-3xl md:text-5xl font-black mt-3">Anahtar Teslim Profesyonel Çözümler</h2>
-          <p className="text-dark/65 mt-5 leading-relaxed">
+          <p className="text-ink/65 mt-5 leading-relaxed">
             Starlife İnşaat olarak, projelerinizin her aşamasında yanınızdayız. Konseptten teslime kadar tüm süreçleri yönetiyor, kalite ve güvenliği gözeten taahhüt çözümleri sunuyoruz.
           </p>
         </div>
@@ -36,7 +36,7 @@ export default function StarlifeTaahhutIsleri() {
             <motion.div key={s.title} variants={fadeUp} className="bg-gray-50 p-8 border-l-2 border-gold hover:bg-white hover:shadow-xl transition-all">
               <s.icon className="text-gold" size={32} />
               <h3 className="font-bold text-xl mt-4">{s.title}</h3>
-              <p className="text-dark/60 text-sm mt-2 leading-relaxed">{s.desc}</p>
+              <p className="text-ink/60 text-sm mt-2 leading-relaxed">{s.desc}</p>
             </motion.div>
           ))}
         </motion.div>

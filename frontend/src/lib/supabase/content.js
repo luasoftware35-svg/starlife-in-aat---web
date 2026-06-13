@@ -1,0 +1,172 @@
+import { useEffect, useMemo, useState } from 'react';
+import { supabase } from './client';
+
+const PROJECT_STATUS_LABELS = {
+  devam: 'Devam Eden',
+  devam_eden: 'Devam Eden',
+  'Devam Eden': 'Devam Eden',
+  tamamlandi: 'Tamamlanan',
+  tamamlanan: 'Tamamlanan',
+  Tamamlanan: 'Tamamlanan',
+};
+
+const COMPANY_TAGS = {
+  starlife: 'Konut',
+  invest: 'Ticari',
+  erd: 'Karma',
+};
+
+export function slugify(value = '') {
+  return value
+    .toLocaleLowerCase('tr-TR')
+    .replace(/ğ/g, 'g')
+    .replace(/ü/g, 'u')
+    .replace(/ş/g, 's')
+    .replace(/ı/g, 'i')
+    .replace(/ö/g, 'o')
+    .replace(/ç/g, 'c')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function normalizeImages(row) {
+  const gallery = Array.isArray(row.images) ? row.images : [];
+  const cover = row.cover_image || row.image || row.image_url;
+  return [cover, ...gallery].filter(Boolean);
+}
+
+function toDateLabel(value) {
+  if (!value) return '';
+  return new Date(value).toLocaleDateString('tr-TR', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
+async function fetchRows(table, { orderBy = 'created_at', ascending = false, filters = [] } = {}) {
+  if (!supabase) return [];
+
+  let query = supabase.from(table).select('*');
+
+  filters.forEach(({ column, operator = 'eq', value }) => {
+    query = query[operator](column, value);
+  });
+
+  if (orderBy) {
+    query = query.order(orderBy, { ascending });
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+  return data || [];
+}
+
+export function useSupabaseRows(table, options, fallbackRows = [], mapper = (row) => row) {
+  const fallback = useMemo(() => fallbackRows.map(mapper), [fallbackRows, mapper]);
+  const optionsKey = JSON.stringify(options || {});
+  const stableOptions = useMemo(() => JSON.parse(optionsKey), [optionsKey]);
+  const [rows, setRows] = useState(fallback);
+
+  useEffect(() => {
+    let mounted = true;
+
+    fetchRows(table, stableOptions)
+      .then((data) => {
+        if (mounted && data.length) {
+          setRows(data.map(mapper));
+        }
+      })
+      .catch(() => {
+        if (mounted) setRows(fallback);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [fallback, mapper, stableOptions, table]);
+
+  return rows;
+}
+
+export function mapProject(row) {
+  const images = normalizeImages(row);
+
+  return {
+    id: row.id,
+    slug: slugify(row.slug || row.title || row.id),
+    title: row.title,
+    status: PROJECT_STATUS_LABELS[row.status] || row.status || 'Devam Eden',
+    location: row.city || row.location || row.region || '',
+    year: row.year || '',
+    image: images[0] || 'https://images.pexels.com/photos/5403840/pexels-photo-5403840.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+    images,
+    tag: row.tag || COMPANY_TAGS[row.company] || 'Konut',
+    featured: Boolean(row.featured),
+    description: row.description || '',
+    city: row.city || '',
+    region: row.region || '',
+    company: row.company || 'starlife',
+    units: row.units || 0,
+    sqm: row.sqm || 0,
+  };
+}
+
+export function mapHeroSlide(row) {
+  return {
+    tag: row.tag || 'Starlife İnşaat',
+    title: row.title || '',
+    desc: row.description || row.desc || '',
+    cta: row.cta_text || row.cta || 'Keşfet',
+    href: row.cta_href || row.href || '/starlife-insaat',
+    image: row.image || row.image_url || 'https://images.unsplash.com/photo-1626885930974-4b69aa21bbf9',
+  };
+}
+
+export function mapTeamMember(row) {
+  return {
+    id: row.id || row.user_id || row.name,
+    name: row.name,
+    title: row.title || row.role || '',
+    image: row.image || row.image_url || '',
+  };
+}
+
+export function mapBlogPost(row) {
+  return {
+    id: row.id,
+    title: row.title,
+    excerpt: row.excerpt || '',
+    date: toDateLabel(row.created_at),
+    author: row.author || 'Starlife İnşaat',
+    image: row.cover_image || row.image || 'https://images.pexels.com/photos/4458205/pexels-photo-4458205.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+  };
+}
+
+export function mapLocation(row) {
+  if (row.project) return row;
+
+  const year = row.year || '';
+  const units = Number(row.units || 0);
+  const sqm = Number(row.sqm || 0);
+
+  return {
+    id: row.id,
+    plate: row.plate || '',
+    city: row.city,
+    region: row.region || '',
+    count: 1,
+    year,
+    cx: row.cx || '50%',
+    cy: row.cy || '50%',
+    project: {
+      name: row.title || row.city,
+      desc: row.description || '',
+      image: row.image || row.cover_image || '/images/projects/istanbul.jpg',
+      units,
+      sqm,
+      year,
+      status: PROJECT_STATUS_LABELS[row.status]?.toUpperCase('tr-TR') || 'DEVAM EDİYOR',
+    },
+  };
+}

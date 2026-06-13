@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" role="img" aria-label="T�rkiye operasyon haritas1">
+  <rect width="900" height="420" fill="#F5F2ED"/>
+  <path d="M68 204L101 172L153 154L205 159L251 135L312 143L360 123L421 132L484 117L548 133L601 128L659 150L724 155L780 181L841 207L815 247L744 260L682 287L612 276L551 303L481 292L422 312L353 300L291 321L230 297L169 309L112 278L70 244Z" fill="#E8E3DA" stroke="#C8C0B4" stroke-width="2"/>
+  <g fill="none" stroke="#C8C0B4" stroke-width="0.7" opacity="0.85">
+    <path d="M120 178L165 309"/>
+    <path d="M185 160L230 297"/>
+    <path d="M252 135L291 321"/>
+    <path d="M313 143L353 300"/>
+    <path d="M360 123L422 312"/>
+    <path d="M421 132L481 292"/>
+    <path d="M484 117L551 303"/>
+    <path d="M548 133L612 276"/>
+    <path d="M601 128L682 287"/>
+    <path d="M659 150L744 260"/>
+    <path d="M724 155L815 247"/>
+    <path d="M101 172L841 207"/>
+    <path d="M153 154L780 181"/>
+    <path d="M112 278L744 260"/>
+    <path d="M169 309L682 287"/>
+    <path d="M251 135L659 150"/>
+    <path d="M291 321L612 276"/>
+  </g>
+  <g fill="#D4AF37" opacity="0.5">
+    <circle cx="162" cy="118" r="3"/>
+    <circle cx="405" cy="168" r="3"/>
+    <circle cx="650" cy="245" r="3"/>
+  </g>
+</svg>

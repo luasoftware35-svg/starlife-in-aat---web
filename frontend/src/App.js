@@ -1,10 +1,13 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 import ScrollToTop from './components/ScrollToTop';
 
 import LandingPage from './pages/LandingPage';
 import KurumsalHakkimizda from './pages/KurumsalHakkimizda';
+import KurumsalYonetim from './pages/KurumsalYonetim';
+import OperasyonHaritasi from './pages/OperasyonHaritasi';
 import Iletisim from './pages/Iletisim';
 import Blog from './pages/Blog';
 import Kvkk from './pages/Kvkk';
@@ -13,6 +16,7 @@ import StarlifeHome from './pages/starlife/StarlifeHome';
 import StarlifeHakkimizda from './pages/starlife/StarlifeHakkimizda';
 import StarlifeInsanKaynaklari from './pages/starlife/StarlifeInsanKaynaklari';
 import StarlifeTaahhutIsleri from './pages/starlife/StarlifeTaahhutIsleri';
+import StarlifeProjectDetail from './pages/starlife/StarlifeProjectDetail';
 import StarlifeProjects from './pages/starlife/StarlifeProjects';
 import YapiGuvenligiPage from './pages/starlife/YapiGuvenligiPage';
 
@@ -22,6 +26,15 @@ import ErdHome from './pages/erd/ErdHome';
 import SubsiteBlog from './pages/SubsiteBlog';
 import SubsiteIletisim from './pages/SubsiteIletisim';
 import SubsiteAbout from './pages/SubsiteAbout';
+import AdminRouteGuard from './components/admin/AdminRouteGuard';
+import AdminContentPage from './pages/admin/AdminContentPage';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminLogin from './pages/admin/AdminLogin';
+import AdminMedia from './pages/admin/AdminMedia';
+import AdminResourceForm from './pages/admin/AdminResourceForm';
+import AdminResourceList from './pages/admin/AdminResourceList';
+import AdminSettings from './pages/admin/AdminSettings';
 
 import { STARLIFE_NAV, INVEST_NAV, ERD_NAV } from './mock/mock';
 
@@ -64,10 +77,70 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <ScrollToTop />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: {
+              background: '#18181b',
+              color: '#fff',
+              border: '1px solid rgba(255,255,255,0.1)',
+            },
+          }}
+        />
         <Routes>
+          {/* Admin */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin" element={<AdminRouteGuard />}>
+            <Route element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="projeler" element={<AdminResourceList resource="projects" />} />
+              <Route path="projeler/yeni" element={<AdminResourceForm resource="projects" />} />
+              <Route path="projeler/duzenle/:id" element={<AdminResourceForm resource="projects" />} />
+              <Route path="harita" element={<AdminResourceList resource="map" />} />
+              <Route path="harita/yeni" element={<AdminResourceForm resource="map" />} />
+              <Route path="harita/duzenle/:id" element={<AdminResourceForm resource="map" />} />
+              <Route path="yonetim" element={<AdminResourceList resource="team" />} />
+              <Route path="yonetim/yeni" element={<AdminResourceForm resource="team" />} />
+              <Route path="yonetim/duzenle/:id" element={<AdminResourceForm resource="team" />} />
+              <Route path="hero" element={<AdminResourceList resource="hero" />} />
+              <Route path="hero/yeni" element={<AdminResourceForm resource="hero" />} />
+              <Route path="hero/duzenle/:id" element={<AdminResourceForm resource="hero" />} />
+              <Route path="blog" element={<AdminResourceList resource="blog" />} />
+              <Route path="blog/yeni" element={<AdminResourceForm resource="blog" />} />
+              <Route path="blog/duzenle/:id" element={<AdminResourceForm resource="blog" />} />
+              <Route path="ayarlar" element={<AdminSettings />} />
+              <Route path="ayarlar/yeni" element={<AdminResourceForm resource="settings" />} />
+              <Route path="ayarlar/duzenle/:id" element={<AdminResourceForm resource="settings" />} />
+              <Route path="sirketler" element={<AdminContentPage type="companies" />} />
+              <Route path="header" element={<AdminContentPage type="header" />} />
+              <Route path="footer" element={<AdminContentPage type="footer" />} />
+              <Route path="hakkimizda" element={<AdminContentPage type="about" />} />
+              <Route path="iletisim" element={<AdminContentPage type="contact" />} />
+              <Route path="medya" element={<AdminMedia />} />
+              <Route path="projects" element={<AdminResourceList resource="projects" />} />
+              <Route path="projects/new" element={<AdminResourceForm resource="projects" />} />
+              <Route path="projects/edit/:id" element={<AdminResourceForm resource="projects" />} />
+              <Route path="map" element={<AdminResourceList resource="map" />} />
+              <Route path="map/new" element={<AdminResourceForm resource="map" />} />
+              <Route path="map/edit/:id" element={<AdminResourceForm resource="map" />} />
+              <Route path="team" element={<AdminResourceList resource="team" />} />
+              <Route path="team/new" element={<AdminResourceForm resource="team" />} />
+              <Route path="team/edit/:id" element={<AdminResourceForm resource="team" />} />
+              <Route path="settings" element={<AdminSettings />} />
+              <Route path="settings/new" element={<AdminResourceForm resource="settings" />} />
+              <Route path="settings/edit/:id" element={<AdminResourceForm resource="settings" />} />
+              <Route path="companies" element={<AdminContentPage type="companies" />} />
+              <Route path="about" element={<AdminContentPage type="about" />} />
+              <Route path="contact" element={<AdminContentPage type="contact" />} />
+              <Route path="media" element={<AdminMedia />} />
+            </Route>
+          </Route>
+
           {/* Holding */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/kurumsal/hakkimizda" element={<KurumsalHakkimizda />} />
+          <Route path="/kurumsal/yonetim" element={<KurumsalYonetim />} />
+          <Route path="/kurumsal/operasyon-haritasi" element={<OperasyonHaritasi />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/iletisim" element={<Iletisim />} />
           <Route path="/politika/kvkk-metni" element={<Kvkk />} />
@@ -78,6 +151,7 @@ function App() {
           <Route path="/starlife-insaat/insankaynaklari" element={<StarlifeInsanKaynaklari />} />
           <Route path="/starlife-insaat/taahhutisleri" element={<StarlifeTaahhutIsleri />} />
           <Route path="/starlife-insaat/tumprojeler" element={<StarlifeProjects title="Tüm Projeler" breadcrumbLabel="Tüm Projeler" />} />
+          <Route path="/starlife-insaat/projeler/:slug" element={<StarlifeProjectDetail />} />
           <Route path="/starlife-insaat/projeler/tamamlanan-projeler" element={<StarlifeProjects filter="Tamamlanan" title="Tamamlanan Projeler" breadcrumbLabel="Tamamlanan" />} />
           <Route path="/starlife-insaat/projeler/devam-eden-projeler" element={<StarlifeProjects filter="Devam Eden" title="Devam Eden Projeler" breadcrumbLabel="Devam Eden" />} />
           <Route path="/starlife-insaat/yapiguvenligi/:slug" element={<YapiGuvenligiRoute />} />

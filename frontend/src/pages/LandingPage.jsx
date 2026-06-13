@@ -1,51 +1,93 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useAnimationControls } from 'framer-motion';
 import { Menu, Search, ArrowUpRight, X } from 'lucide-react';
 import { HERO_SLIDES } from '../mock/mock';
+import { mapHeroSlide, useSupabaseRows } from '../lib/supabase/content';
 import MegaMenu from '../components/holding/MegaMenu';
+import BrandLogo from '../components/shared/BrandLogo';
 
-const SLIDE_COUNT = HERO_SLIDES.length;
-const SLIDE_INTERVAL_MS = 7500;
+const SLIDE_INTERVAL_MS = 5000;
 const EASE = [0.22, 1, 0.36, 1];
+const SLIDE_TRANSITION = { duration: 0.8, ease: EASE };
+const textMotion = (delay = 0) => ({
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: 20 },
+  transition: { duration: 0.5, ease: EASE, delay },
+});
 
 export default function LandingPage() {
   const [active, setActive] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [paused, setPaused] = useState(false);
+  const pausedRef = useRef(false);
+  const progressControls = useAnimationControls();
+  const slides = useSupabaseRows(
+    'hero_slides',
+    { orderBy: 'order_index', ascending: true, filters: [{ column: 'active', value: true }] },
+    HERO_SLIDES,
+    mapHeroSlide,
+  );
+  const slideCount = slides.length || 1;
 
   useEffect(() => {
     if (paused) return undefined;
-    const t = setInterval(() => setActive((p) => (p + 1) % SLIDE_COUNT), SLIDE_INTERVAL_MS);
+    const t = setInterval(() => setActive((p) => (p + 1) % slideCount), SLIDE_INTERVAL_MS);
     return () => clearInterval(t);
+  }, [paused, slideCount]);
+
+  useEffect(() => {
+    if (active >= slideCount) setActive(0);
+  }, [active, slideCount]);
+
+  useEffect(() => {
+    pausedRef.current = paused;
   }, [paused]);
 
-  const goToSlide = useCallback((i) => setActive(i), []);
+  useEffect(() => {
+    progressControls.set({ scaleX: 0 });
+    if (!pausedRef.current) {
+      progressControls.start({ scaleX: 1, transition: { duration: SLIDE_INTERVAL_MS / 1000, ease: 'linear' } });
+    }
+  }, [active, progressControls]);
+
+  useEffect(() => {
+    if (paused) {
+      progressControls.stop();
+      return;
+    }
+    progressControls.start({ scaleX: 1, transition: { duration: SLIDE_INTERVAL_MS / 1000, ease: 'linear' } });
+  }, [paused, progressControls]);
+
+  const goToSlide = useCallback((i) => {
+    setActive(i);
+    setPaused(true);
+  }, []);
   const openMenu = useCallback(() => setMenuOpen(true), []);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
   const openSearch = useCallback(() => setSearchOpen(true), []);
   const closeSearch = useCallback(() => setSearchOpen(false), []);
-  const slides = HERO_SLIDES;
-  const slide = slides[active];
+  const slide = slides[active] || slides[0];
   const num = String(active + 1).padStart(2, '0');
-  const total = String(SLIDE_COUNT).padStart(2, '0');
+  const total = String(slideCount).padStart(2, '0');
 
   return (
     <main
-      className="relative h-[100dvh] w-full overflow-hidden flex flex-col-reverse md:flex-row bg-charcoal"
+      className="relative h-[100dvh] w-full overflow-hidden flex flex-col-reverse md:flex-row bg-mist"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       {/* === LEFT PANEL === */}
-      <aside className="relative w-full md:w-[42%] h-[55vh] md:h-full flex flex-col z-10 overflow-hidden shrink-0 bg-charcoal bg-noise">
+      <aside className="relative w-full md:w-[42%] h-[55vh] md:h-full flex flex-col z-10 overflow-hidden shrink-0 bg-warm bg-noise">
         {/* Cinematic gradient base */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#141414] via-[#0a0a0a] to-[#000000]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-warm via-mist to-surface" />
 
         {/* Subtle pomegranate glow */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-32 -left-32 w-[480px] h-[480px] rounded-full opacity-[0.10] blur-3xl" style={{ background: 'radial-gradient(circle, #C8102E 0%, transparent 70%)' }} />
-          <div className="absolute -bottom-40 right-0 w-[400px] h-[400px] rounded-full opacity-[0.06] blur-3xl" style={{ background: 'radial-gradient(circle, #C8102E 0%, transparent 70%)' }} />
+          <div className="absolute -top-32 -left-32 w-[480px] h-[480px] rounded-full opacity-[0.18] blur-3xl bg-gold/30" />
+          <div className="absolute -bottom-40 right-0 w-[400px] h-[400px] rounded-full opacity-[0.14] blur-3xl bg-gold-light/30" />
         </div>
 
         {/* Vertical pagination — desktop */}
@@ -57,10 +99,19 @@ export default function LandingPage() {
               aria-label={`slide-${i + 1}`}
               className="group flex items-center gap-4 outline-none"
             >
-              <span className={`font-mono-ui text-[10px] tracking-wider transition-all duration-500 ${i === active ? 'text-pomegranate-light' : 'text-white/25 group-hover:text-white/60'}`}>
+              <span className={`font-sans text-[11px] font-medium tracking-[0.12em] transition-all duration-500 ${i === active ? 'text-gold' : 'text-stone-400 group-hover:text-stone-600'}`}>
                 {String(i + 1).padStart(2, '0')}
               </span>
-              <span className={`block h-[1px] transition-all duration-700 ease-out ${i === active ? 'w-12 bg-pomegranate-light' : 'w-4 bg-white/15 group-hover:w-6 group-hover:bg-white/40'}`} />
+              <span className={`relative block h-[2px] overflow-hidden transition-all duration-700 ease-out ${i === active ? 'w-12 bg-stone-300' : 'w-4 bg-stone-300 group-hover:w-6 group-hover:bg-stone-400'}`}>
+                {i === active && (
+                  <motion.span
+                    key={`dot-fill-${active}`}
+                    className="absolute inset-0 origin-left bg-gold"
+                    initial={{ scaleX: 0 }}
+                    animate={progressControls}
+                  />
+                )}
+              </span>
             </button>
           ))}
         </div>
@@ -69,7 +120,16 @@ export default function LandingPage() {
         <div className="md:hidden absolute top-4 left-1/2 -translate-x-1/2 z-20 flex gap-1.5">
           {slides.map((s, i) => (
             <button key={`mdot-${s.tag}`} onClick={() => goToSlide(i)} aria-label={`slide-${i + 1}`}
-              className={`h-[2px] transition-all duration-500 ${i === active ? 'w-8 bg-pomegranate-light' : 'w-4 bg-white/25'}`} />
+              className={`relative h-[2px] overflow-hidden transition-all duration-500 ${i === active ? 'w-8 bg-stone-300' : 'w-4 bg-stone-300'}`}>
+              {i === active && (
+                <motion.span
+                  key={`mobile-dot-fill-${active}`}
+                  className="absolute inset-0 origin-left bg-gold"
+                  initial={{ scaleX: 0 }}
+                  animate={progressControls}
+                />
+              )}
+            </button>
           ))}
         </div>
 
@@ -84,7 +144,7 @@ export default function LandingPage() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -40, scale: 0.95 }}
                 transition={{ duration: 1, ease: EASE }}
-                className="number-outline text-[clamp(8rem,14vw,16rem)] leading-none"
+                className="number-outline text-[clamp(8rem,14vw,16rem)] leading-none opacity-30"
               >
                 {num}
               </motion.div>
@@ -94,30 +154,29 @@ export default function LandingPage() {
           <AnimatePresence mode="wait">
             <motion.div
               key={active}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              variants={{
-                hidden: { opacity: 0 },
-                visible: { opacity: 1, transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
-              }}
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
               className="flex flex-col relative"
             >
               {/* Eyebrow tag */}
               <motion.div
-                variants={{ hidden: { opacity: 0, x: -10 }, visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: EASE } } }}
+                key={`tag-${active}`}
+                {...textMotion(0)}
                 className="flex items-center gap-4 mb-7 md:mb-9"
               >
-                <span className="w-9 h-[1px] bg-pomegranate-light" />
-                <span className="font-mono-ui text-pomegranate-light text-[10px] tracking-[0.4em] uppercase">
+                <span className="w-9 h-[2px] bg-gold" />
+                <span className="font-sans text-gold text-[11px] font-medium tracking-[0.4em] uppercase">
                   {slide.tag}
                 </span>
               </motion.div>
 
               {/* Main heading — Instrument Serif */}
               <motion.h1
-                variants={{ hidden: { opacity: 0, y: 26 }, visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: EASE } } }}
-                className="font-serif-display text-white leading-[0.95] mb-7 md:mb-9 whitespace-pre-line"
+                key={`title-${active}`}
+                {...textMotion(0.15)}
+                className="font-sans text-ink font-black tracking-[-0.02em] leading-[0.95] mb-7 md:mb-9 whitespace-pre-line"
                 style={{ fontSize: 'clamp(3rem, 5.2vw, 5.5rem)' }}
               >
                 {slide.title}
@@ -125,22 +184,23 @@ export default function LandingPage() {
 
               {/* Body copy */}
               <motion.p
-                variants={{ hidden: { opacity: 0, y: 14 }, visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } } }}
-                className="text-white/55 text-[14px] md:text-[15px] leading-[1.75] mb-10 md:mb-14 max-w-[360px] font-light"
+                key={`desc-${active}`}
+                {...textMotion(0.3)}
+                className="text-stone-500 text-base leading-relaxed mb-10 md:mb-14 max-w-[360px] font-light"
               >
                 {slide.desc}
               </motion.p>
 
               {/* CTA */}
-              <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}>
+              <motion.div key={`cta-${active}`} {...textMotion(0.45)}>
                 <Link
                   to={slide.href}
                   className="group inline-flex items-center gap-5 outline-none"
                 >
-                  <span className="relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-pomegranate-light/40 group-hover:border-pomegranate-light group-hover:bg-pomegranate-light transition-all duration-500">
-                    <ArrowUpRight size={18} strokeWidth={1.5} className="text-pomegranate-light group-hover:text-white transition-colors duration-300" />
+                  <span className="relative flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-gold group-hover:border-gold group-hover:bg-gold transition-all duration-500">
+                    <ArrowUpRight size={18} strokeWidth={1.5} className="text-gold group-hover:text-white transition-colors duration-300" />
                   </span>
-                  <span className="font-mono-ui text-white text-[11px] tracking-[0.35em] uppercase">
+                  <span className="font-sans text-ink text-[11px] font-medium tracking-[0.35em] uppercase">
                     {slide.cta}
                   </span>
                 </Link>
@@ -150,26 +210,26 @@ export default function LandingPage() {
         </div>
 
         {/* Bottom info bar — desktop */}
-        <div className="hidden md:flex absolute bottom-6 left-24 right-10 items-center justify-between font-mono-ui text-white/30 text-[10px] tracking-[0.25em] uppercase">
-          <span>Diyarbakır <span className="mx-2 text-white/15">/</span> Türkiye <span className="mx-2 text-white/15">/</span> 2009</span>
+        <div className="hidden md:flex absolute bottom-6 left-24 right-10 items-center justify-between font-sans text-stone-400 text-[11px] font-medium tracking-[0.25em] uppercase">
+          <span>Diyarbakır <span className="mx-2 text-stone-300">/</span> Türkiye <span className="mx-2 text-stone-300">/</span> 2009</span>
           <span>
-            <span className="text-pomegranate-light">{num}</span>
-            <span className="mx-2 text-white/15">—</span>
-            <span className="text-white/40">{total}</span>
+            <span className="text-gold">{num}</span>
+            <span className="mx-2 text-stone-300">—</span>
+            <span className="text-stone-500">{total}</span>
           </span>
         </div>
       </aside>
 
       {/* === RIGHT PANEL — Full bleed image === */}
-      <div className="relative w-full md:w-[58%] h-[45vh] md:h-full overflow-hidden bg-charcoal">
+      <div className="relative w-full md:w-[58%] h-[45vh] md:h-full overflow-hidden bg-ink">
         <AnimatePresence mode="wait">
           <motion.div
             key={active}
             className="absolute inset-0"
-            initial={{ opacity: 0, scale: 1.1 }}
+            initial={{ opacity: 0, scale: 1.03 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.02 }}
-            transition={{ duration: 1.2, ease: EASE }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={SLIDE_TRANSITION}
           >
             <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />
             {/* Cinematic blends */}
@@ -180,48 +240,42 @@ export default function LandingPage() {
 
         {/* Editorial label — top right corner */}
         <div className="hidden md:flex absolute top-24 right-10 flex-col items-end gap-2 z-20">
-          <span className="font-mono-ui text-white/40 text-[10px] tracking-[0.3em] uppercase">{slide.tag}</span>
-          <span className="w-12 h-[1px] bg-pomegranate-light/60" />
+          <span className="font-sans text-white/50 text-[11px] font-medium tracking-[0.3em] uppercase">{slide.tag}</span>
+          <span className="w-12 h-[2px] bg-gold/70" />
         </div>
 
         {/* Mobile slide counter */}
-        <div className="absolute bottom-4 right-5 md:hidden font-mono-ui text-white/55 text-[10px] tracking-[0.3em]">
-          <span className="text-pomegranate-light">{num}</span> / {total}
+        <div className="absolute bottom-4 right-5 md:hidden font-sans text-white/65 text-[11px] font-medium tracking-[0.3em]">
+          <span className="text-gold-light">{num}</span> / {total}
         </div>
 
         {/* Progress bar — visual interval indicator */}
         <div className="hidden md:block absolute bottom-0 left-0 right-0 h-[1px] bg-white/10 overflow-hidden">
           <motion.div
-            key={`bar-${active}-${paused}`}
-            initial={{ width: '0%' }}
-            animate={{ width: paused ? '0%' : '100%' }}
-            transition={{ duration: paused ? 0 : SLIDE_INTERVAL_MS / 1000, ease: 'linear' }}
-            className="h-full bg-pomegranate-light"
+            key={`bar-${active}`}
+            initial={{ scaleX: 0 }}
+            animate={progressControls}
+            className="h-full bg-gold origin-left"
           />
         </div>
       </div>
 
       {/* === HEADER === */}
-      <header className="absolute top-0 left-0 w-full z-40 flex items-center justify-between px-5 md:px-12 h-14 md:h-20">
-        <button onClick={openMenu} className="flex items-center gap-3 text-white/85 hover:text-pomegranate-light transition-colors group" aria-label="menu">
+      <header className="absolute top-0 left-0 w-full z-40 flex items-center justify-between px-5 md:px-12 h-14 md:h-20 backdrop-blur-md bg-white/60 border-b border-white/40 transition-all duration-300">
+        <button onClick={openMenu} className="flex items-center gap-3 text-stone-700 hover:text-gold transition-colors group" aria-label="menu">
           <Menu size={20} strokeWidth={1.5} />
-          <span className="hidden md:inline font-mono-ui text-[10px] tracking-[0.35em] uppercase">Menü</span>
+          <span className="hidden md:inline font-sans text-[11px] font-medium tracking-[0.35em] uppercase">Menü</span>
         </button>
 
-        <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2.5">
-          <span className="font-black text-[15px] md:text-lg tracking-[0.22em] uppercase leading-none">
-            <span className="text-pomegranate-light">STAR</span>
-            <span className="text-white">LİFE</span>
-          </span>
-          <span className="hidden sm:inline-block w-px h-3 bg-white/20" />
-          <span className="hidden sm:inline text-white/45 font-light text-[10px] md:text-[11px] tracking-[0.4em] leading-none">İNŞAAT</span>
+        <Link to="/" className="absolute left-1/2 -translate-x-1/2 flex items-center">
+          <BrandLogo variant="dark" width={140} height={40} />
         </Link>
 
         <div className="flex items-center gap-3 md:gap-7">
-          <button onClick={openSearch} className="text-white/70 hover:text-pomegranate-light transition-colors p-2 -mr-2" aria-label="search">
+          <button onClick={openSearch} className="text-stone-700 hover:text-gold transition-colors p-2 -mr-2" aria-label="search">
             <Search size={17} strokeWidth={1.5} />
           </button>
-          <Link to="/iletisim" className="hidden sm:inline-flex items-center gap-2 text-white/70 hover:text-white text-[10px] md:text-[11px] tracking-[0.35em] uppercase font-mono-ui group">
+          <Link to="/iletisim" className="hidden sm:inline-flex items-center gap-2 text-stone-700 hover:text-gold text-[11px] tracking-[0.35em] uppercase font-sans font-medium group">
             E-Katalog
             <ArrowUpRight size={12} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
           </Link>
@@ -237,16 +291,16 @@ export default function LandingPage() {
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[70] bg-charcoal/97 backdrop-blur-xl flex items-start justify-center px-6 pt-32 md:pt-44"
+            className="fixed inset-0 z-[70] bg-white/95 backdrop-blur-xl flex items-start justify-center px-6 pt-32 md:pt-44"
             onClick={closeSearch}
           >
             <motion.div initial={{ y: -20 }} animate={{ y: 0 }} className="w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
-              <div className="flex items-center gap-4 border-b border-pomegranate-light/30 pb-4">
-                <Search size={20} strokeWidth={1.5} className="text-pomegranate-light" />
-                <input autoFocus placeholder="Aramak istediğinizi yazın..." className="flex-1 bg-transparent outline-none text-white font-serif-display text-2xl md:text-4xl placeholder:text-white/25" />
-                <button onClick={closeSearch} aria-label="Close"><X size={20} strokeWidth={1.5} className="text-white/60 hover:text-white" /></button>
+              <div className="flex items-center gap-4 border-b border-gold/30 pb-4">
+                <Search size={20} strokeWidth={1.5} className="text-gold" />
+                <input autoFocus placeholder="Aramak istediğinizi yazın..." className="flex-1 bg-transparent outline-none text-ink font-sans font-light text-2xl md:text-4xl placeholder:text-stone-300" />
+                <button onClick={closeSearch} aria-label="Close"><X size={20} strokeWidth={1.5} className="text-stone-500 hover:text-ink" /></button>
               </div>
-              <p className="mt-6 font-mono-ui text-white/35 text-[10px] tracking-[0.3em] uppercase">Popüler / Konut Projeleri · Deprem Dayanıklılığı · Hakkımızda</p>
+              <p className="mt-6 font-sans text-stone-400 text-[11px] font-medium tracking-[0.3em] uppercase">Popüler / Konut Projeleri · Deprem Dayanıklılığı · Hakkımızda</p>
             </motion.div>
           </motion.div>
         )}

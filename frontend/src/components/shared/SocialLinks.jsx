@@ -13,7 +13,7 @@ const iconMap = {
 export default function SocialLinks({ vertical = false, size = 16, className = '', theme = 'light' }) {
   const styles = theme === 'dark'
     ? 'border-white/20 text-white/70 hover:text-pomegranate-light hover:border-pomegranate-light'
-    : 'border-black/15 text-dark/60 hover:text-white hover:border-pomegranate hover:bg-pomegranate';
+    : 'border-ink/15 text-ink/60 hover:text-white hover:border-pomegranate hover:bg-pomegranate';
 
   return (
     <div className={`flex ${vertical ? 'flex-col' : 'flex-row'} gap-3 ${className}`}>

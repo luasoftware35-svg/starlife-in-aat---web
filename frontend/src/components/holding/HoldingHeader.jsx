@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import NavItem, { useHeaderState } from '../shared/NavItem';
+import BrandLogo from '../shared/BrandLogo';
 import { HOLDING_NAV } from '../../mock/mock';
 
 const MOBILE_VARIANTS = {
@@ -20,36 +21,34 @@ function MobileMenu({ open, onClose }) {
       animate={MOBILE_VARIANTS.animate}
       exit={MOBILE_VARIANTS.exit}
       transition={MOBILE_TRANSITION}
-      className="fixed inset-0 bg-dark z-[60] flex flex-col"
+      className="fixed inset-0 bg-white z-[60] flex flex-col"
     >
-      <div className="flex justify-between items-center h-16 px-6 border-b border-white/10">
-        <span className="font-black text-lg tracking-[0.15em] uppercase">
-          <span className="text-pomegranate">STAR</span><span className="text-white">LİFE</span>
-        </span>
-        <button onClick={onClose} className="text-white/85" aria-label="Close menu">
+      <div className="flex justify-between items-center h-16 px-6 border-b border-stone-200/60">
+        <BrandLogo variant="dark" width={140} height={40} />
+        <button onClick={onClose} className="text-stone-700 hover:text-gold transition-colors" aria-label="Close menu">
           <X size={24} />
         </button>
       </div>
       <div className="flex-1 overflow-y-auto p-6 space-y-2">
         {HOLDING_NAV.map((item) => (
-          <div key={item.label} className="border-b border-white/5 py-2">
+          <div key={item.label} className="border-b border-stone-100 py-2">
             {item.href ? (
-              <Link to={item.href} className="block py-2 text-white/85 text-base">{item.label}</Link>
+              <Link to={item.href} className="block py-2 text-ink font-light text-base hover:text-gold transition-colors">{item.label}</Link>
             ) : (
               <details>
-                <summary className="py-2 text-white/85 text-base cursor-pointer list-none flex justify-between items-center">
+                <summary className="py-2 text-ink font-light text-base cursor-pointer list-none flex justify-between items-center">
                   {item.label} <ChevronDown size={16} />
                 </summary>
                 <div className="pl-3 pb-2">
                   {item.children.map((c) => (
-                    <Link key={c.href} to={c.href} className="block py-2 text-white/60 text-sm hover:text-pomegranate-light">{c.label}</Link>
+                    <Link key={c.href} to={c.href} className="block py-2 text-stone-500 text-sm hover:text-gold transition-colors">{c.label}</Link>
                   ))}
                 </div>
               </details>
             )}
           </div>
         ))}
-        <Link to="/iletisim" className="block mt-6 border border-pomegranate text-pomegranate-light px-5 py-3 text-xs tracking-widest uppercase text-center hover:bg-pomegranate hover:text-white transition-all">
+        <Link to="/iletisim" className="block mt-6 border border-gold text-gold px-5 py-3 text-[11px] tracking-[0.25em] uppercase text-center font-medium hover:bg-gold hover:text-white transition-all">
           Bize Ulaşın
         </Link>
       </div>
@@ -66,16 +65,12 @@ export default function HoldingHeader({ transparent = false }) {
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 h-16 transition-all duration-300 ${
-        showBg ? 'bg-dark/95 backdrop-blur-sm border-b border-white/10' : 'bg-transparent'
+        showBg ? 'bg-white/90 backdrop-blur-md border-b border-stone-200/60' : 'backdrop-blur-md bg-white/60 border-b border-white/40'
       }`}
     >
-      <div className="h-full max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center justify-between">
+      <div className="h-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <span className="font-black text-lg tracking-[0.15em] uppercase">
-            <span className="text-pomegranate">STAR</span>
-            <span className="text-white">LİFE</span>
-          </span>
-          <span className="hidden sm:inline text-white/50 font-light text-xs tracking-[0.3em]">İNŞAAT</span>
+          <BrandLogo variant="dark" width={140} height={40} />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">
@@ -87,12 +82,12 @@ export default function HoldingHeader({ transparent = false }) {
         <div className="flex items-center gap-4">
           <Link
             to="/iletisim"
-            className="hidden md:inline-block border border-pomegranate text-pomegranate-light px-5 py-2 text-xs tracking-widest uppercase hover:bg-pomegranate hover:text-white transition-all duration-300"
+            className="hidden md:inline-block border border-gold text-gold text-[11px] tracking-[0.25em] font-medium px-5 py-2 hover:bg-gold hover:text-white transition-all duration-300"
           >
             Bize Ulaşın
           </Link>
           <button
-            className="lg:hidden text-white/85 hover:text-pomegranate-light transition-colors"
+            className="lg:hidden text-stone-700 hover:text-gold transition-colors"
             onClick={openMobile}
             aria-label="menu"
           >

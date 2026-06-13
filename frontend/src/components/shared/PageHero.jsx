@@ -10,7 +10,7 @@ export default function PageHero({ title, breadcrumb = [], image, height = '52vh
       className="relative w-full overflow-hidden"
       style={{ height }}
     >
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 pointer-events-none">
         {image ? (
           <>
             <img src={image} alt={title} className="w-full h-full object-cover" />
@@ -22,7 +22,7 @@ export default function PageHero({ title, breadcrumb = [], image, height = '52vh
         )}
       </div>
 
-      <div className="relative z-10 h-full max-w-[1400px] mx-auto flex flex-col justify-end px-6 md:px-16 pb-12 md:pb-16">
+      <div className="relative z-20 h-full max-w-[1400px] mx-auto flex flex-col justify-end px-6 md:px-16 pb-12 md:pb-16 pointer-events-auto">
         {breadcrumb.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -33,7 +33,7 @@ export default function PageHero({ title, breadcrumb = [], image, height = '52vh
             {breadcrumb.map((b, i) => (
               <span key={`bc-${b.label}-${i}`}>
                 {b.href ? (
-                  <Link to={b.href} className="hover:text-pomegranate-light transition-colors">{b.label}</Link>
+                  <Link to={b.href} className="inline-block hover:text-pomegranate-light transition-colors">{b.label}</Link>
                 ) : (
                   <span className="text-white/70">{b.label}</span>
                 )}

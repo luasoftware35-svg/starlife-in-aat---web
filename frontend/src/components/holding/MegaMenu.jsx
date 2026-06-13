@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ArrowUpRight, Phone, Mail, MapPin, ChevronRight } from 'lucide-react';
 import { HOLDING_NAV, COMPANY, SOCIALS } from '../../mock/mock';
+import BrandLogo from '../shared/BrandLogo';
 
 const EASE = [0.76, 0, 0.24, 1];
 const EASE_OUT = [0.22, 1, 0.36, 1];
@@ -65,8 +66,8 @@ export default function MegaMenu({ open, onClose }) {
           >
             {/* Decorative glow */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
-              <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full opacity-[0.10] blur-3xl" style={{ background: 'radial-gradient(circle, #C8102E 0%, transparent 70%)' }} />
-              <div className="absolute -bottom-60 -right-20 w-[500px] h-[500px] rounded-full opacity-[0.07] blur-3xl" style={{ background: 'radial-gradient(circle, #C8102E 0%, transparent 70%)' }} />
+              <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full opacity-[0.10] blur-3xl bg-gold" />
+              <div className="absolute -bottom-60 -right-20 w-[500px] h-[500px] rounded-full opacity-[0.07] blur-3xl bg-gold-light" />
             </div>
 
             <div className="relative h-[100dvh] flex flex-col">
@@ -77,13 +78,8 @@ export default function MegaMenu({ open, onClose }) {
                 transition={{ delay: 0.5, duration: 0.5 }}
                 className="flex justify-between items-center h-14 md:h-20 px-5 md:px-12 shrink-0 border-b border-white/5"
               >
-                <Link to="/" onClick={handleClose} className="flex items-center gap-2.5">
-                  <span className="font-black text-[15px] md:text-lg tracking-[0.22em] uppercase leading-none">
-                    <span className="text-pomegranate-light">STAR</span>
-                    <span className="text-white">LİFE</span>
-                  </span>
-                  <span className="hidden sm:inline-block w-px h-3 bg-white/20" />
-                  <span className="hidden sm:inline text-white/45 font-light text-[10px] md:text-[11px] tracking-[0.4em] leading-none">İNŞAAT</span>
+                <Link to="/" onClick={handleClose} className="flex items-center">
+                  <BrandLogo variant="light" width={140} height={40} />
                 </Link>
 
                 <button

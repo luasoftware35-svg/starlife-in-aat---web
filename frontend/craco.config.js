@@ -61,6 +61,8 @@ let webpackConfig = {
 };
 
 webpackConfig.devServer = (devServerConfig) => {
+  devServerConfig.historyApiFallback = true;
+
   // Add health check endpoints if enabled
   if (config.enableHealthCheck && setupHealthEndpoints && healthPluginInstance) {
     const originalSetupMiddlewares = devServerConfig.setupMiddlewares;
@@ -82,7 +84,7 @@ webpackConfig.devServer = (devServerConfig) => {
 };
 
 // Wrap with visual edits (automatically adds babel plugin, dev server, and overlay in dev mode)
-if (isDevServer) {
+if (isDevServer && process.env.ENABLE_VISUAL_EDITS === "true") {
   try {
     const { withVisualEdits } = require("@emergentbase/visual-edits/craco");
     webpackConfig = withVisualEdits(webpackConfig);
@@ -98,5 +100,20 @@ if (isDevServer) {
     }
   }
 }
+
+const existingDevServer = webpackConfig.devServer;
+webpackConfig.devServer = (devServerConfig) => {
+  const nextConfig = typeof existingDevServer === 'function'
+    ? existingDevServer(devServerConfig)
+    : { ...devServerConfig, ...(existingDevServer || {}) };
+
+  return {
+    ...nextConfig,
+    historyApiFallback: {
+      index: '/index.html',
+      disableDotRule: true,
+    },
+  };
+};
 
 module.exports = webpackConfig;

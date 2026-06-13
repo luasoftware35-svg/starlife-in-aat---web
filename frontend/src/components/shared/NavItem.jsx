@@ -4,9 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 
 const DROPDOWN_VARIANTS = {
-  initial: { opacity: 0, y: -8 },
+  initial: { opacity: 0, y: -6 },
   animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -8 },
+  exit: { opacity: 0, y: -6 },
 };
 
 const DROPDOWN_TRANSITION = { duration: 0.2 };
@@ -24,8 +24,8 @@ export default function NavItem({ item, isActive }) {
     return (
       <Link
         to={item.href}
-        className={`text-sm font-medium tracking-wide transition-colors duration-200 ${
-          isActive(item.href) ? 'text-pomegranate' : 'text-white/85 hover:text-pomegranate-light'
+        className={`border-b border-transparent text-[13px] tracking-[0.12em] transition-all duration-200 ${
+          isActive(item.href) ? 'text-gold font-medium' : 'text-stone-700 font-light hover:text-gold hover:border-gold'
         }`}
       >
         {item.label}
@@ -35,7 +35,7 @@ export default function NavItem({ item, isActive }) {
 
   return (
     <div className="relative" onMouseEnter={onEnter} onMouseLeave={onLeave}>
-      <button className="flex items-center gap-1 text-sm font-medium text-white/85 hover:text-pomegranate-light transition-colors">
+      <button className="flex items-center gap-1 border-b border-transparent text-[13px] font-light tracking-[0.12em] text-stone-700 hover:text-gold hover:border-gold transition-all duration-200">
         {item.label}
         <ChevronDown size={14} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
@@ -48,12 +48,12 @@ export default function NavItem({ item, isActive }) {
             transition={DROPDOWN_TRANSITION}
             className="absolute top-full left-1/2 -translate-x-1/2 pt-4"
           >
-            <div className="bg-dark/97 backdrop-blur-md border border-white/10 shadow-2xl min-w-[240px] py-2">
+            <div className="bg-white/95 backdrop-blur-sm border border-stone-100 shadow-lg shadow-stone-200/50 min-w-[240px] py-2">
               {item.children.map((c) => (
                 <Link
                   key={c.href}
                   to={c.href}
-                  className="block px-5 py-3 text-sm text-white/75 hover:text-pomegranate-light hover:bg-white/5 transition-colors"
+                  className="block px-5 py-3 text-[13px] font-light tracking-wide text-stone-600 hover:text-gold hover:bg-stone-50 transition-colors"
                 >
                   {c.label}
                 </Link>

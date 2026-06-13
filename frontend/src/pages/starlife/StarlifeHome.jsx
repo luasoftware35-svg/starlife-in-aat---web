@@ -8,6 +8,7 @@ import SocialLinks from '../../components/shared/SocialLinks';
 import ContactForm from '../../components/shared/ContactForm';
 import { STARLIFE_NAV, PROJECTS } from '../../mock/mock';
 import { fadeUp, staggerContainer } from '../../lib/animations';
+import { mapProject, useSupabaseRows } from '../../lib/supabase/content';
 
 const VIEWPORT = { once: true, margin: '-80px' };
 const VIEWPORT_TIGHT = { once: true, margin: '-50px' };
@@ -24,6 +25,13 @@ const TWO_CARDS = [
 ];
 
 export default function StarlifeHome() {
+  const projects = useSupabaseRows(
+    'projects',
+    { orderBy: 'order_index', ascending: true },
+    PROJECTS,
+    mapProject,
+  );
+
   return (
     <div className="bg-white text-charcoal min-h-screen">
       <SubsiteHeader navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" contactHref="/starlife-insaat/iletisim" />
@@ -166,23 +174,25 @@ export default function StarlifeHome() {
           </div>
           <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={VIEWPORT_TIGHT}
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
-            {PROJECTS.slice(0, 6).map((p) => (
-              <motion.div
+            {projects.slice(0, 6).map((p) => (
+              <motion.article
                 key={p.id}
                 variants={fadeUp}
                 className="group relative overflow-hidden aspect-[4/5] cursor-pointer bg-charcoal"
               >
-                <img src={p.image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/40 to-transparent" />
-                <div className="absolute top-5 right-5 px-3 py-1 bg-pomegranate/90 text-white text-[9px] tracking-[0.25em] uppercase font-medium">
-                  {p.status}
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-6 md:p-7">
-                  <span className="text-pomegranate-light text-[10px] tracking-[0.35em] uppercase font-medium">{p.tag}</span>
-                  <h3 className="font-serif-display text-white font-medium text-2xl mt-2">{p.title}</h3>
-                  <p className="text-white/55 text-[13px] mt-1.5 font-light">{p.location} · {p.year}</p>
-                </div>
-              </motion.div>
+                <Link to={`/starlife-insaat/projeler/${p.slug}`} className="block h-full">
+                  <img src={p.image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/40 to-transparent" />
+                  <div className="absolute top-5 right-5 px-3 py-1 bg-pomegranate/90 text-white text-[9px] tracking-[0.25em] uppercase font-medium">
+                    {p.status}
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-6 md:p-7">
+                    <span className="text-pomegranate-light text-[10px] tracking-[0.35em] uppercase font-medium">{p.tag}</span>
+                    <h3 className="font-serif-display text-white font-medium text-2xl mt-2">{p.title}</h3>
+                    <p className="text-white/55 text-[13px] mt-1.5 font-light">{p.location} · {p.year}</p>
+                  </div>
+                </Link>
+              </motion.article>
             ))}
           </motion.div>
         </div>
@@ -191,7 +201,7 @@ export default function StarlifeHome() {
       {/* CTA Banner — refined, charcoal-based instead of bright red */}
       <section className="bg-charcoal py-20 md:py-32 px-6 md:px-16 text-center relative overflow-hidden bg-noise">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full opacity-[0.06]" style={{ background: 'radial-gradient(circle, #C8102E 0%, transparent 70%)' }} />
+          <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full opacity-[0.06] bg-gold-light blur-3xl" />
         </div>
         <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={VIEWPORT_TIGHT} className="max-w-3xl mx-auto relative z-10">
           <span className="text-pomegranate-light text-[11px] tracking-[0.5em] uppercase font-medium flex items-center justify-center gap-3">
