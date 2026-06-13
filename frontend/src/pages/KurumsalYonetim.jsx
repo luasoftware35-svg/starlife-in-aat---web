@@ -81,13 +81,13 @@ export default function KurumsalYonetim() {
         ]}
       />
 
-      <section className="bg-mist py-24 px-6 md:px-12 lg:px-20">
+      <section className="bg-mist py-16 px-5 sm:px-6 md:px-12 md:py-24 lg:px-20">
         <div className="max-w-[1400px] mx-auto">
           <div className="mb-14">
             <span className="text-gold text-[11px] font-medium tracking-[0.4em] uppercase block mb-4">
               EKİBİMİZ
             </span>
-            <h2 className="text-5xl font-bold text-ink tracking-[-0.01em]">
+            <h2 className="text-3xl font-bold text-ink tracking-[-0.01em] sm:text-4xl md:text-5xl">
               Vizyonumuzu Şekillendiren İsimler
             </h2>
             <p className="text-stone-500 font-light text-base mt-4 max-w-xl leading-relaxed">
@@ -100,7 +100,7 @@ export default function KurumsalYonetim() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-5xl mx-auto mt-16"
+            className="grid grid-cols-1 gap-8 max-w-5xl mx-auto mt-12 md:mt-16 lg:grid-cols-3 lg:gap-12"
           >
             {teamMembers.map((member) => (
               <motion.article

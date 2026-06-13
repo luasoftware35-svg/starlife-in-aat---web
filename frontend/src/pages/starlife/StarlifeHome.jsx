@@ -125,7 +125,7 @@ export default function StarlifeHome() {
           className="max-w-[1400px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {VALUES.map((v, i) => (
             <motion.div key={v.title} variants={fadeUp}
-              className="bg-cream p-9 md:p-10 border-t border-pomegranate/30 hover:border-pomegranate transition-all duration-500 group">
+              className="bg-cream p-6 sm:p-8 md:p-10 border-t border-pomegranate/30 hover:border-pomegranate transition-all duration-500 group">
               <div className="flex items-start justify-between mb-7">
                 <v.icon className="text-pomegranate" size={28} strokeWidth={1.5} />
                 <span className="text-pomegranate/30 font-mono text-[11px] tracking-widest">0{i + 1}</span>
@@ -144,7 +144,7 @@ export default function StarlifeHome() {
             <Link key={c.title} to={c.href} className="relative aspect-[16/10] md:aspect-[16/11] overflow-hidden group block">
               <img src={c.image} alt={c.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out" />
               <div className="absolute inset-0 bg-gradient-to-t from-charcoal/95 via-charcoal/40 to-charcoal/10 group-hover:from-charcoal/90 transition-colors duration-500" />
-              <div className="absolute bottom-0 left-0 p-8 md:p-12">
+              <div className="absolute bottom-0 left-0 p-6 sm:p-8 md:p-12">
                 <span className="text-pomegranate-light text-[10px] tracking-[0.4em] uppercase font-medium">{c.label}</span>
                 <h3 className="font-serif-display text-white font-medium text-3xl md:text-5xl mt-3 leading-tight">{c.title}</h3>
                 <span className="inline-flex items-center gap-3 text-white/90 text-[11px] tracking-[0.35em] uppercase font-medium mt-5 group-hover:gap-5 transition-all duration-300">
@@ -164,7 +164,7 @@ export default function StarlifeHome() {
               <span className="text-pomegranate text-[11px] tracking-[0.5em] uppercase font-medium flex items-center gap-3">
                 <span className="w-8 h-[1px] bg-pomegranate/60" /> Projelerimiz
               </span>
-              <h2 className="font-serif-display text-charcoal text-4xl md:text-5xl lg:text-6xl font-medium mt-4 leading-tight tracking-tight">
+              <h2 className="font-serif-display text-charcoal text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium mt-4 leading-tight tracking-tight">
                 Öne Çıkan <span className="italic text-pomegranate">Projeler</span>
               </h2>
             </div>
@@ -207,10 +207,10 @@ export default function StarlifeHome() {
           <span className="text-pomegranate-light text-[11px] tracking-[0.5em] uppercase font-medium flex items-center justify-center gap-3">
             <span className="w-8 h-[1px] bg-pomegranate-light/60" /> İletişim <span className="w-8 h-[1px] bg-pomegranate-light/60" />
           </span>
-          <h2 className="font-serif-display text-white text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1] mt-6 tracking-tight">
+          <h2 className="font-serif-display text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium leading-[1.1] mt-6 tracking-tight">
             Mutlu, huzurlu ve <span className="italic text-pomegranate-light">güvenli</span> bir yaşam için
           </h2>
-          <Link to="/starlife-insaat/iletisim" className="inline-flex items-center gap-3 bg-pomegranate text-white font-medium px-10 py-4 mt-10 md:mt-12 tracking-[0.3em] text-[11px] uppercase hover:bg-pomegranate-dark transition-colors duration-300 group">
+          <Link to="/starlife-insaat/iletisim" className="inline-flex items-center justify-center gap-3 bg-pomegranate text-white font-medium px-7 py-4 mt-10 md:mt-12 tracking-[0.25em] text-[11px] uppercase hover:bg-pomegranate-dark transition-colors duration-300 group sm:px-10 sm:tracking-[0.3em]">
             Bize Ulaşın <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </motion.div>

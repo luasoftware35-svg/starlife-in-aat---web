@@ -39,7 +39,7 @@ export default function SubsiteFooter({ brandPrefix, brandSuffix, basePath = '/'
           <h4 className="text-gold text-[11px] tracking-[0.35em] uppercase mb-6 font-medium">İletişim</h4>
           <ul className="space-y-5">
             <li className="flex gap-3 text-white/60 text-sm font-light leading-relaxed"><MapPin size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><span>{COMPANY.address}</span></li>
-            <li className="flex gap-3 text-white/60 text-sm font-light"><Mail size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><a href={`mailto:${COMPANY.email}`} className="hover:text-gold transition-colors">{COMPANY.email}</a></li>
+            <li className="flex gap-3 text-white/60 text-sm font-light"><Mail size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><a href={`mailto:${COMPANY.email}`} className="break-all hover:text-gold transition-colors">{COMPANY.email}</a></li>
             <li className="flex gap-3 text-white/60 text-sm font-light"><Phone size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><a href={`tel:${COMPANY.phone.replace(/\s/g, '')}`} className="hover:text-gold transition-colors">{COMPANY.phone}</a></li>
           </ul>
         </div>

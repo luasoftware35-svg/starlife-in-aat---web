@@ -7,7 +7,7 @@ export const COMPANY = {
   founder: 'Numan Erdoğan',
   address: 'Ceysa Serhat Plaza B Blok Kat 2 No:2 Kayapınar/Diyarbakır',
   phone: '0412 504 1008',
-  email: 'tanitimmedya@starlifeinsaat.com',
+  email: 'luasoftware35@gmail.com',
 };
 
 export const SOCIALS = [

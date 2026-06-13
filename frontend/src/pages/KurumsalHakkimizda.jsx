@@ -14,7 +14,7 @@ export default function KurumsalHakkimizda() {
       <HoldingHeader />
       <PageHero title="Hakkımızda" breadcrumb={[{ label: 'Ana Sayfa', href: '/' }, { label: 'Kurumsal', href: '/kurumsal/hakkimizda' }, { label: 'Hakkımızda' }]} image="https://images.pexels.com/photos/34700467/pexels-photo-34700467.png?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600" />
 
-      <section className="bg-white text-ink py-24 px-6 md:px-16">
+      <section className="bg-white text-ink py-16 px-5 sm:px-6 md:px-16 md:py-24">
         <div className="max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-16 items-center">
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-50px' }}>
             <span className="text-gold text-xs tracking-[0.4em] uppercase">2009'dan Beri</span>
@@ -60,7 +60,7 @@ export default function KurumsalHakkimizda() {
         </motion.div>
       </section>
 
-      <section className="bg-ink py-24 px-6 md:px-16">
+      <section className="bg-ink py-16 px-5 sm:px-6 md:px-16 md:py-24">
         <div className="max-w-[1400px] mx-auto">
           <div className="text-center mb-14">
             <span className="text-pomegranate-light text-xs tracking-[0.4em] uppercase font-semibold">Grup Şirketlerimiz</span>

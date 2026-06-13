@@ -281,7 +281,7 @@ export default function MegaMenu({ open, onClose }) {
                     <a href={`tel:${COMPANY.phone.replace(/\s/g, '')}`} className="flex items-center gap-2.5 hover:text-pomegranate-light transition-colors">
                       <Phone size={13} strokeWidth={1.5} /> {COMPANY.phone}
                     </a>
-                    <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-2.5 hover:text-pomegranate-light transition-colors">
+                    <a href={`mailto:${COMPANY.email}`} className="flex items-center gap-2.5 break-all hover:text-pomegranate-light transition-colors">
                       <Mail size={13} strokeWidth={1.5} /> {COMPANY.email}
                     </a>
                     <span className="hidden lg:flex items-center gap-2.5 text-white/30">

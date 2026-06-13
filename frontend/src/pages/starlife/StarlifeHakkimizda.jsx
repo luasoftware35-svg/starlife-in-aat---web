@@ -13,7 +13,7 @@ export default function StarlifeHakkimizda() {
       <SubsiteHeader navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" contactHref="/starlife-insaat/iletisim" />
       <PageHero title="Hakkımızda" breadcrumb={[{ label: 'Anasayfa', href: '/starlife-insaat' }, { label: 'Kurumsal', href: '/starlife-insaat/kurumsal/hakkimizda' }, { label: 'Hakkımızda' }]} image="https://images.pexels.com/photos/5403840/pexels-photo-5403840.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600" />
 
-      <section className="bg-white text-ink py-24 px-6 md:px-16">
+      <section className="bg-white text-ink py-16 px-5 sm:px-6 md:px-16 md:py-24">
         <div className="max-w-[1400px] mx-auto grid lg:grid-cols-2 gap-16 items-center">
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
             <span className="text-gold text-xs tracking-[0.4em] uppercase">Starlife İnşaat</span>
@@ -26,13 +26,13 @@ export default function StarlifeHakkimizda() {
         </div>
       </section>
 
-      <section className="bg-gray-50 text-ink py-20 px-6 md:px-16">
+      <section className="bg-gray-50 text-ink py-16 px-5 sm:px-6 md:px-16 md:py-20">
         <div className="max-w-[1400px] mx-auto grid md:grid-cols-2 gap-8">
           {[
             { icon: Building2, title: 'Vizyonumuz', desc: 'Modern, sürdürülebilir ve estetik yaşam alanları inşa ederek, geleceğin mimarisine yön veren bir marka olmak.' },
             { icon: Target, title: 'Misyonumuz', desc: 'Yüksek mühendislik standartları ve çağdaş tasarım anlayışıyla, güvenli ve konforlu yapılar inşa etmek.' },
           ].map((b) => (
-            <motion.div key={b.title} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="bg-white p-10 border-t-2 border-gold">
+            <motion.div key={b.title} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="bg-white p-6 border-t-2 border-gold sm:p-8 md:p-10">
               <b.icon className="text-gold" size={36} />
               <h3 className="font-black text-2xl mt-4">{b.title}</h3>
               <p className="text-ink/65 mt-3 leading-relaxed">{b.desc}</p>
@@ -41,7 +41,7 @@ export default function StarlifeHakkimizda() {
         </div>
       </section>
 
-      <section className="bg-pomegranate py-20 px-6 md:px-16">
+      <section className="bg-pomegranate py-16 px-5 sm:px-6 md:px-16 md:py-20">
         <div className="max-w-[1200px] mx-auto grid md:grid-cols-3 gap-8 text-center">
           {[{ v: '2009', l: 'Kuruluş' }, { v: '50+', l: 'Tamamlanan Proje' }, { v: '%100', l: 'Müşteri Memnuniyeti' }].map((s) => (
             <div key={s.l}>

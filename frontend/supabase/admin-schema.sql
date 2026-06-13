@@ -177,5 +177,5 @@ insert into public.site_settings (key, value, group_name)
 values
   ('site.title', 'Starlife İnşaat', 'general'),
   ('contact.phone', '+90 000 000 00 00', 'contact'),
-  ('contact.email', 'info@starlife.com', 'contact')
+  ('contact.email', 'luasoftware35@gmail.com', 'contact')
 on conflict (key) do nothing;

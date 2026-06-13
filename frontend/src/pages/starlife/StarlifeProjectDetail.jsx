@@ -98,7 +98,7 @@ export default function StarlifeProjectDetail() {
         image={project.image}
       />
 
-      <section className="bg-white px-6 py-20 md:px-16">
+      <section className="bg-white px-5 py-16 sm:px-6 md:px-16 md:py-20">
         <div className="mx-auto grid max-w-[1400px] gap-12 lg:grid-cols-[minmax(0,1fr)_380px]">
           <div>
             <Link to="/starlife-insaat/tumprojeler" className="inline-flex items-center gap-2 text-gold text-[11px] font-medium tracking-[0.3em] uppercase">
@@ -108,7 +108,7 @@ export default function StarlifeProjectDetail() {
             <span className="mt-10 block text-gold text-[11px] font-medium tracking-[0.4em] uppercase">
               {project.tag} · {project.status}
             </span>
-            <h1 className="mt-4 font-serif-display text-4xl font-medium leading-tight tracking-tight text-ink md:text-6xl">
+            <h1 className="mt-4 font-serif-display text-4xl font-medium leading-tight tracking-tight text-ink text-balance md:text-6xl">
               {project.title}
             </h1>
             {project.description && (
@@ -162,15 +162,15 @@ export default function StarlifeProjectDetail() {
         </div>
       </section>
 
-      <section className="bg-mist px-6 py-20 md:px-16">
+      <section className="bg-mist px-5 py-16 sm:px-6 md:px-16 md:py-20">
         <div className="mx-auto max-w-[1400px]">
           <div className="mb-10">
             <span className="text-gold text-[11px] font-medium tracking-[0.4em] uppercase">Galeri</span>
-            <h2 className="mt-3 text-4xl font-bold tracking-tight text-ink">Proje Görselleri</h2>
+            <h2 className="mt-3 text-3xl font-bold tracking-tight text-ink sm:text-4xl">Proje Görselleri</h2>
             <p className="mt-3 text-sm font-light text-ink/55">Görselleri büyütmek için üzerine tıklayın.</p>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3">
             {gallery.map((image, index) => (
               <button
                 key={`${image}-${index}`}

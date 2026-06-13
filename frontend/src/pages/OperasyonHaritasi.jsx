@@ -270,7 +270,7 @@ export default function OperasyonHaritasi() {
         ]}
       />
 
-      <section className="bg-[#0F0F0F] py-20 px-6 md:px-12 lg:px-20">
+      <section className="bg-[#0F0F0F] py-16 px-5 sm:px-6 md:px-12 md:py-20 lg:px-20">
         <style>
           {`
             @keyframes provinceFade {
@@ -305,7 +305,7 @@ export default function OperasyonHaritasi() {
             <span className="text-gold text-[11px] font-medium tracking-[0.4em] uppercase block mb-4">
               OPERASYONLARIMIZ
             </span>
-            <h2 className="text-5xl font-bold text-white tracking-[-0.01em]">
+            <h2 className="text-3xl font-bold text-white tracking-[-0.01em] sm:text-4xl md:text-5xl">
               Türkiye Genelinde Faaliyet Alanlarımız
             </h2>
             <p className="text-stone-400 font-light text-base mt-4 max-w-xl leading-relaxed">
@@ -322,7 +322,7 @@ export default function OperasyonHaritasi() {
               className="min-w-0"
             >
               <div
-                className="relative w-full bg-[#0F0F0F] border border-[#202020] p-4 md:p-8 overflow-hidden operation-map"
+                className="relative w-full bg-[#0F0F0F] border border-[#202020] p-3 sm:p-4 md:p-8 overflow-hidden operation-map"
                 onClick={() => setSelected(null)}
               >
                 <svg viewBox="0 0 1007 443" xmlns="http://www.w3.org/2000/svg" aria-label="Türkiye operasyon haritası">
@@ -363,8 +363,8 @@ export default function OperasyonHaritasi() {
                       >
                         <span className={`absolute -inset-2 rounded-full border border-gold/40 ${active ? 'animate-ping bg-gold/20' : 'bg-gold/10'}`} />
                         <span className="relative block w-3.5 h-3.5 rounded-full bg-gold border border-gold-light shadow-[0_0_18px_rgba(212,175,55,0.55)] group-hover:scale-125 transition-transform duration-300" />
-                        <span className="absolute left-1/2 top-1/2 w-14 h-px bg-gold/30 origin-left rotate-[-18deg]" />
-                        <span className={`absolute left-1/2 top-1/2 whitespace-nowrap text-left ${labelOffset}`}>
+                        <span className="absolute left-1/2 top-1/2 hidden w-14 h-px bg-gold/30 origin-left rotate-[-18deg] sm:block" />
+                        <span className={`absolute left-1/2 top-1/2 hidden whitespace-nowrap text-left sm:block ${labelOffset}`}>
                           <span className="block font-serif italic text-stone-300 text-sm md:text-base leading-none group-hover:text-white transition-colors">
                             {loc.city}
                           </span>

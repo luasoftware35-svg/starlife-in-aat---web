@@ -7,8 +7,8 @@ const EASE = [0.22, 1, 0.36, 1];
 export default function PageHero({ title, breadcrumb = [], image, height = '52vh' }) {
   return (
     <section
-      className="relative w-full overflow-hidden"
-      style={{ height }}
+      className="relative w-full min-h-[360px] overflow-hidden"
+      style={{ height: `max(${height}, 360px)` }}
     >
       <div className="absolute inset-0 pointer-events-none">
         {image ? (
@@ -22,13 +22,13 @@ export default function PageHero({ title, breadcrumb = [], image, height = '52vh
         )}
       </div>
 
-      <div className="relative z-20 h-full max-w-[1400px] mx-auto flex flex-col justify-end px-6 md:px-16 pb-12 md:pb-16 pointer-events-auto">
+      <div className="relative z-20 h-full max-w-[1400px] mx-auto flex flex-col justify-end px-5 sm:px-6 md:px-16 pb-10 md:pb-16 pointer-events-auto">
         {breadcrumb.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-white/45 text-[10px] tracking-[0.35em] uppercase mb-5 font-medium"
+            className="flex flex-wrap gap-y-2 text-white/45 text-[9px] sm:text-[10px] tracking-[0.25em] sm:tracking-[0.35em] uppercase mb-5 font-medium"
           >
             {breadcrumb.map((b, i) => (
               <span key={`bc-${b.label}-${i}`}>
@@ -46,8 +46,8 @@ export default function PageHero({ title, breadcrumb = [], image, height = '52vh
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.85, ease: EASE }}
-          className="font-serif-display text-white font-medium leading-[1.05] tracking-tight"
-          style={{ fontSize: 'clamp(2.5rem, 5vw, 4.5rem)' }}
+          className="font-serif-display text-white font-medium leading-[1.05] tracking-tight text-balance"
+          style={{ fontSize: 'clamp(2.35rem, 12vw, 4.5rem)' }}
         >
           {title}
         </motion.h1>
