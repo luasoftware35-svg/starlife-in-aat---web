@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown } from 'lucide-react';
@@ -16,19 +17,28 @@ const MOBILE_TRANSITION = { duration: 0.4, ease: [0.22, 1, 0.36, 1] };
 function MobileMenu({ open, onClose }) {
   const [expandedItem, setExpandedItem] = useState(null);
 
+  useEffect(() => {
+    if (!open) return undefined;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+
   if (!open) return null;
+  if (typeof document === 'undefined') return null;
 
   const toggleItem = (label) => {
     setExpandedItem((current) => (current === label ? null : label));
   };
 
-  return (
+  return createPortal(
     <motion.div
       initial={MOBILE_VARIANTS.initial}
       animate={MOBILE_VARIANTS.animate}
       exit={MOBILE_VARIANTS.exit}
       transition={MOBILE_TRANSITION}
-      className="fixed inset-0 bg-white z-[110] flex flex-col"
+      className="fixed inset-0 z-[999] flex min-h-[100dvh] flex-col bg-white"
     >
       <div className="flex justify-between items-center h-16 px-6 border-b border-stone-200/60">
         <BrandLogo variant="dark" width={140} height={40} />
@@ -67,7 +77,8 @@ function MobileMenu({ open, onClose }) {
           Bize Ulaşın
         </Link>
       </div>
-    </motion.div>
+    </motion.div>,
+    document.body
   );
 }
 
