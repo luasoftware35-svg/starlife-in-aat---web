@@ -275,10 +275,15 @@ export default function LandingPage() {
           <button onClick={openSearch} className="text-stone-700 hover:text-gold transition-colors p-2 -mr-2" aria-label="search">
             <Search size={17} strokeWidth={1.5} />
           </button>
-          <Link to="/iletisim" className="hidden sm:inline-flex items-center gap-2 text-stone-700 hover:text-gold text-[11px] tracking-[0.35em] uppercase font-sans font-medium group">
+          <a
+            href="https://heyzine.com/flip-book/0f96dbe75c.html"
+            target="_blank"
+            rel="noreferrer"
+            className="hidden sm:inline-flex items-center gap-2 text-stone-700 hover:text-gold text-[11px] tracking-[0.35em] uppercase font-sans font-medium group"
+          >
             E-Katalog
             <ArrowUpRight size={12} className="opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-          </Link>
+          </a>
         </div>
       </header>
 

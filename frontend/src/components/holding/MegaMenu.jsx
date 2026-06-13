@@ -83,6 +83,7 @@ export default function MegaMenu({ open, onClose }) {
                 </Link>
 
                 <button
+                  type="button"
                   onClick={handleClose}
                   className="group flex items-center gap-3 text-white/85 hover:text-pomegranate-light transition-colors -mr-2"
                   aria-label="Close"
@@ -124,8 +125,9 @@ export default function MegaMenu({ open, onClose }) {
 
                             {hasChildren ? (
                               <button
+                                type="button"
                                 onClick={() => toggleExpand(item.label)}
-                                className="flex-1 text-left flex items-baseline gap-4 outline-none"
+                                className="flex-1 text-left flex items-baseline gap-4 outline-none py-1"
                               >
                                 <span className={`font-serif-display text-white leading-[1] transition-all duration-500 ${
                                   isExpanded || hoveredItem === item.label ? 'text-pomegranate-light italic' : 'group-hover:italic'
@@ -186,7 +188,7 @@ export default function MegaMenu({ open, onClose }) {
                                         <Link
                                           to={c.href}
                                           onClick={handleClose}
-                                          className="group/sub inline-flex items-center gap-3 text-white/55 text-base md:text-lg font-light hover:text-pomegranate-light transition-colors py-1"
+                                          className="group/sub inline-flex min-h-11 items-center gap-3 text-white/55 text-base md:text-lg font-light hover:text-pomegranate-light transition-colors py-1"
                                         >
                                           <span className="w-6 h-[1px] bg-white/15 group-hover/sub:w-10 group-hover/sub:bg-pomegranate-light transition-all duration-400" />
                                           {c.label}

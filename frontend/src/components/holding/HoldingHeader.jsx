@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown } from 'lucide-react';
@@ -14,7 +14,14 @@ const MOBILE_VARIANTS = {
 const MOBILE_TRANSITION = { duration: 0.4, ease: [0.22, 1, 0.36, 1] };
 
 function MobileMenu({ open, onClose }) {
+  const [expandedItem, setExpandedItem] = useState(null);
+
   if (!open) return null;
+
+  const toggleItem = (label) => {
+    setExpandedItem((current) => (current === label ? null : label));
+  };
+
   return (
     <motion.div
       initial={MOBILE_VARIANTS.initial}
@@ -33,22 +40,30 @@ function MobileMenu({ open, onClose }) {
         {HOLDING_NAV.map((item) => (
           <div key={item.label} className="border-b border-stone-100 py-2">
             {item.href ? (
-              <Link to={item.href} className="block py-2 text-ink font-light text-base hover:text-gold transition-colors">{item.label}</Link>
+              <Link to={item.href} onClick={onClose} className="block py-2 text-ink font-light text-base hover:text-gold transition-colors">{item.label}</Link>
             ) : (
-              <details>
-                <summary className="py-2 text-ink font-light text-base cursor-pointer list-none flex justify-between items-center">
-                  {item.label} <ChevronDown size={16} />
-                </summary>
-                <div className="pl-3 pb-2">
+              <div>
+                <button
+                  type="button"
+                  onClick={() => toggleItem(item.label)}
+                  className="flex w-full items-center justify-between py-2 text-left text-base font-light text-ink transition-colors hover:text-gold"
+                  aria-expanded={expandedItem === item.label}
+                >
+                  {item.label}
+                  <ChevronDown size={16} className={`transition-transform ${expandedItem === item.label ? 'rotate-180' : ''}`} />
+                </button>
+                {expandedItem === item.label && (
+                  <div className="pl-3 pb-2">
                   {item.children.map((c) => (
-                    <Link key={c.href} to={c.href} className="block py-2 text-stone-500 text-sm hover:text-gold transition-colors">{c.label}</Link>
+                    <Link key={c.href} to={c.href} onClick={onClose} className="block py-2 text-stone-500 text-sm hover:text-gold transition-colors">{c.label}</Link>
                   ))}
-                </div>
-              </details>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         ))}
-        <Link to="/iletisim" className="block mt-6 border border-gold text-gold px-5 py-3 text-[11px] tracking-[0.25em] uppercase text-center font-medium hover:bg-gold hover:text-white transition-all">
+        <Link to="/iletisim" onClick={onClose} className="block mt-6 border border-gold text-gold px-5 py-3 text-[11px] tracking-[0.25em] uppercase text-center font-medium hover:bg-gold hover:text-white transition-all">
           Bize Ulaşın
         </Link>
       </div>
