@@ -20,7 +20,7 @@ function MobileNav({ navItems, brandPrefix, brandSuffix, accentClass, onClose, o
       animate={MOBILE_VARIANTS.animate}
       exit={MOBILE_VARIANTS.exit}
       transition={MOBILE_TRANSITION}
-      className="fixed inset-0 bg-white z-[100] flex flex-col"
+      className="fixed inset-0 bg-white z-[110] flex flex-col"
     >
       <div className="flex justify-between items-center h-16 px-6 border-b border-stone-200/60">
         <BrandLogo variant="dark" width={140} height={40} />
@@ -61,7 +61,7 @@ export default function SubsiteHeader({ navItems, brandPrefix, brandSuffix, cont
   };
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 h-16 transition-all duration-300 ${
+    <header className={`fixed top-0 left-0 w-full z-[100] h-16 transition-all duration-300 ${
       scrolled ? 'bg-white/90 backdrop-blur-md border-b border-stone-200/60' : 'backdrop-blur-md bg-white/60 border-b border-white/40'
     }`}>
       <div className="h-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 flex items-center justify-between gap-6">
@@ -83,7 +83,7 @@ export default function SubsiteHeader({ navItems, brandPrefix, brandSuffix, cont
             type="button"
             className="relative z-[95] grid h-11 w-11 place-items-center xl:hidden text-stone-700 hover:text-gold transition-colors"
             onClick={handleOpenMobile}
-            onPointerDown={handleOpenMobile}
+            onTouchEnd={handleOpenMobile}
             aria-label="menu"
           >
             <Menu size={24} />
