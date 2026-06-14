@@ -218,6 +218,10 @@ export default function OperasyonHaritasi() {
     () => new Set(operationLocations.map((location) => String(location.plate || '')).filter(Boolean)),
     [operationLocations],
   );
+  const locationsByPlate = useMemo(
+    () => new Map(operationLocations.map((location) => [String(location.plate || ''), location])),
+    [operationLocations],
+  );
 
   useEffect(() => {
     document.title = 'Operasyon Haritası — Starlife İnşaat';
@@ -317,9 +321,16 @@ export default function OperasyonHaritasi() {
                     {cities.map((city) => {
                       const plate = String(city.plate);
                       const active = String(selected?.plate || '') === plate;
+                      const location = locationsByPlate.get(plate);
                       const served = servedPlates.has(plate);
                       return (
-                        <g key={city.plate} data-city={city.city} data-plate={city.plate}>
+                        <g
+                          key={city.plate}
+                          data-city={city.city}
+                          data-plate={city.plate}
+                          onClick={location ? (event) => selectLocation(event, location) : undefined}
+                          className={location ? 'cursor-pointer' : undefined}
+                        >
                           <path
                             d={city.draw}
                             style={
@@ -345,29 +356,25 @@ export default function OperasyonHaritasi() {
                 >
                   {operationLocations.map((loc, index) => {
                     const active = selected?.id === loc.id;
-                    const labelOffset = index % 2 === 0 ? '-translate-x-1/2 -translate-y-full' : '-translate-x-1/2 translate-y-2';
+                    const labelTransform = index % 2 === 0 ? 'translate(-50%, calc(-100% - 8px))' : 'translate(-50%, 8px)';
                     return (
                       <motion.button
                         key={loc.id}
                         type="button"
                         variants={{
-                          hidden: { opacity: 0, scale: 0 },
-                          visible: { opacity: 1, scale: [0, 1.2, 1], transition: { duration: 0.55, ease: EASE } },
+                          hidden: { opacity: 0 },
+                          visible: { opacity: 1, transition: { duration: 0.45, ease: EASE } },
                         }}
                         onClick={(event) => selectLocation(event, loc)}
-                        className="absolute pointer-events-auto group"
-                        style={{ left: loc.cx, top: loc.cy, transform: 'translate(-50%, -50%)' }}
+                        className={`absolute pointer-events-auto group whitespace-nowrap rounded-sm border px-2 py-1 text-left font-serif italic text-[10px] leading-none transition-colors sm:px-2.5 sm:text-sm md:text-base ${
+                          active
+                            ? 'border-gold/50 bg-[#0F0F0F]/80 text-white'
+                            : 'border-gold/20 bg-[#0F0F0F]/55 text-stone-300 hover:border-gold/45 hover:text-white'
+                        }`}
+                        style={{ left: loc.cx, top: loc.cy, transform: labelTransform }}
                         aria-label={`${loc.city} projesini göster`}
                       >
-                        <span
-                          className={`absolute left-1/2 top-1/2 whitespace-nowrap rounded-sm border px-2 py-1 text-left font-serif italic text-[10px] leading-none transition-colors sm:px-2.5 sm:text-sm md:text-base ${labelOffset} ${
-                            active
-                              ? 'border-gold/50 bg-[#0F0F0F]/80 text-white'
-                              : 'border-gold/20 bg-[#0F0F0F]/55 text-stone-300 group-hover:border-gold/45 group-hover:text-white'
-                          }`}
-                        >
-                          {loc.city}
-                        </span>
+                        {loc.city}
                       </motion.button>
                     );
                   })}
