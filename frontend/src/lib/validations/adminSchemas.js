@@ -56,11 +56,18 @@ export const teamSchema = z.object({
 });
 
 export const mapLocationSchema = z.object({
+  plate: optionalText,
   city: z.string().trim().min(2, 'Şehir zorunludur.'),
   region: optionalText,
   title: optionalText,
   description: optionalText,
   company: optionalText,
+  image: optionalUrl,
+  count: z.coerce.number().int().min(1).optional(),
+  year: optionalText,
+  units: z.coerce.number().int().optional(),
+  sqm: z.coerce.number().int().optional(),
+  status: optionalText,
   cx: optionalText,
   cy: optionalText,
   order_index: z.coerce.number().int().min(0).optional(),

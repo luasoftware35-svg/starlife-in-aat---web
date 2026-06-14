@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import cities from 'react-turkey-map/src/cities';
 import HoldingHeader from '../components/holding/HoldingHeader';
@@ -132,19 +132,15 @@ const locations = [
   },
 ];
 
-const coordinates = {
-  İstanbul: '41.01° N · 28.97° E',
-  Ankara: '39.93° N · 32.85° E',
-  Kocaeli: '40.77° N · 29.94° E',
-  Bilecik: '40.14° N · 29.98° E',
-  Denizli: '37.78° N · 29.09° E',
-  Antalya: '36.91° N · 30.71° E',
-  Şanlıurfa: '37.16° N · 38.79° E',
-  Malatya: '38.36° N · 38.31° E',
-  Elazığ: '38.68° N · 39.22° E',
-  Diyarbakır: '37.91° N · 40.23° E',
-  Şırnak: '37.52° N · 42.46° E',
-};
+const percentToNumber = (value) => Number(String(value || '0').replace('%', ''));
+
+function getLocationPoint(location) {
+  return {
+    id: location.id,
+    x: percentToNumber(location.cx),
+    y: percentToNumber(location.cy),
+  };
+}
 
 function ProjectImage({ src, alt }) {
   const [failed, setFailed] = useState(false);
@@ -180,9 +176,6 @@ function DetailPanel({ selected, onClose }) {
           <div className="flex items-start justify-between gap-6">
             <span className="text-[10px] tracking-[0.4em] text-stone-500 uppercase">
               {selected.region}
-            </span>
-            <span className="text-[10px] tracking-[0.25em] text-stone-500 uppercase text-right">
-              {coordinates[selected.city]}
             </span>
           </div>
 
@@ -231,6 +224,14 @@ export default function OperasyonHaritasi() {
   );
   const [selected, setSelected] = useState(operationLocations[5] || operationLocations[0] || null);
   const chipRefs = useRef({});
+  const servedPlates = useMemo(
+    () => new Set(operationLocations.map((location) => String(location.plate || '')).filter(Boolean)),
+    [operationLocations],
+  );
+  const networkPoints = useMemo(
+    () => operationLocations.map(getLocationPoint),
+    [operationLocations],
+  );
 
   useEffect(() => {
     document.title = 'Operasyon Haritası — Starlife İnşaat';
@@ -283,6 +284,18 @@ export default function OperasyonHaritasi() {
               height: auto;
               filter: drop-shadow(0 40px 80px rgba(0,0,0,0.35));
             }
+            .operation-map .operation-map-connections {
+              position: absolute;
+              inset: 1rem;
+              width: auto;
+              height: auto;
+              filter: none;
+            }
+            @media (min-width: 768px) {
+              .operation-map .operation-map-connections {
+                inset: 2rem;
+              }
+            }
             .operation-map svg path {
               fill: #1A1A1A;
               stroke: #2E2E2E;
@@ -327,15 +340,53 @@ export default function OperasyonHaritasi() {
               >
                 <svg viewBox="0 0 1007 443" xmlns="http://www.w3.org/2000/svg" aria-label="Türkiye operasyon haritası">
                   <g>
-                    {cities.map((city) => (
-                      <g key={city.plate} data-city={city.city} data-plate={city.plate}>
-                        <path
-                          d={city.draw}
-                          style={selected?.plate === city.plate ? { fill: '#252525', stroke: '#333333' } : undefined}
-                        />
-                      </g>
-                    ))}
+                    {cities.map((city) => {
+                      const plate = String(city.plate);
+                      const active = String(selected?.plate || '') === plate;
+                      const served = servedPlates.has(plate);
+                      return (
+                        <g key={city.plate} data-city={city.city} data-plate={city.plate}>
+                          <path
+                            d={city.draw}
+                            style={
+                              active
+                                ? { fill: '#2B2415', stroke: '#D4AF37', strokeWidth: 1.1 }
+                                : served
+                                  ? { fill: '#211E18', stroke: 'rgba(212,175,55,0.35)', strokeWidth: 0.9 }
+                                  : undefined
+                            }
+                          />
+                        </g>
+                      );
+                    })}
                   </g>
+                </svg>
+
+                <svg className="operation-map-connections pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                  {networkPoints.slice(1).map((point, index) => {
+                    const previous = networkPoints[index];
+                    return (
+                      <line
+                        key={`${previous.id}-${point.id}`}
+                        x1={previous.x}
+                        y1={previous.y}
+                        x2={point.x}
+                        y2={point.y}
+                        stroke="rgba(212,175,55,0.22)"
+                        strokeWidth="0.16"
+                        strokeDasharray="0.9 1.8"
+                      />
+                    );
+                  })}
+                  {networkPoints.map((point) => (
+                    <circle
+                      key={point.id}
+                      cx={point.x}
+                      cy={point.y}
+                      r="0.45"
+                      fill="rgba(212,175,55,0.28)"
+                    />
+                  ))}
                 </svg>
 
                 <motion.div
@@ -345,9 +396,9 @@ export default function OperasyonHaritasi() {
                   variants={{ visible: { transition: { staggerChildren: 0.08, delayChildren: 0.55 } } }}
                   className="absolute inset-4 md:inset-8 pointer-events-none"
                 >
-                  {operationLocations.map((loc) => {
+                  {operationLocations.map((loc, index) => {
                     const active = selected?.id === loc.id;
-                    const labelOffset = loc.id % 2 === 0 ? '-translate-x-[42%] -translate-y-[135%]' : 'translate-x-[10%] -translate-y-[140%]';
+                    const labelOffset = index % 2 === 0 ? '-translate-x-[42%] -translate-y-[135%]' : 'translate-x-[10%] -translate-y-[140%]';
                     return (
                       <motion.button
                         key={loc.id}
@@ -394,7 +445,7 @@ export default function OperasyonHaritasi() {
                           active ? 'border-gold text-white bg-gold/5' : 'border-stone-700 text-stone-400 hover:border-gold/60 hover:text-white'
                         }`}
                       >
-                        <span className="text-stone-500 mr-2">{String(loc.id).padStart(2, '0')}</span>
+                        <span className="text-stone-500 mr-2">{String(index + 1).padStart(2, '0')}</span>
                         <span className="font-bold">{loc.city}</span>
                         <span className="text-stone-500 text-[9px] ml-1">{loc.region}</span>
                       </button>

@@ -147,6 +147,7 @@ export const adminResources = {
       { key: 'company', label: 'Şirket' },
     ],
     fields: [
+      text('plate', 'Plaka Kodu'),
       text('city', 'Şehir'),
       text('region', 'Bölge'),
       text('title', 'Başlık'),
@@ -155,6 +156,15 @@ export const adminResources = {
         { value: 'starlife', label: 'Starlife İnşaat' },
         { value: 'invest', label: 'İnvest İnşaat' },
         { value: 'erd', label: 'ERD İnşaat' },
+      ]),
+      image('image', 'Görsel'),
+      number('count', 'Proje Sayısı'),
+      text('year', 'Yıl'),
+      number('units', 'Ünite Sayısı'),
+      number('sqm', 'Alan (m²)'),
+      select('status', 'Durum', [
+        { value: 'devam', label: 'Devam Ediyor' },
+        { value: 'tamamlandi', label: 'Tamamlandı' },
       ]),
       text('cx', 'Harita Pozisyonu X (%)'),
       text('cy', 'Harita Pozisyonu Y (%)'),

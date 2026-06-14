@@ -156,7 +156,7 @@ export function mapLocation(row) {
     plate: row.plate || '',
     city: row.city,
     region: row.region || '',
-    count: 1,
+    count: Number(row.count || 1),
     year,
     cx: row.cx || '50%',
     cy: row.cy || '50%',

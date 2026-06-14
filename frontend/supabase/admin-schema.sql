@@ -52,11 +52,18 @@ create table if not exists public.team_members (
 
 create table if not exists public.map_locations (
   id uuid primary key default gen_random_uuid(),
+  plate text,
   city text not null,
   region text,
   title text,
   description text,
   company text,
+  image text,
+  count integer,
+  year text,
+  units integer,
+  sqm integer,
+  status text,
   cx text,
   cy text,
   active boolean not null default true,
