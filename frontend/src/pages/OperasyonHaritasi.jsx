@@ -347,26 +347,16 @@ export default function OperasyonHaritasi() {
                   </g>
                 </svg>
 
-                <motion.div
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, margin: '-80px' }}
-                  variants={{ visible: { transition: { staggerChildren: 0.08, delayChildren: 0.55 } } }}
-                  className="absolute inset-4 md:inset-8 pointer-events-none"
-                >
+                <div className="absolute inset-4 z-10 pointer-events-none md:inset-8">
                   {operationLocations.map((loc, index) => {
                     const active = selected?.id === loc.id;
                     const labelTransform = index % 2 === 0 ? 'translate(-50%, calc(-100% - 8px))' : 'translate(-50%, 8px)';
                     return (
-                      <motion.button
+                      <button
                         key={loc.id}
                         type="button"
-                        variants={{
-                          hidden: { opacity: 0 },
-                          visible: { opacity: 1, transition: { duration: 0.45, ease: EASE } },
-                        }}
                         onClick={(event) => selectLocation(event, loc)}
-                        className={`absolute pointer-events-auto group whitespace-nowrap rounded-sm border px-2 py-1 text-left font-serif italic text-[10px] leading-none transition-colors sm:px-2.5 sm:text-sm md:text-base ${
+                        className={`absolute pointer-events-auto whitespace-nowrap rounded-sm border px-2 py-1 text-left font-serif italic text-[10px] leading-none shadow-[0_8px_24px_rgba(0,0,0,0.35)] transition-colors sm:px-2.5 sm:text-sm md:text-base ${
                           active
                             ? 'border-gold/50 bg-[#0F0F0F]/80 text-white'
                             : 'border-gold/20 bg-[#0F0F0F]/55 text-stone-300 hover:border-gold/45 hover:text-white'
@@ -375,10 +365,10 @@ export default function OperasyonHaritasi() {
                         aria-label={`${loc.city} projesini göster`}
                       >
                         {loc.city}
-                      </motion.button>
+                      </button>
                     );
                   })}
-                </motion.div>
+                </div>
               </div>
 
               <div className="mt-8">
