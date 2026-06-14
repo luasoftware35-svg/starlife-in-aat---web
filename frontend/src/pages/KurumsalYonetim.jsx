@@ -39,7 +39,7 @@ const card = {
 function TeamImage({ src, alt }) {
   const [failed, setFailed] = useState(false);
 
-  if (failed) {
+  if (failed || !src) {
     return (
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-stone-100 text-stone-300">
         <User size={44} strokeWidth={1.4} />
@@ -98,8 +98,7 @@ export default function KurumsalYonetim() {
           <motion.div
             variants={container}
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
+            animate="visible"
             className="grid grid-cols-1 gap-8 max-w-5xl mx-auto mt-12 md:mt-16 lg:grid-cols-3 lg:gap-12"
           >
             {teamMembers.map((member) => (
