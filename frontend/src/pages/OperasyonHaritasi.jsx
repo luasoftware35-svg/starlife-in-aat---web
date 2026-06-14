@@ -132,16 +132,6 @@ const locations = [
   },
 ];
 
-const percentToNumber = (value) => Number(String(value || '0').replace('%', ''));
-
-function getLocationPoint(location) {
-  return {
-    id: location.id,
-    x: percentToNumber(location.cx),
-    y: percentToNumber(location.cy),
-  };
-}
-
 function ProjectImage({ src, alt }) {
   const [failed, setFailed] = useState(false);
 
@@ -228,10 +218,6 @@ export default function OperasyonHaritasi() {
     () => new Set(operationLocations.map((location) => String(location.plate || '')).filter(Boolean)),
     [operationLocations],
   );
-  const networkPoints = useMemo(
-    () => operationLocations.map(getLocationPoint),
-    [operationLocations],
-  );
 
   useEffect(() => {
     document.title = 'Operasyon Haritası — Starlife İnşaat';
@@ -283,18 +269,6 @@ export default function OperasyonHaritasi() {
               width: 100%;
               height: auto;
               filter: drop-shadow(0 40px 80px rgba(0,0,0,0.35));
-            }
-            .operation-map .operation-map-connections {
-              position: absolute;
-              inset: 1rem;
-              width: auto;
-              height: auto;
-              filter: none;
-            }
-            @media (min-width: 768px) {
-              .operation-map .operation-map-connections {
-                inset: 2rem;
-              }
             }
             .operation-map svg path {
               fill: #1A1A1A;
@@ -362,34 +336,6 @@ export default function OperasyonHaritasi() {
                   </g>
                 </svg>
 
-                <svg className="operation-map-connections pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                  {networkPoints.slice(1).map((point, index) => {
-                    const previous = networkPoints[index];
-                    return (
-                      <line
-                        key={`${previous.id}-${point.id}`}
-                        x1={previous.x}
-                        y1={previous.y}
-                        x2={point.x}
-                        y2={point.y}
-                        stroke="rgba(212,175,55,0.22)"
-                        strokeWidth="0.16"
-                        strokeDasharray="0.9 1.8"
-                      />
-                    );
-                  })}
-                  {networkPoints.map((point) => (
-                    <g key={point.id}>
-                      <circle cx={point.x} cy={point.y} r="2.2" fill="rgba(212,175,55,0.08)" />
-                      <circle cx={point.x} cy={point.y} r="1.15" fill="none" stroke="rgba(212,175,55,0.36)" strokeWidth="0.16" />
-                      <circle cx={point.x} cy={point.y} r="0.62" fill="rgba(212,175,55,0.82)" />
-                      <circle cx={point.x + 1.35} cy={point.y - 0.95} r="0.28" fill="rgba(212,175,55,0.42)" />
-                      <circle cx={point.x - 1.2} cy={point.y + 1.1} r="0.24" fill="rgba(212,175,55,0.34)" />
-                      <circle cx={point.x + 0.8} cy={point.y + 1.45} r="0.22" fill="rgba(212,175,55,0.3)" />
-                    </g>
-                  ))}
-                </svg>
-
                 <motion.div
                   initial="hidden"
                   whileInView="visible"
@@ -399,7 +345,7 @@ export default function OperasyonHaritasi() {
                 >
                   {operationLocations.map((loc, index) => {
                     const active = selected?.id === loc.id;
-                    const labelOffset = index % 2 === 0 ? '-translate-x-[42%] -translate-y-[135%]' : 'translate-x-[10%] -translate-y-[140%]';
+                    const labelOffset = index % 2 === 0 ? '-translate-x-1/2 -translate-y-full' : '-translate-x-1/2 translate-y-2';
                     return (
                       <motion.button
                         key={loc.id}
@@ -413,17 +359,14 @@ export default function OperasyonHaritasi() {
                         style={{ left: loc.cx, top: loc.cy, transform: 'translate(-50%, -50%)' }}
                         aria-label={`${loc.city} projesini göster`}
                       >
-                        <span className={`absolute -inset-3 rounded-full border border-gold/45 ${active ? 'animate-ping bg-gold/25' : 'bg-gold/10'}`} />
-                        <span className="absolute -inset-1.5 rounded-full bg-gold/20 blur-[3px]" />
-                        <span className="relative block h-5 w-5 rounded-full border border-gold-light bg-gold shadow-[0_0_24px_rgba(212,175,55,0.8)] transition-transform duration-300 group-hover:scale-125" />
-                        <span className="absolute left-1/2 top-1/2 hidden w-16 h-px bg-gold/35 origin-left rotate-[-18deg] sm:block" />
-                        <span className={`absolute left-1/2 top-1/2 hidden whitespace-nowrap text-left sm:block ${labelOffset}`}>
-                          <span className="block font-serif italic text-stone-300 text-sm md:text-base leading-none group-hover:text-white transition-colors">
-                            {loc.city}
-                          </span>
-                          <span className="block mt-1 text-[8px] md:text-[9px] text-stone-500 tracking-[0.28em] uppercase">
-                            {loc.count} proje · {loc.year}
-                          </span>
+                        <span
+                          className={`absolute left-1/2 top-1/2 whitespace-nowrap rounded-sm border px-2 py-1 text-left font-serif italic text-[10px] leading-none transition-colors sm:px-2.5 sm:text-sm md:text-base ${labelOffset} ${
+                            active
+                              ? 'border-gold/50 bg-[#0F0F0F]/80 text-white'
+                              : 'border-gold/20 bg-[#0F0F0F]/55 text-stone-300 group-hover:border-gold/45 group-hover:text-white'
+                          }`}
+                        >
+                          {loc.city}
                         </span>
                       </motion.button>
                     );
