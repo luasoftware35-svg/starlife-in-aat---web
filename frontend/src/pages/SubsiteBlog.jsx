@@ -23,7 +23,7 @@ export default function SubsiteBlog({ navItems, brandPrefix, brandSuffix, basePa
       <PageHero title="Bizden Haberler" breadcrumb={[{ label: 'Anasayfa', href: basePath }, { label: 'Bizden Haberler' }]} image="https://images.pexels.com/photos/4458205/pexels-photo-4458205.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600" />
 
       <section className="bg-white text-ink py-16 px-5 sm:px-6 md:px-16 md:py-24">
-        <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }} className="max-w-[1400px] mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="max-w-[1400px] mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {posts.map((b) => (
             <motion.article key={b.id} variants={fadeUp} className="group">
               <Link to={`${basePath}/blog/${b.slug}`} className="block">
