@@ -136,9 +136,11 @@ export function mapTeamMember(row) {
 export function mapBlogPost(row) {
   return {
     id: row.id,
+    slug: slugify(row.slug || row.title || row.id),
     title: row.title,
     excerpt: row.excerpt || '',
-    date: toDateLabel(row.created_at),
+    content: row.content || row.excerpt || '',
+    date: row.date || toDateLabel(row.created_at),
     author: row.author || 'Starlife İnşaat',
     image: row.cover_image || row.image || 'https://images.pexels.com/photos/4458205/pexels-photo-4458205.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
   };

@@ -10,6 +10,7 @@ import KurumsalYonetim from './pages/KurumsalYonetim';
 import OperasyonHaritasi from './pages/OperasyonHaritasi';
 import Iletisim from './pages/Iletisim';
 import Blog from './pages/Blog';
+import BlogDetail from './pages/BlogDetail';
 import Kvkk from './pages/Kvkk';
 
 import StarlifeHome from './pages/starlife/StarlifeHome';
@@ -142,6 +143,7 @@ function App() {
           <Route path="/kurumsal/yonetim" element={<KurumsalYonetim />} />
           <Route path="/kurumsal/operasyon-haritasi" element={<OperasyonHaritasi />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogDetail />} />
           <Route path="/iletisim" element={<Iletisim />} />
           <Route path="/politika/kvkk-metni" element={<Kvkk />} />
 
@@ -156,6 +158,7 @@ function App() {
           <Route path="/starlife-insaat/projeler/devam-eden-projeler" element={<StarlifeProjects filter="Devam Eden" title="Devam Eden Projeler" breadcrumbLabel="Devam Eden" />} />
           <Route path="/starlife-insaat/yapiguvenligi/:slug" element={<YapiGuvenligiRoute />} />
           <Route path="/starlife-insaat/blog" element={<SubsiteBlog navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" basePath="/starlife-insaat" />} />
+          <Route path="/starlife-insaat/blog/:slug" element={<BlogDetail navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" basePath="/starlife-insaat" />} />
           <Route path="/starlife-insaat/iletisim" element={<SubsiteIletisim navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" basePath="/starlife-insaat" />} />
           <Route path="/starlife-insaat/politika/kvkk-metni" element={<Kvkk />} />
 
@@ -163,12 +166,14 @@ function App() {
           <Route path="/invest-insaat" element={<InvestHome />} />
           <Route path="/invest-insaat/kurumsal/invest-insaat" element={<SubsiteAbout {...investAboutProps} />} />
           <Route path="/invest-insaat/blog" element={<SubsiteBlog navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" />} />
+          <Route path="/invest-insaat/blog/:slug" element={<BlogDetail navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" />} />
           <Route path="/invest-insaat/iletisim" element={<SubsiteIletisim navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" />} />
 
           {/* ERD */}
           <Route path="/erd-insaat" element={<ErdHome />} />
           <Route path="/erd-insaat/kurumsal/erd-insaat" element={<SubsiteAbout {...erdAboutProps} />} />
           <Route path="/erd-insaat/blog" element={<SubsiteBlog navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" />} />
+          <Route path="/erd-insaat/blog/:slug" element={<BlogDetail navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" />} />
           <Route path="/erd-insaat/iletisim" element={<SubsiteIletisim navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" />} />
         </Routes>
       </BrowserRouter>

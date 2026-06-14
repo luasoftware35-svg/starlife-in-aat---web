@@ -68,7 +68,7 @@ export const adminResources = {
     table: 'blog_posts',
     schema: blogSchema,
     orderBy: 'created_at',
-    defaults: { published: false },
+    defaults: { published: true },
     columns: [
       { key: 'title', label: 'Başlık' },
       { key: 'slug', label: 'Slug' },
