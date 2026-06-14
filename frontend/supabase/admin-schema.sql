@@ -12,6 +12,7 @@ create table if not exists public.projects (
   region text,
   company text not null default 'starlife',
   status text not null default 'devam',
+  tag text,
   units integer,
   sqm integer,
   year text,

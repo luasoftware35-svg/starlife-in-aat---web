@@ -46,12 +46,17 @@ export const HERO_SLIDES = [
 ];
 
 export const PROJECTS = [
-  { id: 1, title: 'Starlife Residence Diyarbakır', status: 'Devam Eden', location: 'Kayapınar/Diyarbakır', year: 2024, image: 'https://images.pexels.com/photos/5403840/pexels-photo-5403840.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', tag: 'Konut' },
-  { id: 2, title: 'Starlife Park Evleri', status: 'Tamamlanan', location: 'Diyarbakır', year: 2022, image: 'https://images.pexels.com/photos/33230969/pexels-photo-33230969.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', tag: 'Konut' },
-  { id: 3, title: 'İnvest Plaza', status: 'Devam Eden', location: 'Diyarbakır', year: 2025, image: 'https://images.pexels.com/photos/34700467/pexels-photo-34700467.png?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', tag: 'Ticari' },
-  { id: 4, title: 'ERD Tower', status: 'Devam Eden', location: 'Diyarbakır', year: 2026, image: 'https://images.pexels.com/photos/31197870/pexels-photo-31197870.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940', tag: 'Karma' },
-  { id: 5, title: 'Starlife Garden', status: 'Tamamlanan', location: 'Diyarbakır', year: 2021, image: 'https://images.unsplash.com/photo-1542442828-287217bfb87f', tag: 'Konut' },
-  { id: 6, title: 'Şehir Konakları', status: 'Tamamlanan', location: 'Diyarbakır', year: 2020, image: 'https://images.unsplash.com/photo-1564078516393-cf04bd966897', tag: 'Konut' },
+  { id: 1, title: 'Elit Life Villaları', status: 'Tamamlanan', location: 'Kayapınar - Diyarbakır', year: '2023 - 2024', image: 'https://lzgeijdlqadtryfwthqr.supabase.co/storage/v1/object/public/media/project-import/elit-life-villalari.webp', tag: 'Konut' },
+  { id: 2, title: 'New Star Konutları', status: 'Tamamlanan', location: 'Talaytepe - Diyarbakır', year: '2023 - 2024', image: 'https://lzgeijdlqadtryfwthqr.supabase.co/storage/v1/object/public/media/project-import/new-star-konutlari.webp', tag: 'Karma' },
+  { id: 3, title: 'Batışehir Konutları', status: 'Tamamlanan', location: 'Talaytepe - Diyarbakır', year: '2022 - 2023', image: 'https://lzgeijdlqadtryfwthqr.supabase.co/storage/v1/object/public/media/project-import/batisehir-konutlari.webp', tag: 'Karma' },
+  { id: 4, title: 'Kent Park Sitesi', status: 'Tamamlanan', location: 'Gaziler - Diyarbakır', year: '2012 - 2013', image: 'https://lzgeijdlqadtryfwthqr.supabase.co/storage/v1/object/public/media/project-import/kent-park-sitesi.webp', tag: 'Karma' },
+  { id: 5, title: 'Star Office', status: 'Tamamlanan', location: 'Bağcılar - Diyarbakır', year: '2018 - 2020', image: 'https://lzgeijdlqadtryfwthqr.supabase.co/storage/v1/object/public/media/project-import/star-office.webp', tag: 'Ticari' },
+  { id: 6, title: 'Göletli Park 2', status: 'Tamamlanan', location: 'Diyarbakır', year: '', image: 'https://lzgeijdlqadtryfwthqr.supabase.co/storage/v1/object/public/media/project-import/goletli-park-2.webp', tag: 'Konut' },
+  { id: 7, title: 'Star Plus', status: 'Tamamlanan', location: 'Kayapınar - Diyarbakır', year: '2014 - 2016', image: 'https://lzgeijdlqadtryfwthqr.supabase.co/storage/v1/object/public/media/project-import/star-plus.webp', tag: 'Karma' },
+  { id: 8, title: 'Göletli Park 1', status: 'Tamamlanan', location: 'Diyarbakır', year: '', image: 'https://lzgeijdlqadtryfwthqr.supabase.co/storage/v1/object/public/media/project-import/goletli-park-1.webp', tag: 'Konut' },
+  { id: 9, title: 'Star Life Sitesi', status: 'Tamamlanan', location: 'Kayapınar - Diyarbakır', year: '2013 - 2014', image: 'https://lzgeijdlqadtryfwthqr.supabase.co/storage/v1/object/public/media/project-import/star-life-sitesi.webp', tag: 'Karma' },
+  { id: 10, title: 'Yenikent Sitesi', status: 'Tamamlanan', location: 'Diyarbakır', year: '', image: 'https://lzgeijdlqadtryfwthqr.supabase.co/storage/v1/object/public/media/project-import/yenikent-sitesi.webp', tag: 'Konut' },
+  { id: 11, title: 'Bilge Sitesi', status: 'Tamamlanan', location: 'Diyarbakır', year: '', image: 'https://lzgeijdlqadtryfwthqr.supabase.co/storage/v1/object/public/media/project-import/bilge-sitesi.webp', tag: 'Konut' },
 ];
 
 export const BLOG_POSTS = [

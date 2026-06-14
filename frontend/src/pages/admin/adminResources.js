@@ -47,6 +47,11 @@ export const adminResources = {
         { value: 'devam', label: 'Devam Ediyor' },
         { value: 'tamamlandi', label: 'Tamamlandı' },
       ]),
+      select('tag', 'Kategori', [
+        { value: 'Konut', label: 'Konut' },
+        { value: 'Ticari', label: 'Ticari' },
+        { value: 'Karma', label: 'Karma' },
+      ]),
       number('units', 'Ünite Sayısı'),
       number('sqm', 'Alan (m²)'),
       text('year', 'Yıl'),

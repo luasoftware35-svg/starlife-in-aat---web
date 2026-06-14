@@ -16,6 +16,7 @@ export const projectSchema = z.object({
   region: optionalText,
   company: z.string().trim().min(1, 'Şirket zorunludur.'),
   status: z.string().trim().min(1, 'Durum zorunludur.'),
+  tag: optionalText,
   units: z.coerce.number().int().optional(),
   sqm: z.coerce.number().int().optional(),
   year: optionalText,
