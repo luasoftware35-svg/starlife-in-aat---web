@@ -122,6 +122,7 @@ export const adminResources = {
       text('name', 'Ad Soyad'),
       text('title', 'Unvan'),
       image('image', 'Fotoğraf'),
+      textarea('bio', 'Özgeçmiş'),
       number('order_index', 'Sıra'),
       checkbox('active', 'Aktif'),
     ],

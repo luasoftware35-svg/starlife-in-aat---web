@@ -129,6 +129,7 @@ export function mapTeamMember(row) {
     name: row.name,
     title: row.title || row.role || '',
     image: row.image || row.image_url || '',
+    bio: row.bio || row.biography || row.description || '',
   };
 }
 

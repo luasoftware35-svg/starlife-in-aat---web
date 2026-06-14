@@ -49,6 +49,7 @@ export const teamSchema = z.object({
   name: z.string().trim().min(2, 'Ad soyad zorunludur.'),
   title: z.string().trim().min(2, 'Unvan zorunludur.'),
   image: optionalUrl,
+  bio: optionalText,
   order_index: z.coerce.number().int().min(0).optional(),
   active: z.boolean().optional(),
 });

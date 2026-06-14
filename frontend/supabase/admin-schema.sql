@@ -42,6 +42,7 @@ create table if not exists public.team_members (
   name text not null,
   title text not null,
   image text,
+  bio text,
   active boolean not null default true,
   order_index integer not null default 0,
   created_at timestamptz not null default now(),

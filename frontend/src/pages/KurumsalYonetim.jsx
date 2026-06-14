@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { User } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { X, User } from 'lucide-react';
 import HoldingHeader from '../components/holding/HoldingHeader';
 import HoldingFooter from '../components/holding/HoldingFooter';
 import PageHero from '../components/shared/PageHero';
@@ -13,16 +13,19 @@ const team = [
     name: 'Numan Erdoğan',
     title: 'CEO & Kurucu',
     image: '/images/team/numan-erdogan.jpg',
+    bio: 'Starlife İnşaat vizyonunu şekillendiren liderlik anlayışıyla, kaliteli ve güvenli yaşam alanları üretme hedefi doğrultusunda çalışmalarını sürdürmektedir.',
   },
   {
     name: 'Ahmet Erdoğan',
     title: 'Yönetim Kurulu Üyesi',
     image: '/images/team/ahmet-erdogan.jpg',
+    bio: 'Yönetim kurulu üyesi olarak proje geliştirme, kurumsal büyüme ve sürdürülebilir yapı standartlarının güçlendirilmesi süreçlerinde aktif rol almaktadır.',
   },
   {
     name: 'Mahmut Erdoğan',
     title: 'Yönetim Kurulu Üyesi',
     image: '/images/team/mahmut-erdogan.jpg',
+    bio: 'Yönetim kurulu üyesi olarak operasyonel süreçlerin geliştirilmesi, kalite standartlarının korunması ve uzun vadeli değer üreten projelerin hayata geçirilmesine katkı sunmaktadır.',
   },
 ];
 
@@ -58,6 +61,7 @@ function TeamImage({ src, alt }) {
 }
 
 export default function KurumsalYonetim() {
+  const [selectedMember, setSelectedMember] = useState(null);
   const teamMembers = useSupabaseRows(
     'team_members',
     { orderBy: 'order_index', ascending: true, filters: [{ column: 'active', value: true }] },
@@ -68,6 +72,14 @@ export default function KurumsalYonetim() {
   useEffect(() => {
     document.title = 'Yönetim Kurulu — Starlife İnşaat';
   }, []);
+
+  useEffect(() => {
+    if (!selectedMember) return undefined;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [selectedMember]);
 
   return (
     <div className="bg-mist min-h-screen text-ink">
@@ -117,12 +129,63 @@ export default function KurumsalYonetim() {
                   <p className="text-gold text-[11px] font-medium tracking-[0.3em] uppercase mt-2">
                     {member.title}
                   </p>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedMember(member)}
+                    className="mt-6 inline-flex items-center justify-center border border-gold px-5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-gold transition-all hover:bg-gold hover:text-white"
+                  >
+                    Özgeçmiş
+                  </button>
                 </div>
               </motion.article>
             ))}
           </motion.div>
         </div>
       </section>
+
+      <AnimatePresence>
+        {selectedMember && (
+          <motion.div
+            className="fixed inset-0 z-[1000] flex items-center justify-center bg-ink/70 px-5 py-8 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedMember(null)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 24, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 16, scale: 0.98 }}
+              transition={{ duration: 0.35, ease: EASE }}
+              className="relative max-h-[86vh] w-full max-w-3xl overflow-y-auto bg-surface p-6 shadow-2xl shadow-black/25 sm:p-8 md:p-10"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setSelectedMember(null)}
+                className="absolute right-5 top-5 grid h-10 w-10 place-items-center border border-border text-stone-500 transition hover:border-gold hover:text-gold"
+                aria-label="Özgeçmişi kapat"
+              >
+                <X size={18} />
+              </button>
+
+              <span className="text-gold text-[10px] font-medium tracking-[0.45em] uppercase">
+                Özgeçmiş
+              </span>
+              <h3 className="mt-4 pr-12 text-3xl font-black tracking-[-0.02em] text-ink md:text-4xl">
+                {selectedMember.name}
+              </h3>
+              <p className="mt-2 text-[11px] font-medium uppercase tracking-[0.32em] text-gold">
+                {selectedMember.title}
+              </p>
+              <div className="mt-7 h-[1px] w-14 bg-gold" />
+              <div className="mt-7 whitespace-pre-line text-base font-light leading-8 text-stone-600">
+                {selectedMember.bio || `${selectedMember.name} için özgeçmiş bilgisi yakında eklenecektir.`}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <HoldingFooter />
     </div>
