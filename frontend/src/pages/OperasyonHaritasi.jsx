@@ -379,13 +379,14 @@ export default function OperasyonHaritasi() {
                     );
                   })}
                   {networkPoints.map((point) => (
-                    <circle
-                      key={point.id}
-                      cx={point.x}
-                      cy={point.y}
-                      r="0.45"
-                      fill="rgba(212,175,55,0.28)"
-                    />
+                    <g key={point.id}>
+                      <circle cx={point.x} cy={point.y} r="2.2" fill="rgba(212,175,55,0.08)" />
+                      <circle cx={point.x} cy={point.y} r="1.15" fill="none" stroke="rgba(212,175,55,0.36)" strokeWidth="0.16" />
+                      <circle cx={point.x} cy={point.y} r="0.62" fill="rgba(212,175,55,0.82)" />
+                      <circle cx={point.x + 1.35} cy={point.y - 0.95} r="0.28" fill="rgba(212,175,55,0.42)" />
+                      <circle cx={point.x - 1.2} cy={point.y + 1.1} r="0.24" fill="rgba(212,175,55,0.34)" />
+                      <circle cx={point.x + 0.8} cy={point.y + 1.45} r="0.22" fill="rgba(212,175,55,0.3)" />
+                    </g>
                   ))}
                 </svg>
 
@@ -412,9 +413,10 @@ export default function OperasyonHaritasi() {
                         style={{ left: loc.cx, top: loc.cy, transform: 'translate(-50%, -50%)' }}
                         aria-label={`${loc.city} projesini göster`}
                       >
-                        <span className={`absolute -inset-2 rounded-full border border-gold/40 ${active ? 'animate-ping bg-gold/20' : 'bg-gold/10'}`} />
-                        <span className="relative block w-3.5 h-3.5 rounded-full bg-gold border border-gold-light shadow-[0_0_18px_rgba(212,175,55,0.55)] group-hover:scale-125 transition-transform duration-300" />
-                        <span className="absolute left-1/2 top-1/2 hidden w-14 h-px bg-gold/30 origin-left rotate-[-18deg] sm:block" />
+                        <span className={`absolute -inset-3 rounded-full border border-gold/45 ${active ? 'animate-ping bg-gold/25' : 'bg-gold/10'}`} />
+                        <span className="absolute -inset-1.5 rounded-full bg-gold/20 blur-[3px]" />
+                        <span className="relative block h-5 w-5 rounded-full border border-gold-light bg-gold shadow-[0_0_24px_rgba(212,175,55,0.8)] transition-transform duration-300 group-hover:scale-125" />
+                        <span className="absolute left-1/2 top-1/2 hidden w-16 h-px bg-gold/35 origin-left rotate-[-18deg] sm:block" />
                         <span className={`absolute left-1/2 top-1/2 hidden whitespace-nowrap text-left sm:block ${labelOffset}`}>
                           <span className="block font-serif italic text-stone-300 text-sm md:text-base leading-none group-hover:text-white transition-colors">
                             {loc.city}
@@ -445,7 +447,6 @@ export default function OperasyonHaritasi() {
                           active ? 'border-gold text-white bg-gold/5' : 'border-stone-700 text-stone-400 hover:border-gold/60 hover:text-white'
                         }`}
                       >
-                        <span className="text-stone-500 mr-2">{String(index + 1).padStart(2, '0')}</span>
                         <span className="font-bold">{loc.city}</span>
                         <span className="text-stone-500 text-[9px] ml-1">{loc.region}</span>
                       </button>
