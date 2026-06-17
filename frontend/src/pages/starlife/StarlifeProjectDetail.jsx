@@ -1,12 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeft, Building2, Calendar, MapPin, Ruler, X } from 'lucide-react';
 import SubsiteHeader from '../../components/shared/SubsiteHeader';
 import SubsiteFooter from '../../components/shared/SubsiteFooter';
 import PageHero from '../../components/shared/PageHero';
+import Seo from '../../components/seo/Seo';
 import { PROJECTS, STARLIFE_NAV } from '../../mock/mock';
 import { mapProject, slugify } from '../../lib/supabase/content';
+import { buildBreadcrumbSchema, buildProjectSchema } from '../../lib/seo/schema';
+import { buildCanonical } from '../../lib/seo/siteConfig';
 import { supabase } from '../../lib/supabase/client';
 
 const DETAIL_STATS = [
@@ -18,6 +21,7 @@ const DETAIL_STATS = [
 
 export default function StarlifeProjectDetail() {
   const { slug } = useParams();
+  const { pathname } = useLocation();
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [state, setState] = useState({ loading: true, projects: [] });
 
@@ -87,6 +91,30 @@ export default function StarlifeProjectDetail() {
 
   return (
     <div className="min-h-screen bg-white text-ink">
+      <Seo
+        title={project.title}
+        description={project.description || `${project.title} — Starlife İnşaat ${project.status?.toLowerCase()} konut projesi. ${project.location || 'Diyarbakır'}.`}
+        keywords={`${project.title}, Starlife İnşaat, ${project.tag}, ${project.location}, konut projesi, inşaat firması`}
+        pathname={pathname}
+        image={project.image}
+        type="article"
+        jsonLd={[
+          buildProjectSchema({
+            title: project.title,
+            description: project.description,
+            image: project.image,
+            url: buildCanonical(pathname),
+            location: project.location,
+            status: project.status,
+            year: project.year,
+          }),
+          buildBreadcrumbSchema([
+            { name: 'Anasayfa', href: '/starlife-insaat' },
+            { name: 'Projeler', href: '/starlife-insaat/tumprojeler' },
+            { name: project.title },
+          ]),
+        ].filter(Boolean)}
+      />
       <SubsiteHeader navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" contactHref="/starlife-insaat/iletisim" />
       <PageHero
         title={project.title}

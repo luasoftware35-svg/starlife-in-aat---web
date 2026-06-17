@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import ScrollToTop from './components/ScrollToTop';
+import RouteSeo from './components/seo/RouteSeo';
 
 import LandingPage from './pages/LandingPage';
 import KurumsalHakkimizda from './pages/KurumsalHakkimizda';
@@ -80,6 +81,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <ScrollToTop />
+        <RouteSeo />
         <Toaster
           position="top-right"
           toastOptions={{

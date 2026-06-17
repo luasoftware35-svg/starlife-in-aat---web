@@ -1,16 +1,20 @@
 import React, { useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeft, Building2, Calendar, MapPin, Ruler, X } from 'lucide-react';
 import SubsiteHeader from '../../components/shared/SubsiteHeader';
 import SubsiteFooter from '../../components/shared/SubsiteFooter';
 import PageHero from '../../components/shared/PageHero';
+import Seo from '../../components/seo/Seo';
 import { STARLIFE_NAV } from '../../mock/mock';
 import { TAAHHUT_PROJECTS } from '../../mock/taahhutProjects';
 import { slugify } from '../../lib/supabase/content';
+import { buildBreadcrumbSchema, buildProjectSchema } from '../../lib/seo/schema';
+import { buildCanonical } from '../../lib/seo/siteConfig';
 
 export default function StarlifeTaahhutDetail() {
   const { slug } = useParams();
+  const { pathname } = useLocation();
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
   const project = useMemo(
@@ -64,6 +68,31 @@ export default function StarlifeTaahhutDetail() {
 
   return (
     <div className="min-h-screen bg-white text-ink">
+      <Seo
+        title={project.title}
+        description={project.description || `${project.title} — Starlife İnşaat ${project.status?.toLowerCase()} taahhüt işi. ${project.location || 'Türkiye'}.`}
+        keywords={`${project.title}, taahhüt işleri, TOKİ, Starlife İnşaat, ${project.location}, inşaat firması`}
+        pathname={pathname}
+        image={project.image}
+        type="article"
+        jsonLd={[
+          buildProjectSchema({
+            title: project.title,
+            description: project.description,
+            image: project.image,
+            url: buildCanonical(pathname),
+            location: project.location,
+            status: project.status,
+            year: project.year,
+          }),
+          buildBreadcrumbSchema([
+            { name: 'Anasayfa', href: '/starlife-insaat' },
+            { name: 'Taahhüt İşleri', href: '/starlife-insaat/taahhutisleri' },
+            { name: project.status, href: listHref },
+            { name: project.title },
+          ]),
+        ].filter(Boolean)}
+      />
       <SubsiteHeader navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" contactHref="/starlife-insaat/iletisim" />
       <PageHero
         title={project.title}

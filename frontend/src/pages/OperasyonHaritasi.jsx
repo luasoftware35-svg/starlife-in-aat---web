@@ -224,10 +224,6 @@ export default function OperasyonHaritasi() {
   );
 
   useEffect(() => {
-    document.title = 'Operasyon Haritası — Starlife İnşaat';
-  }, []);
-
-  useEffect(() => {
     if (!selected && operationLocations.length) {
       setSelected(operationLocations[0]);
       return;

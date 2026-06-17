@@ -1,13 +1,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, Calendar, User } from 'lucide-react';
 import HoldingHeader from '../components/holding/HoldingHeader';
 import HoldingFooter from '../components/holding/HoldingFooter';
 import SubsiteHeader from '../components/shared/SubsiteHeader';
 import SubsiteFooter from '../components/shared/SubsiteFooter';
 import PageHero from '../components/shared/PageHero';
+import Seo from '../components/seo/Seo';
 import { BLOG_POSTS } from '../mock/mock';
 import { mapBlogPost, slugify } from '../lib/supabase/content';
+import { buildArticleSchema, buildBreadcrumbSchema } from '../lib/seo/schema';
+import { buildCanonical } from '../lib/seo/siteConfig';
 import { supabase } from '../lib/supabase/client';
 
 function renderContent(content) {
@@ -24,6 +27,7 @@ function renderContent(content) {
 
 export default function BlogDetail({ navItems, brandPrefix, brandSuffix, basePath = '/blog' }) {
   const { slug } = useParams();
+  const { pathname } = useLocation();
   const isSubsite = Boolean(navItems);
   const listPath = isSubsite ? `${basePath}/blog` : '/blog';
   const [state, setState] = useState({ loading: true, posts: [] });
@@ -61,11 +65,18 @@ export default function BlogDetail({ navItems, brandPrefix, brandSuffix, basePat
     state.posts.find((item) => item.slug === slug || String(item.id) === slug || slugify(item.title) === slug)
   ), [slug, state.posts]);
 
-  useEffect(() => {
-    if (post?.title) {
-      document.title = `${post.title} — Starlife İnşaat`;
-    }
-  }, [post]);
+  const seoDescription = post?.excerpt || post?.content?.slice(0, 160) || 'Starlife İnşaat blog yazısı';
+  const articleSchema = post ? buildArticleSchema({
+    title: post.title,
+    description: seoDescription,
+    image: post.image,
+    url: buildCanonical(pathname),
+    author: post.author,
+  }) : null;
+  const breadcrumbSchema = buildBreadcrumbSchema([
+    { name: 'Bizden Haberler', href: listPath },
+    { name: post?.title || 'Haber Detayı' },
+  ]);
 
   const Header = isSubsite
     ? <SubsiteHeader navItems={navItems} brandPrefix={brandPrefix} brandSuffix={brandSuffix} contactHref={`${basePath}/iletisim`} />
@@ -100,6 +111,17 @@ export default function BlogDetail({ navItems, brandPrefix, brandSuffix, basePat
 
   return (
     <div className="min-h-screen bg-white text-ink">
+      {post && (
+        <Seo
+          title={post.title}
+          description={seoDescription}
+          keywords={`${post.title}, Starlife İnşaat, inşaat haberleri, yapı güvenliği`}
+          pathname={pathname}
+          image={post.image}
+          type="article"
+          jsonLd={[articleSchema, breadcrumbSchema].filter(Boolean)}
+        />
+      )}
       {Header}
       <PageHero
         title={post.title}

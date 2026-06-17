@@ -70,10 +70,6 @@ export default function KurumsalYonetim() {
   );
 
   useEffect(() => {
-    document.title = 'Yönetim Kurulu — Starlife İnşaat';
-  }, []);
-
-  useEffect(() => {
     if (!selectedMember) return undefined;
     document.body.style.overflow = 'hidden';
     return () => {
