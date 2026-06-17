@@ -17,6 +17,8 @@ import StarlifeHome from './pages/starlife/StarlifeHome';
 import StarlifeHakkimizda from './pages/starlife/StarlifeHakkimizda';
 import StarlifeInsanKaynaklari from './pages/starlife/StarlifeInsanKaynaklari';
 import StarlifeTaahhutIsleri from './pages/starlife/StarlifeTaahhutIsleri';
+import StarlifeTaahhutListe from './pages/starlife/StarlifeTaahhutListe';
+import StarlifeTaahhutDetail from './pages/starlife/StarlifeTaahhutDetail';
 import StarlifeProjectDetail from './pages/starlife/StarlifeProjectDetail';
 import StarlifeProjects from './pages/starlife/StarlifeProjects';
 import YapiGuvenligiPage from './pages/starlife/YapiGuvenligiPage';
@@ -152,6 +154,9 @@ function App() {
           <Route path="/starlife-insaat/kurumsal/hakkimizda" element={<StarlifeHakkimizda />} />
           <Route path="/starlife-insaat/insankaynaklari" element={<StarlifeInsanKaynaklari />} />
           <Route path="/starlife-insaat/taahhutisleri" element={<StarlifeTaahhutIsleri />} />
+          <Route path="/starlife-insaat/taahhutisler/tamamlanan-isler" element={<StarlifeTaahhutListe filter="Tamamlanan" title="Tamamlanan İşler" breadcrumbLabel="Tamamlanan İşler" />} />
+          <Route path="/starlife-insaat/taahhutisler/devam-eden-isler" element={<StarlifeTaahhutListe filter="Devam Eden" title="Devam Eden İşler" breadcrumbLabel="Devam Eden İşler" />} />
+          <Route path="/starlife-insaat/taahhut/:slug" element={<StarlifeTaahhutDetail />} />
           <Route path="/starlife-insaat/tumprojeler" element={<StarlifeProjects title="Tüm Projeler" breadcrumbLabel="Tüm Projeler" />} />
           <Route path="/starlife-insaat/projeler/:slug" element={<StarlifeProjectDetail />} />
           <Route path="/starlife-insaat/projeler/tamamlanan-projeler" element={<StarlifeProjects filter="Tamamlanan" title="Tamamlanan Projeler" breadcrumbLabel="Tamamlanan" />} />

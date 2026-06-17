@@ -124,7 +124,13 @@ export const STARLIFE_NAV = [
       { label: 'İ.K.', href: '/starlife-insaat/insankaynaklari' },
     ]
   },
-  { label: 'Taahhüt İşleri', href: '/starlife-insaat/taahhutisleri' },
+  {
+    label: 'Taahhüt İşleri', children: [
+      { label: 'Taahhüt İşleri', href: '/starlife-insaat/taahhutisleri' },
+      { label: 'Tamamlanan İşler', href: '/starlife-insaat/taahhutisler/tamamlanan-isler' },
+      { label: 'Devam Eden İşler', href: '/starlife-insaat/taahhutisler/devam-eden-isler' },
+    ]
+  },
   {
     label: 'Projeler', children: [
       { label: 'Tamamlanan Projeler', href: '/starlife-insaat/projeler/tamamlanan-projeler' },
