@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, lazy, Suspense, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useAnimationControls } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { Menu, Search, ArrowUpRight, X } from 'lucide-react';
 import { HERO_SLIDES } from '../mock/mock';
 import { mapHeroSlide, useSupabaseRows } from '../lib/supabase/content';
-import MegaMenu from '../components/holding/MegaMenu';
+import { optimizeImageUrl } from '../lib/imageUtils';
 import BrandLogo from '../components/shared/BrandLogo';
+
+const MegaMenu = lazy(() => import('../components/holding/MegaMenu'));
 
 const SLIDE_INTERVAL_MS = 5000;
 const EASE = [0.22, 1, 0.36, 1];
@@ -70,6 +73,10 @@ export default function LandingPage() {
   const openSearch = useCallback(() => setSearchOpen(true), []);
   const closeSearch = useCallback(() => setSearchOpen(false), []);
   const slide = slides[active] || slides[0];
+  const lcpImage = useMemo(
+    () => optimizeImageUrl(slides[0]?.image, { width: 1600, quality: 75 }),
+    [slides],
+  );
   const num = String(active + 1).padStart(2, '0');
   const total = String(slideCount).padStart(2, '0');
 
@@ -79,6 +86,11 @@ export default function LandingPage() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
+      {lcpImage && (
+        <Helmet prioritizeSeoTags>
+          <link rel="preload" as="image" href={lcpImage} fetchPriority="high" />
+        </Helmet>
+      )}
       {/* === LEFT PANEL === */}
       <aside className="relative w-full md:w-[42%] h-[55vh] md:h-full flex flex-col z-10 overflow-hidden shrink-0 bg-warm bg-noise">
         {/* Cinematic gradient base */}
@@ -231,7 +243,14 @@ export default function LandingPage() {
             exit={{ opacity: 0, scale: 0.98 }}
             transition={SLIDE_TRANSITION}
           >
-            <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />
+            <img
+              src={slide.image}
+              alt={slide.title}
+              className="w-full h-full object-cover"
+              fetchPriority={active === 0 ? 'high' : 'auto'}
+              loading={active === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
             {/* Cinematic blends */}
             <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-charcoal/70 via-charcoal/20 to-transparent" />
             <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-charcoal/50 to-transparent" />
@@ -288,7 +307,11 @@ export default function LandingPage() {
       </header>
 
       {/* Hamburger Menu Overlay — premium split-panel mega menu */}
-      <MegaMenu open={menuOpen} onClose={closeMenu} />
+      {menuOpen && (
+        <Suspense fallback={null}>
+          <MegaMenu open={menuOpen} onClose={closeMenu} />
+        </Suspense>
+      )}
 
       {/* Search overlay */}
       <AnimatePresence>

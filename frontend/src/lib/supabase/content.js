@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from './client';
+import { optimizeImageUrl } from '../imageUtils';
 
 const PROJECT_STATUS_LABELS = {
   devam: 'Devam Eden',
@@ -113,13 +114,15 @@ export function mapProject(row) {
 }
 
 export function mapHeroSlide(row) {
+  const image = row.image || row.image_url || 'https://images.unsplash.com/photo-1626885930974-4b69aa21bbf9';
+
   return {
     tag: row.tag || 'Starlife İnşaat',
     title: row.title || '',
     desc: row.description || row.desc || '',
     cta: row.cta_text || row.cta || 'Keşfet',
     href: row.cta_href || row.href || '/starlife-insaat',
-    image: row.image || row.image_url || 'https://images.unsplash.com/photo-1626885930974-4b69aa21bbf9',
+    image: optimizeImageUrl(image, { width: 1600, quality: 75 }),
   };
 }
 

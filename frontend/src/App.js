@@ -1,46 +1,52 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import ScrollToTop from './components/ScrollToTop';
 import RouteSeo from './components/seo/RouteSeo';
-
+import PageLoader from './components/shared/PageLoader';
 import LandingPage from './pages/LandingPage';
-import KurumsalHakkimizda from './pages/KurumsalHakkimizda';
-import KurumsalYonetim from './pages/KurumsalYonetim';
-import OperasyonHaritasi from './pages/OperasyonHaritasi';
-import Iletisim from './pages/Iletisim';
-import Blog from './pages/Blog';
-import BlogDetail from './pages/BlogDetail';
-import Kvkk from './pages/Kvkk';
-
-import StarlifeHome from './pages/starlife/StarlifeHome';
-import StarlifeHakkimizda from './pages/starlife/StarlifeHakkimizda';
-import StarlifeInsanKaynaklari from './pages/starlife/StarlifeInsanKaynaklari';
-import StarlifeTaahhutIsleri from './pages/starlife/StarlifeTaahhutIsleri';
-import StarlifeTaahhutListe from './pages/starlife/StarlifeTaahhutListe';
-import StarlifeTaahhutDetail from './pages/starlife/StarlifeTaahhutDetail';
-import StarlifeProjectDetail from './pages/starlife/StarlifeProjectDetail';
-import StarlifeProjects from './pages/starlife/StarlifeProjects';
-import YapiGuvenligiPage from './pages/starlife/YapiGuvenligiPage';
-
-import InvestHome from './pages/invest/InvestHome';
-import ErdHome from './pages/erd/ErdHome';
-
-import SubsiteBlog from './pages/SubsiteBlog';
-import SubsiteIletisim from './pages/SubsiteIletisim';
-import SubsiteAbout from './pages/SubsiteAbout';
-import AdminRouteGuard from './components/admin/AdminRouteGuard';
-import AdminContentPage from './pages/admin/AdminContentPage';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminLayout from './pages/admin/AdminLayout';
-import AdminLogin from './pages/admin/AdminLogin';
-import AdminMedia from './pages/admin/AdminMedia';
-import AdminResourceForm from './pages/admin/AdminResourceForm';
-import AdminResourceList from './pages/admin/AdminResourceList';
-import AdminSettings from './pages/admin/AdminSettings';
 
 import { STARLIFE_NAV, INVEST_NAV, ERD_NAV } from './mock/mock';
+
+const KurumsalHakkimizda = lazy(() => import('./pages/KurumsalHakkimizda'));
+const KurumsalYonetim = lazy(() => import('./pages/KurumsalYonetim'));
+const OperasyonHaritasi = lazy(() => import('./pages/OperasyonHaritasi'));
+const Iletisim = lazy(() => import('./pages/Iletisim'));
+const Blog = lazy(() => import('./pages/Blog'));
+const BlogDetail = lazy(() => import('./pages/BlogDetail'));
+const Kvkk = lazy(() => import('./pages/Kvkk'));
+
+const StarlifeHome = lazy(() => import('./pages/starlife/StarlifeHome'));
+const StarlifeHakkimizda = lazy(() => import('./pages/starlife/StarlifeHakkimizda'));
+const StarlifeInsanKaynaklari = lazy(() => import('./pages/starlife/StarlifeInsanKaynaklari'));
+const StarlifeTaahhutIsleri = lazy(() => import('./pages/starlife/StarlifeTaahhutIsleri'));
+const StarlifeTaahhutListe = lazy(() => import('./pages/starlife/StarlifeTaahhutListe'));
+const StarlifeTaahhutDetail = lazy(() => import('./pages/starlife/StarlifeTaahhutDetail'));
+const StarlifeProjectDetail = lazy(() => import('./pages/starlife/StarlifeProjectDetail'));
+const StarlifeProjects = lazy(() => import('./pages/starlife/StarlifeProjects'));
+const YapiGuvenligiPage = lazy(() => import('./pages/starlife/YapiGuvenligiPage'));
+
+const InvestHome = lazy(() => import('./pages/invest/InvestHome'));
+const ErdHome = lazy(() => import('./pages/erd/ErdHome'));
+
+const SubsiteBlog = lazy(() => import('./pages/SubsiteBlog'));
+const SubsiteIletisim = lazy(() => import('./pages/SubsiteIletisim'));
+const SubsiteAbout = lazy(() => import('./pages/SubsiteAbout'));
+
+const AdminRouteGuard = lazy(() => import('./components/admin/AdminRouteGuard'));
+const AdminContentPage = lazy(() => import('./pages/admin/AdminContentPage'));
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
+const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
+const AdminMedia = lazy(() => import('./pages/admin/AdminMedia'));
+const AdminResourceForm = lazy(() => import('./pages/admin/AdminResourceForm'));
+const AdminResourceList = lazy(() => import('./pages/admin/AdminResourceList'));
+const AdminSettings = lazy(() => import('./pages/admin/AdminSettings'));
+
+function SuspensePage({ children }) {
+  return <Suspense fallback={<PageLoader />}>{children}</Suspense>;
+}
 
 const investAboutProps = {
   navItems: INVEST_NAV, brandPrefix: 'İNVEST', brandSuffix: '', basePath: '/invest-insaat',
@@ -71,9 +77,12 @@ const erdAboutProps = {
 };
 
 function YapiGuvenligiRoute() {
-  // ensures component re-renders on slug change
   const params = useParams();
-  return <YapiGuvenligiPage key={params.slug} />;
+  return (
+    <SuspensePage>
+      <YapiGuvenligiPage key={params.slug} />
+    </SuspensePage>
+  );
 }
 
 function App() {
@@ -94,94 +103,94 @@ function App() {
         />
         <Routes>
           {/* Admin */}
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin" element={<AdminRouteGuard />}>
-            <Route element={<AdminLayout />}>
-              <Route index element={<AdminDashboard />} />
-              <Route path="projeler" element={<AdminResourceList resource="projects" />} />
-              <Route path="projeler/yeni" element={<AdminResourceForm resource="projects" />} />
-              <Route path="projeler/duzenle/:id" element={<AdminResourceForm resource="projects" />} />
-              <Route path="harita" element={<AdminResourceList resource="map" />} />
-              <Route path="harita/yeni" element={<AdminResourceForm resource="map" />} />
-              <Route path="harita/duzenle/:id" element={<AdminResourceForm resource="map" />} />
-              <Route path="yonetim" element={<AdminResourceList resource="team" />} />
-              <Route path="yonetim/yeni" element={<AdminResourceForm resource="team" />} />
-              <Route path="yonetim/duzenle/:id" element={<AdminResourceForm resource="team" />} />
-              <Route path="hero" element={<AdminResourceList resource="hero" />} />
-              <Route path="hero/yeni" element={<AdminResourceForm resource="hero" />} />
-              <Route path="hero/duzenle/:id" element={<AdminResourceForm resource="hero" />} />
-              <Route path="blog" element={<AdminResourceList resource="blog" />} />
-              <Route path="blog/yeni" element={<AdminResourceForm resource="blog" />} />
-              <Route path="blog/duzenle/:id" element={<AdminResourceForm resource="blog" />} />
-              <Route path="ayarlar" element={<AdminSettings />} />
-              <Route path="ayarlar/yeni" element={<AdminResourceForm resource="settings" />} />
-              <Route path="ayarlar/duzenle/:id" element={<AdminResourceForm resource="settings" />} />
-              <Route path="sirketler" element={<AdminContentPage type="companies" />} />
-              <Route path="header" element={<AdminContentPage type="header" />} />
-              <Route path="footer" element={<AdminContentPage type="footer" />} />
-              <Route path="hakkimizda" element={<AdminContentPage type="about" />} />
-              <Route path="iletisim" element={<AdminContentPage type="contact" />} />
-              <Route path="medya" element={<AdminMedia />} />
-              <Route path="projects" element={<AdminResourceList resource="projects" />} />
-              <Route path="projects/new" element={<AdminResourceForm resource="projects" />} />
-              <Route path="projects/edit/:id" element={<AdminResourceForm resource="projects" />} />
-              <Route path="map" element={<AdminResourceList resource="map" />} />
-              <Route path="map/new" element={<AdminResourceForm resource="map" />} />
-              <Route path="map/edit/:id" element={<AdminResourceForm resource="map" />} />
-              <Route path="team" element={<AdminResourceList resource="team" />} />
-              <Route path="team/new" element={<AdminResourceForm resource="team" />} />
-              <Route path="team/edit/:id" element={<AdminResourceForm resource="team" />} />
-              <Route path="settings" element={<AdminSettings />} />
-              <Route path="settings/new" element={<AdminResourceForm resource="settings" />} />
-              <Route path="settings/edit/:id" element={<AdminResourceForm resource="settings" />} />
-              <Route path="companies" element={<AdminContentPage type="companies" />} />
-              <Route path="about" element={<AdminContentPage type="about" />} />
-              <Route path="contact" element={<AdminContentPage type="contact" />} />
-              <Route path="media" element={<AdminMedia />} />
+          <Route path="/admin/login" element={<SuspensePage><AdminLogin /></SuspensePage>} />
+          <Route path="/admin" element={<SuspensePage><AdminRouteGuard /></SuspensePage>}>
+            <Route element={<SuspensePage><AdminLayout /></SuspensePage>}>
+              <Route index element={<SuspensePage><AdminDashboard /></SuspensePage>} />
+              <Route path="projeler" element={<SuspensePage><AdminResourceList resource="projects" /></SuspensePage>} />
+              <Route path="projeler/yeni" element={<SuspensePage><AdminResourceForm resource="projects" /></SuspensePage>} />
+              <Route path="projeler/duzenle/:id" element={<SuspensePage><AdminResourceForm resource="projects" /></SuspensePage>} />
+              <Route path="harita" element={<SuspensePage><AdminResourceList resource="map" /></SuspensePage>} />
+              <Route path="harita/yeni" element={<SuspensePage><AdminResourceForm resource="map" /></SuspensePage>} />
+              <Route path="harita/duzenle/:id" element={<SuspensePage><AdminResourceForm resource="map" /></SuspensePage>} />
+              <Route path="yonetim" element={<SuspensePage><AdminResourceList resource="team" /></SuspensePage>} />
+              <Route path="yonetim/yeni" element={<SuspensePage><AdminResourceForm resource="team" /></SuspensePage>} />
+              <Route path="yonetim/duzenle/:id" element={<SuspensePage><AdminResourceForm resource="team" /></SuspensePage>} />
+              <Route path="hero" element={<SuspensePage><AdminResourceList resource="hero" /></SuspensePage>} />
+              <Route path="hero/yeni" element={<SuspensePage><AdminResourceForm resource="hero" /></SuspensePage>} />
+              <Route path="hero/duzenle/:id" element={<SuspensePage><AdminResourceForm resource="hero" /></SuspensePage>} />
+              <Route path="blog" element={<SuspensePage><AdminResourceList resource="blog" /></SuspensePage>} />
+              <Route path="blog/yeni" element={<SuspensePage><AdminResourceForm resource="blog" /></SuspensePage>} />
+              <Route path="blog/duzenle/:id" element={<SuspensePage><AdminResourceForm resource="blog" /></SuspensePage>} />
+              <Route path="ayarlar" element={<SuspensePage><AdminSettings /></SuspensePage>} />
+              <Route path="ayarlar/yeni" element={<SuspensePage><AdminResourceForm resource="settings" /></SuspensePage>} />
+              <Route path="ayarlar/duzenle/:id" element={<SuspensePage><AdminResourceForm resource="settings" /></SuspensePage>} />
+              <Route path="sirketler" element={<SuspensePage><AdminContentPage type="companies" /></SuspensePage>} />
+              <Route path="header" element={<SuspensePage><AdminContentPage type="header" /></SuspensePage>} />
+              <Route path="footer" element={<SuspensePage><AdminContentPage type="footer" /></SuspensePage>} />
+              <Route path="hakkimizda" element={<SuspensePage><AdminContentPage type="about" /></SuspensePage>} />
+              <Route path="iletisim" element={<SuspensePage><AdminContentPage type="contact" /></SuspensePage>} />
+              <Route path="medya" element={<SuspensePage><AdminMedia /></SuspensePage>} />
+              <Route path="projects" element={<SuspensePage><AdminResourceList resource="projects" /></SuspensePage>} />
+              <Route path="projects/new" element={<SuspensePage><AdminResourceForm resource="projects" /></SuspensePage>} />
+              <Route path="projects/edit/:id" element={<SuspensePage><AdminResourceForm resource="projects" /></SuspensePage>} />
+              <Route path="map" element={<SuspensePage><AdminResourceList resource="map" /></SuspensePage>} />
+              <Route path="map/new" element={<SuspensePage><AdminResourceForm resource="map" /></SuspensePage>} />
+              <Route path="map/edit/:id" element={<SuspensePage><AdminResourceForm resource="map" /></SuspensePage>} />
+              <Route path="team" element={<SuspensePage><AdminResourceList resource="team" /></SuspensePage>} />
+              <Route path="team/new" element={<SuspensePage><AdminResourceForm resource="team" /></SuspensePage>} />
+              <Route path="team/edit/:id" element={<SuspensePage><AdminResourceForm resource="team" /></SuspensePage>} />
+              <Route path="settings" element={<SuspensePage><AdminSettings /></SuspensePage>} />
+              <Route path="settings/new" element={<SuspensePage><AdminResourceForm resource="settings" /></SuspensePage>} />
+              <Route path="settings/edit/:id" element={<SuspensePage><AdminResourceForm resource="settings" /></SuspensePage>} />
+              <Route path="companies" element={<SuspensePage><AdminContentPage type="companies" /></SuspensePage>} />
+              <Route path="about" element={<SuspensePage><AdminContentPage type="about" /></SuspensePage>} />
+              <Route path="contact" element={<SuspensePage><AdminContentPage type="contact" /></SuspensePage>} />
+              <Route path="media" element={<SuspensePage><AdminMedia /></SuspensePage>} />
             </Route>
           </Route>
 
           {/* Holding */}
           <Route path="/" element={<LandingPage />} />
-          <Route path="/kurumsal/hakkimizda" element={<KurumsalHakkimizda />} />
-          <Route path="/kurumsal/yonetim" element={<KurumsalYonetim />} />
-          <Route path="/kurumsal/operasyon-haritasi" element={<OperasyonHaritasi />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogDetail />} />
-          <Route path="/iletisim" element={<Iletisim />} />
-          <Route path="/politika/kvkk-metni" element={<Kvkk />} />
+          <Route path="/kurumsal/hakkimizda" element={<SuspensePage><KurumsalHakkimizda /></SuspensePage>} />
+          <Route path="/kurumsal/yonetim" element={<SuspensePage><KurumsalYonetim /></SuspensePage>} />
+          <Route path="/kurumsal/operasyon-haritasi" element={<SuspensePage><OperasyonHaritasi /></SuspensePage>} />
+          <Route path="/blog" element={<SuspensePage><Blog /></SuspensePage>} />
+          <Route path="/blog/:slug" element={<SuspensePage><BlogDetail /></SuspensePage>} />
+          <Route path="/iletisim" element={<SuspensePage><Iletisim /></SuspensePage>} />
+          <Route path="/politika/kvkk-metni" element={<SuspensePage><Kvkk /></SuspensePage>} />
 
           {/* Starlife */}
-          <Route path="/starlife-insaat" element={<StarlifeHome />} />
-          <Route path="/starlife-insaat/kurumsal/hakkimizda" element={<StarlifeHakkimizda />} />
-          <Route path="/starlife-insaat/insankaynaklari" element={<StarlifeInsanKaynaklari />} />
-          <Route path="/starlife-insaat/taahhutisleri" element={<StarlifeTaahhutIsleri />} />
-          <Route path="/starlife-insaat/taahhutisler/tamamlanan-isler" element={<StarlifeTaahhutListe filter="Tamamlanan" title="Tamamlanan İşler" breadcrumbLabel="Tamamlanan İşler" />} />
-          <Route path="/starlife-insaat/taahhutisler/devam-eden-isler" element={<StarlifeTaahhutListe filter="Devam Eden" title="Devam Eden İşler" breadcrumbLabel="Devam Eden İşler" />} />
-          <Route path="/starlife-insaat/taahhut/:slug" element={<StarlifeTaahhutDetail />} />
-          <Route path="/starlife-insaat/tumprojeler" element={<StarlifeProjects title="Tüm Projeler" breadcrumbLabel="Tüm Projeler" />} />
-          <Route path="/starlife-insaat/projeler/:slug" element={<StarlifeProjectDetail />} />
-          <Route path="/starlife-insaat/projeler/tamamlanan-projeler" element={<StarlifeProjects filter="Tamamlanan" title="Tamamlanan Projeler" breadcrumbLabel="Tamamlanan" />} />
-          <Route path="/starlife-insaat/projeler/devam-eden-projeler" element={<StarlifeProjects filter="Devam Eden" title="Devam Eden Projeler" breadcrumbLabel="Devam Eden" />} />
+          <Route path="/starlife-insaat" element={<SuspensePage><StarlifeHome /></SuspensePage>} />
+          <Route path="/starlife-insaat/kurumsal/hakkimizda" element={<SuspensePage><StarlifeHakkimizda /></SuspensePage>} />
+          <Route path="/starlife-insaat/insankaynaklari" element={<SuspensePage><StarlifeInsanKaynaklari /></SuspensePage>} />
+          <Route path="/starlife-insaat/taahhutisleri" element={<SuspensePage><StarlifeTaahhutIsleri /></SuspensePage>} />
+          <Route path="/starlife-insaat/taahhutisler/tamamlanan-isler" element={<SuspensePage><StarlifeTaahhutListe filter="Tamamlanan" title="Tamamlanan İşler" breadcrumbLabel="Tamamlanan İşler" /></SuspensePage>} />
+          <Route path="/starlife-insaat/taahhutisler/devam-eden-isler" element={<SuspensePage><StarlifeTaahhutListe filter="Devam Eden" title="Devam Eden İşler" breadcrumbLabel="Devam Eden İşler" /></SuspensePage>} />
+          <Route path="/starlife-insaat/taahhut/:slug" element={<SuspensePage><StarlifeTaahhutDetail /></SuspensePage>} />
+          <Route path="/starlife-insaat/tumprojeler" element={<SuspensePage><StarlifeProjects title="Tüm Projeler" breadcrumbLabel="Tüm Projeler" /></SuspensePage>} />
+          <Route path="/starlife-insaat/projeler/:slug" element={<SuspensePage><StarlifeProjectDetail /></SuspensePage>} />
+          <Route path="/starlife-insaat/projeler/tamamlanan-projeler" element={<SuspensePage><StarlifeProjects filter="Tamamlanan" title="Tamamlanan Projeler" breadcrumbLabel="Tamamlanan" /></SuspensePage>} />
+          <Route path="/starlife-insaat/projeler/devam-eden-projeler" element={<SuspensePage><StarlifeProjects filter="Devam Eden" title="Devam Eden Projeler" breadcrumbLabel="Devam Eden" /></SuspensePage>} />
           <Route path="/starlife-insaat/yapiguvenligi/:slug" element={<YapiGuvenligiRoute />} />
-          <Route path="/starlife-insaat/blog" element={<SubsiteBlog navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" basePath="/starlife-insaat" />} />
-          <Route path="/starlife-insaat/blog/:slug" element={<BlogDetail navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" basePath="/starlife-insaat" />} />
-          <Route path="/starlife-insaat/iletisim" element={<SubsiteIletisim navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" basePath="/starlife-insaat" />} />
-          <Route path="/starlife-insaat/politika/kvkk-metni" element={<Kvkk />} />
+          <Route path="/starlife-insaat/blog" element={<SuspensePage><SubsiteBlog navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" basePath="/starlife-insaat" /></SuspensePage>} />
+          <Route path="/starlife-insaat/blog/:slug" element={<SuspensePage><BlogDetail navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" basePath="/starlife-insaat" /></SuspensePage>} />
+          <Route path="/starlife-insaat/iletisim" element={<SuspensePage><SubsiteIletisim navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" basePath="/starlife-insaat" /></SuspensePage>} />
+          <Route path="/starlife-insaat/politika/kvkk-metni" element={<SuspensePage><Kvkk /></SuspensePage>} />
 
           {/* Invest */}
-          <Route path="/invest-insaat" element={<InvestHome />} />
-          <Route path="/invest-insaat/kurumsal/invest-insaat" element={<SubsiteAbout {...investAboutProps} />} />
-          <Route path="/invest-insaat/blog" element={<SubsiteBlog navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" />} />
-          <Route path="/invest-insaat/blog/:slug" element={<BlogDetail navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" />} />
-          <Route path="/invest-insaat/iletisim" element={<SubsiteIletisim navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" />} />
+          <Route path="/invest-insaat" element={<SuspensePage><InvestHome /></SuspensePage>} />
+          <Route path="/invest-insaat/kurumsal/invest-insaat" element={<SuspensePage><SubsiteAbout {...investAboutProps} /></SuspensePage>} />
+          <Route path="/invest-insaat/blog" element={<SuspensePage><SubsiteBlog navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" /></SuspensePage>} />
+          <Route path="/invest-insaat/blog/:slug" element={<SuspensePage><BlogDetail navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" /></SuspensePage>} />
+          <Route path="/invest-insaat/iletisim" element={<SuspensePage><SubsiteIletisim navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" /></SuspensePage>} />
 
           {/* ERD */}
-          <Route path="/erd-insaat" element={<ErdHome />} />
-          <Route path="/erd-insaat/kurumsal/erd-insaat" element={<SubsiteAbout {...erdAboutProps} />} />
-          <Route path="/erd-insaat/blog" element={<SubsiteBlog navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" />} />
-          <Route path="/erd-insaat/blog/:slug" element={<BlogDetail navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" />} />
-          <Route path="/erd-insaat/iletisim" element={<SubsiteIletisim navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" />} />
+          <Route path="/erd-insaat" element={<SuspensePage><ErdHome /></SuspensePage>} />
+          <Route path="/erd-insaat/kurumsal/erd-insaat" element={<SuspensePage><SubsiteAbout {...erdAboutProps} /></SuspensePage>} />
+          <Route path="/erd-insaat/blog" element={<SuspensePage><SubsiteBlog navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" /></SuspensePage>} />
+          <Route path="/erd-insaat/blog/:slug" element={<SuspensePage><BlogDetail navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" /></SuspensePage>} />
+          <Route path="/erd-insaat/iletisim" element={<SuspensePage><SubsiteIletisim navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" /></SuspensePage>} />
         </Routes>
       </BrowserRouter>
     </div>
