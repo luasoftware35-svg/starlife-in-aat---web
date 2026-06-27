@@ -75,18 +75,18 @@ export const COMPANIES = [
     href: '/starlife-insaat',
   },
   {
-    slug: 'invest-insaat',
-    name: 'İnvest İnşaat',
-    desc: 'Yatırım odaklı; konut, ticari ve karma kullanımlı projeler.',
-    image: 'https://images.pexels.com/photos/33230969/pexels-photo-33230969.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-    href: '/invest-insaat',
-  },
-  {
     slug: 'erd-insaat',
     name: 'ERD İnşaat',
     desc: 'Mimari vizyon, mühendislik altyapısı ve yenilikçi projeler.',
     image: 'https://images.pexels.com/photos/34700467/pexels-photo-34700467.png?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
     href: '/erd-insaat',
+  },
+  {
+    slug: 'invest-insaat',
+    name: 'İnvest İnşaat',
+    desc: 'Yatırım odaklı; konut, ticari ve karma kullanımlı projeler.',
+    image: 'https://images.pexels.com/photos/33230969/pexels-photo-33230969.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+    href: '/invest-insaat',
   },
 ];
 
@@ -108,8 +108,8 @@ export const HOLDING_NAV = [
   {
     label: 'Grup Şirketlerimiz', children: [
       { label: 'Starlife İnşaat', href: '/starlife-insaat' },
-      { label: 'İnvest İnşaat', href: '/invest-insaat' },
       { label: 'ERD İnşaat', href: '/erd-insaat' },
+      { label: 'İnvest İnşaat', href: '/invest-insaat' },
     ]
   },
   { label: 'Bizden Haberler', href: '/blog' },

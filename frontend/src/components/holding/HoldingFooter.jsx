@@ -35,8 +35,8 @@ export default function HoldingFooter() {
           <h4 className="text-gold text-[11px] tracking-[0.35em] uppercase mb-6 font-medium">Grup Şirketlerimiz</h4>
           <ul className="space-y-3.5">
             <li><Link to="/starlife-insaat" className="text-white/60 text-sm font-light hover:text-gold hover:translate-x-1 transition-all inline-flex items-center gap-1.5">Starlife İnşaat <ArrowUpRight size={12} className="opacity-60" /></Link></li>
-            <li><Link to="/invest-insaat" className="text-white/60 text-sm font-light hover:text-gold hover:translate-x-1 transition-all inline-flex items-center gap-1.5">İnvest İnşaat <ArrowUpRight size={12} className="opacity-60" /></Link></li>
             <li><Link to="/erd-insaat" className="text-white/60 text-sm font-light hover:text-gold hover:translate-x-1 transition-all inline-flex items-center gap-1.5">ERD İnşaat <ArrowUpRight size={12} className="opacity-60" /></Link></li>
+            <li><Link to="/invest-insaat" className="text-white/60 text-sm font-light hover:text-gold hover:translate-x-1 transition-all inline-flex items-center gap-1.5">İnvest İnşaat <ArrowUpRight size={12} className="opacity-60" /></Link></li>
           </ul>
         </div>
 
