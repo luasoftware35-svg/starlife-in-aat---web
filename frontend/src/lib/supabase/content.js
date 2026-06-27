@@ -45,10 +45,28 @@ function toDateLabel(value) {
   });
 }
 
-async function fetchRows(table, { orderBy = 'created_at', ascending = false, filters = [] } = {}) {
+const CACHE_TTL_MS = 5 * 60 * 1000;
+const queryCache = new Map();
+
+const BLOG_LIST_COLUMNS = 'id, title, slug, excerpt, cover_image, created_at';
+const BLOG_DETAIL_COLUMNS = 'id, title, slug, excerpt, cover_image, content, created_at';
+
+async function fetchRows(table, {
+  orderBy = 'created_at',
+  ascending = false,
+  filters = [],
+  columns = '*',
+  limit,
+} = {}) {
   if (!supabase) return [];
 
-  let query = supabase.from(table).select('*');
+  const cacheKey = JSON.stringify({ table, orderBy, ascending, filters, columns, limit });
+  const cached = queryCache.get(cacheKey);
+  if (cached && Date.now() - cached.at < CACHE_TTL_MS) {
+    return cached.data;
+  }
+
+  let query = supabase.from(table).select(columns);
 
   filters.forEach(({ column, operator = 'eq', value }) => {
     query = query[operator](column, value);
@@ -58,9 +76,16 @@ async function fetchRows(table, { orderBy = 'created_at', ascending = false, fil
     query = query.order(orderBy, { ascending });
   }
 
+  if (limit) {
+    query = query.limit(limit);
+  }
+
   const { data, error } = await query;
   if (error) throw error;
-  return data || [];
+
+  const rows = data || [];
+  queryCache.set(cacheKey, { data: rows, at: Date.now() });
+  return rows;
 }
 
 export function useSupabaseRows(table, options, fallbackRows = [], mapper = (row) => row) {
@@ -136,17 +161,90 @@ export function mapTeamMember(row) {
   };
 }
 
-export function mapBlogPost(row) {
+export function mapBlogPost(row, { variant = 'detail' } = {}) {
+  const imageWidth = variant === 'list' ? 640 : 1200;
+  const image = row.cover_image || row.image || 'https://images.pexels.com/photos/4458205/pexels-photo-4458205.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940';
+
   return {
     id: row.id,
     slug: slugify(row.slug || row.title || row.id),
     title: row.title,
     excerpt: row.excerpt || '',
-    content: row.content || row.excerpt || '',
+    content: variant === 'list' ? '' : (row.content || row.excerpt || ''),
     date: row.date || toDateLabel(row.created_at),
     author: row.author || 'Starlife İnşaat',
-    image: row.cover_image || row.image || 'https://images.pexels.com/photos/4458205/pexels-photo-4458205.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+    image: optimizeImageUrl(image, { width: imageWidth, quality: 75 }),
   };
+}
+
+export const BLOG_POST_LIST_QUERY = {
+  orderBy: 'created_at',
+  ascending: false,
+  columns: BLOG_LIST_COLUMNS,
+};
+
+export function findBlogPostBySlug(posts, slug) {
+  return posts.find(
+    (item) => item.slug === slug || String(item.id) === slug || slugify(item.title) === slug,
+  );
+}
+
+export async function fetchBlogPostBySlug(slug, fallbackRows = []) {
+  const fallbackPosts = fallbackRows.map((row) => mapBlogPost(row));
+  const fallbackPost = findBlogPostBySlug(fallbackPosts, slug);
+
+  if (!supabase) return fallbackPost || null;
+
+  const cacheKey = `blog_post:${slug}`;
+  const cached = queryCache.get(cacheKey);
+  if (cached && Date.now() - cached.at < CACHE_TTL_MS) {
+    return cached.data;
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('blog_posts')
+      .select(BLOG_DETAIL_COLUMNS)
+      .eq('slug', slug)
+      .maybeSingle();
+
+    if (!error && data) {
+      const post = mapBlogPost(data);
+      queryCache.set(cacheKey, { data: post, at: Date.now() });
+      return post;
+    }
+  } catch {
+    // fall through to fallback
+  }
+
+  return fallbackPost || null;
+}
+
+export function useBlogPost(slug, fallbackRows = []) {
+  const fallbackPost = useMemo(
+    () => findBlogPostBySlug(fallbackRows.map((row) => mapBlogPost(row)), slug),
+    [fallbackRows, slug],
+  );
+  const [state, setState] = useState({
+    loading: Boolean(supabase) && !fallbackPost,
+    post: fallbackPost || null,
+  });
+
+  useEffect(() => {
+    let mounted = true;
+
+    fetchBlogPostBySlug(slug, fallbackRows).then((post) => {
+      if (mounted) {
+        setState({ loading: false, post });
+      }
+    });
+
+    return () => {
+      mounted = false;
+    };
+  }, [fallbackRows, slug]);
+
+  return state;
 }
 
 export function mapLocation(row) {

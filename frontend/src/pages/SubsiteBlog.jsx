@@ -1,55 +1,50 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Calendar, User, ArrowRight } from 'lucide-react';
+import React, { useCallback } from 'react';
 import SubsiteHeader from '../components/shared/SubsiteHeader';
 import SubsiteFooter from '../components/shared/SubsiteFooter';
 import PageHero from '../components/shared/PageHero';
+import BlogPostGrid from '../components/shared/BlogPostGrid';
 import { BLOG_POSTS } from '../mock/mock';
-import { fadeUp, staggerContainer } from '../lib/animations';
-import { mapBlogPost, useSupabaseRows } from '../lib/supabase/content';
+import { BLOG_POST_LIST_QUERY, mapBlogPost, useSupabaseRows } from '../lib/supabase/content';
+import { optimizeImageUrl } from '../lib/imageUtils';
+
+const BLOG_HERO_IMAGE = optimizeImageUrl(
+  'https://images.pexels.com/photos/4458205/pexels-photo-4458205.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600',
+  { width: 1200, quality: 75 },
+);
 
 export default function SubsiteBlog({ navItems, brandPrefix, brandSuffix, basePath }) {
+  const mapListPost = useCallback((row) => mapBlogPost(row, { variant: 'list' }), []);
   const posts = useSupabaseRows(
     'blog_posts',
-    { orderBy: 'created_at', ascending: false },
+    BLOG_POST_LIST_QUERY,
     BLOG_POSTS,
-    mapBlogPost,
+    mapListPost,
   );
 
   return (
     <div className="bg-white text-ink min-h-screen">
-      <SubsiteHeader navItems={navItems} brandPrefix={brandPrefix} brandSuffix={brandSuffix} contactHref={`${basePath}/iletisim`} />
-      <PageHero title="Bizden Haberler" breadcrumb={[{ label: 'Anasayfa', href: basePath }, { label: 'Bizden Haberler' }]} image="https://images.pexels.com/photos/4458205/pexels-photo-4458205.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600" />
+      <SubsiteHeader
+        navItems={navItems}
+        brandPrefix={brandPrefix}
+        brandSuffix={brandSuffix}
+        contactHref={`${basePath}/iletisim`}
+      />
+      <PageHero
+        title="Bizden Haberler"
+        breadcrumb={[{ label: 'Anasayfa', href: basePath }, { label: 'Bizden Haberler' }]}
+        image={BLOG_HERO_IMAGE}
+      />
 
       <section className="bg-white text-ink py-16 px-5 sm:px-6 md:px-16 md:py-24">
-        <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="max-w-[1400px] mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {posts.map((b) => (
-            <motion.article key={b.id} variants={fadeUp} className="group">
-              <Link to={`${basePath}/blog/${b.slug}`} className="block">
-                <div className="aspect-[4/3] overflow-hidden bg-ink">
-                  <img src={b.image} alt={b.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                </div>
-              </Link>
-              <div className="mt-5">
-                <div className="flex items-center gap-4 text-ink/50 text-xs tracking-widest uppercase">
-                  <span className="flex items-center gap-1.5"><Calendar size={12} /> {b.date}</span>
-                  <span className="flex items-center gap-1.5"><User size={12} /> {b.author}</span>
-                </div>
-                <Link to={`${basePath}/blog/${b.slug}`} className="block">
-                  <h3 className="font-bold text-xl mt-3 group-hover:text-gold transition-colors">{b.title}</h3>
-                </Link>
-                <p className="text-ink/65 text-sm mt-3 leading-relaxed">{b.excerpt}</p>
-                <Link to={`${basePath}/blog/${b.slug}`} className="inline-flex items-center gap-2 text-gold text-xs tracking-[0.3em] uppercase mt-5 border-b border-gold/40 pb-1 group-hover:gap-3 transition-all">
-                  Devamını Oku <ArrowRight size={12} />
-                </Link>
-              </div>
-            </motion.article>
-          ))}
-        </motion.div>
+        <BlogPostGrid posts={posts} basePath={basePath} />
       </section>
 
-      <SubsiteFooter brandPrefix={brandPrefix} brandSuffix={brandSuffix} basePath={basePath} description="Güvenli ve modern yaşam alanları." />
+      <SubsiteFooter
+        brandPrefix={brandPrefix}
+        brandSuffix={brandSuffix}
+        basePath={basePath}
+        description="Güvenli ve modern yaşam alanları."
+      />
     </div>
   );
 }

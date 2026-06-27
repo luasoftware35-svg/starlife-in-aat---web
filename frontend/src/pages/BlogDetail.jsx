@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { ArrowLeft, Calendar, User } from 'lucide-react';
 import HoldingHeader from '../components/holding/HoldingHeader';
@@ -8,10 +8,9 @@ import SubsiteFooter from '../components/shared/SubsiteFooter';
 import PageHero from '../components/shared/PageHero';
 import Seo from '../components/seo/Seo';
 import { BLOG_POSTS } from '../mock/mock';
-import { mapBlogPost, slugify } from '../lib/supabase/content';
+import { useBlogPost } from '../lib/supabase/content';
 import { buildArticleSchema, buildBreadcrumbSchema } from '../lib/seo/schema';
 import { buildCanonical } from '../lib/seo/siteConfig';
-import { supabase } from '../lib/supabase/client';
 
 function renderContent(content) {
   return String(content || '')
@@ -25,45 +24,37 @@ function renderContent(content) {
     ));
 }
 
+function BlogDetailSkeleton({ Header, Footer, listPath }) {
+  return (
+    <div className="min-h-screen bg-white text-ink">
+      {Header}
+      <section className="bg-mist px-5 py-16 sm:px-6 md:px-16 md:py-24">
+        <div className="mx-auto max-w-4xl animate-pulse">
+          <div className="h-4 w-32 rounded bg-stone-200" />
+          <div className="mt-8 h-10 w-3/4 rounded bg-stone-200" />
+          <div className="mt-6 h-4 w-48 rounded bg-stone-200" />
+          <div className="mt-10 aspect-[16/9] rounded bg-stone-200" />
+          <div className="mt-10 space-y-4">
+            <div className="h-4 w-full rounded bg-stone-200" />
+            <div className="h-4 w-full rounded bg-stone-200" />
+            <div className="h-4 w-5/6 rounded bg-stone-200" />
+          </div>
+          <Link to={listPath} className="mt-10 inline-flex items-center gap-2 text-gold text-[11px] font-medium tracking-[0.3em] uppercase">
+            <ArrowLeft size={14} /> Haberlere Dön
+          </Link>
+        </div>
+      </section>
+      {Footer}
+    </div>
+  );
+}
+
 export default function BlogDetail({ navItems, brandPrefix, brandSuffix, basePath = '/blog' }) {
   const { slug } = useParams();
   const { pathname } = useLocation();
   const isSubsite = Boolean(navItems);
   const listPath = isSubsite ? `${basePath}/blog` : '/blog';
-  const [state, setState] = useState({ loading: true, posts: [] });
-
-  useEffect(() => {
-    let mounted = true;
-    const fallback = BLOG_POSTS.map(mapBlogPost);
-
-    if (!supabase) {
-      setState({ loading: false, posts: fallback });
-      return () => {
-        mounted = false;
-      };
-    }
-
-    supabase
-      .from('blog_posts')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .then(({ data, error }) => {
-        if (!mounted) return;
-        if (error || !data?.length) {
-          setState({ loading: false, posts: fallback });
-          return;
-        }
-        setState({ loading: false, posts: data.map(mapBlogPost) });
-      });
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  const post = useMemo(() => (
-    state.posts.find((item) => item.slug === slug || String(item.id) === slug || slugify(item.title) === slug)
-  ), [slug, state.posts]);
+  const { loading, post } = useBlogPost(slug, BLOG_POSTS);
 
   const seoDescription = post?.excerpt || post?.content?.slice(0, 160) || 'Starlife İnşaat blog yazısı';
   const articleSchema = post ? buildArticleSchema({
@@ -85,12 +76,8 @@ export default function BlogDetail({ navItems, brandPrefix, brandSuffix, basePat
     ? <SubsiteFooter brandPrefix={brandPrefix} brandSuffix={brandSuffix} basePath={basePath} description="Güvenli ve modern yaşam alanları." />
     : <HoldingFooter />;
 
-  if (state.loading) {
-    return (
-      <div className="grid min-h-screen place-items-center bg-white text-ink">
-        <p className="text-sm tracking-[0.3em] uppercase text-ink/50">Haber yükleniyor...</p>
-      </div>
-    );
+  if (loading && !post) {
+    return <BlogDetailSkeleton Header={Header} Footer={Footer} listPath={listPath} />;
   }
 
   if (!post) {
@@ -111,17 +98,15 @@ export default function BlogDetail({ navItems, brandPrefix, brandSuffix, basePat
 
   return (
     <div className="min-h-screen bg-white text-ink">
-      {post && (
-        <Seo
-          title={post.title}
-          description={seoDescription}
-          keywords={`${post.title}, Starlife İnşaat, inşaat haberleri, yapı güvenliği`}
-          pathname={pathname}
-          image={post.image}
-          type="article"
-          jsonLd={[articleSchema, breadcrumbSchema].filter(Boolean)}
-        />
-      )}
+      <Seo
+        title={post.title}
+        description={seoDescription}
+        keywords={`${post.title}, Starlife İnşaat, inşaat haberleri, yapı güvenliği`}
+        pathname={pathname}
+        image={post.image}
+        type="article"
+        jsonLd={[articleSchema, breadcrumbSchema].filter(Boolean)}
+      />
       {Header}
       <PageHero
         title={post.title}
@@ -147,7 +132,16 @@ export default function BlogDetail({ navItems, brandPrefix, brandSuffix, basePat
           )}
 
           <div className="mt-10 overflow-hidden bg-ink">
-            <img src={post.image} alt={post.title} className="h-full w-full object-cover" />
+            <img
+              src={post.image}
+              alt={post.title}
+              width={1200}
+              height={675}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              className="h-full w-full object-cover"
+            />
           </div>
 
           <div className="mt-12 space-y-6">

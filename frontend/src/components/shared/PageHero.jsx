@@ -1,19 +1,31 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { optimizeImageUrl } from '../../lib/imageUtils';
 
 const EASE = [0.22, 1, 0.36, 1];
 
 export default function PageHero({ title, breadcrumb = [], image, height = '52vh' }) {
+  const heroImage = image ? optimizeImageUrl(image, { width: 1200, quality: 75 }) : null;
+
   return (
     <section
       className="relative w-full min-h-[360px] overflow-hidden"
       style={{ height: `max(${height}, 360px)` }}
     >
       <div className="absolute inset-0 pointer-events-none">
-        {image ? (
+        {heroImage ? (
           <>
-            <img src={image} alt={title} className="w-full h-full object-cover" />
+            <img
+              src={heroImage}
+              alt={title}
+              width={1200}
+              height={675}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+              className="w-full h-full object-cover"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/65 to-charcoal/30" />
             <div className="absolute inset-0 bg-gradient-to-r from-charcoal/50 to-transparent" />
           </>
