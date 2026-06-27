@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, User } from 'lucide-react';
 import HoldingHeader from '../components/holding/HoldingHeader';
@@ -7,6 +7,9 @@ import PageHero from '../components/shared/PageHero';
 import { mapTeamMember, useSupabaseRows } from '../lib/supabase/content';
 
 const EASE = [0.22, 1, 0.36, 1];
+
+const LEADER_NAME = 'Numan Erdoğan';
+const BOARD_ORDER = ['Ahmet Erdoğan', 'Mahmut Erdoğan', 'Ayetullah Yağmur'];
 
 const team = [
   {
@@ -27,6 +30,12 @@ const team = [
     image: '/images/team/mahmut-erdogan.jpg',
     bio: 'Yönetim kurulu üyesi olarak operasyonel süreçlerin geliştirilmesi, kalite standartlarının korunması ve uzun vadeli değer üreten projelerin hayata geçirilmesine katkı sunmaktadır.',
   },
+  {
+    name: 'Ayetullah Yağmur',
+    title: 'Genel Koordinatör',
+    image: '/images/team/ayetullah-yagmur.jpg',
+    bio: 'Genel koordinatör olarak grup şirketleri arası operasyonel uyumu sağlamak, proje süreçlerini koordine etmek ve kurumsal hedeflerin sahada etkin biçimde uygulanmasına liderlik etmektedir.',
+  },
 ];
 
 const container = {
@@ -38,6 +47,51 @@ const card = {
   hidden: { opacity: 0, y: 28 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
 };
+
+function TeamCard({ member, onSelect, className = '' }) {
+  return (
+    <motion.article
+      variants={card}
+      className={`group overflow-hidden bg-surface border border-border hover:shadow-lg hover:shadow-stone-200/60 hover:-translate-y-1 transition-all duration-300 ${className}`}
+    >
+      <div className="aspect-[3/4] relative overflow-hidden bg-stone-100">
+        <TeamImage src={member.image} alt={member.name} />
+        <div className="absolute inset-0 bg-gold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
+      <div className="pt-6 pb-8 px-6">
+        <div className="w-10 h-[2px] bg-gold mb-5" />
+        <h3 className="text-xl font-black text-ink">{member.name}</h3>
+        <p className="text-gold text-[11px] font-medium tracking-[0.3em] uppercase mt-2">
+          {member.title}
+        </p>
+        <button
+          type="button"
+          onClick={() => onSelect(member)}
+          className="mt-6 inline-flex items-center justify-center border border-gold px-5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-gold transition-all hover:bg-gold hover:text-white"
+        >
+          Özgeçmiş
+        </button>
+      </div>
+    </motion.article>
+  );
+}
+
+function mergeTeamMembers(members) {
+  const names = new Set(members.map((member) => member.name));
+  const extras = team
+    .filter((member) => !names.has(member.name))
+    .map((member) => ({ ...member, id: member.name }));
+
+  return [...members, ...extras];
+}
+function splitTeamMembers(members) {
+  const leader = members.find((member) => member.name === LEADER_NAME) || members[0];
+  const board = BOARD_ORDER
+    .map((name) => members.find((member) => member.name === name))
+    .filter(Boolean);
+
+  return { leader, board };
+}
 
 function TeamImage({ src, alt }) {
   const [failed, setFailed] = useState(false);
@@ -68,6 +122,7 @@ export default function KurumsalYonetim() {
     team,
     mapTeamMember,
   );
+  const displayMembers = useMemo(() => mergeTeamMembers(teamMembers), [teamMembers]);
 
   useEffect(() => {
     if (!selectedMember) return undefined;
@@ -76,6 +131,8 @@ export default function KurumsalYonetim() {
       document.body.style.overflow = '';
     };
   }, [selectedMember]);
+
+  const { leader, board } = splitTeamMembers(displayMembers);
 
   return (
     <div className="bg-mist min-h-screen text-ink">
@@ -107,34 +164,29 @@ export default function KurumsalYonetim() {
             variants={container}
             initial="hidden"
             animate="visible"
-            className="grid grid-cols-1 gap-8 max-w-5xl mx-auto mt-12 md:mt-16 lg:grid-cols-3 lg:gap-12"
+            className="max-w-5xl mx-auto mt-12 md:mt-16"
           >
-            {teamMembers.map((member) => (
-              <motion.article
-                key={member.id || member.name}
-                variants={card}
-                className="group overflow-hidden bg-surface border border-border hover:shadow-lg hover:shadow-stone-200/60 hover:-translate-y-1 transition-all duration-300"
-              >
-                <div className="aspect-[3/4] relative overflow-hidden bg-stone-100">
-                  <TeamImage src={member.image} alt={member.name} />
-                  <div className="absolute inset-0 bg-gold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-                <div className="pt-6 pb-8 px-6">
-                  <div className="w-10 h-[2px] bg-gold mb-5" />
-                  <h3 className="text-xl font-black text-ink">{member.name}</h3>
-                  <p className="text-gold text-[11px] font-medium tracking-[0.3em] uppercase mt-2">
-                    {member.title}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedMember(member)}
-                    className="mt-6 inline-flex items-center justify-center border border-gold px-5 py-2.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-gold transition-all hover:bg-gold hover:text-white"
-                  >
-                    Özgeçmiş
-                  </button>
-                </div>
-              </motion.article>
-            ))}
+            {leader && (
+              <div className="flex justify-center mb-10 md:mb-14">
+                <TeamCard
+                  member={leader}
+                  onSelect={setSelectedMember}
+                  className="w-full max-w-sm"
+                />
+              </div>
+            )}
+
+            {board.length > 0 && (
+              <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-10 lg:gap-12">
+                {board.map((member) => (
+                  <TeamCard
+                    key={member.id || member.name}
+                    member={member}
+                    onSelect={setSelectedMember}
+                  />
+                ))}
+              </div>
+            )}
           </motion.div>
         </div>
       </section>
