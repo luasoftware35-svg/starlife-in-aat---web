@@ -7,6 +7,7 @@ import { HERO_SLIDES } from '../mock/mock';
 import { mapHeroSlide, useSupabaseRows } from '../lib/supabase/content';
 import { optimizeImageUrl } from '../lib/imageUtils';
 import BrandLogo from '../components/shared/BrandLogo';
+import { POPULAR_SEARCHES, searchSite } from '../lib/siteSearch';
 
 const MegaMenu = lazy(() => import('../components/holding/MegaMenu'));
 
@@ -24,6 +25,7 @@ export default function LandingPage() {
   const [active, setActive] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [paused, setPaused] = useState(false);
   const pausedRef = useRef(false);
   const progressControls = useAnimationControls();
@@ -71,7 +73,11 @@ export default function LandingPage() {
   const openMenu = useCallback(() => setMenuOpen(true), []);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
   const openSearch = useCallback(() => setSearchOpen(true), []);
-  const closeSearch = useCallback(() => setSearchOpen(false), []);
+  const closeSearch = useCallback(() => {
+    setSearchOpen(false);
+    setSearchQuery('');
+  }, []);
+  const searchResults = useMemo(() => searchSite(searchQuery), [searchQuery]);
   const slide = slides[active] || slides[0];
   const lcpImage = useMemo(
     () => optimizeImageUrl(slides[0]?.image, { width: 1600, quality: 75 }),
@@ -324,11 +330,66 @@ export default function LandingPage() {
           >
             <motion.div initial={{ y: -20 }} animate={{ y: 0 }} className="w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center gap-4 border-b border-gold/30 pb-4">
-                <Search size={20} strokeWidth={1.5} className="text-gold" />
-                <input autoFocus placeholder="Aramak istediğinizi yazın..." className="flex-1 bg-transparent outline-none text-ink font-sans font-light text-2xl md:text-4xl placeholder:text-stone-300" />
+                <Search size={20} strokeWidth={1.5} className="text-gold shrink-0" />
+                <input
+                  autoFocus
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder="Aramak istediğinizi yazın..."
+                  className="flex-1 bg-transparent outline-none text-ink font-sans font-light text-2xl md:text-4xl placeholder:text-stone-300"
+                />
                 <button onClick={closeSearch} aria-label="Close"><X size={20} strokeWidth={1.5} className="text-stone-500 hover:text-ink" /></button>
               </div>
-              <p className="mt-6 font-sans text-stone-400 text-[11px] font-medium tracking-[0.3em] uppercase">Popüler / Konut Projeleri · Deprem Dayanıklılığı · Hakkımızda</p>
+
+              {searchQuery.trim() ? (
+                <div className="mt-8 max-h-[50vh] overflow-y-auto">
+                  {searchResults.length > 0 ? (
+                    <ul className="space-y-2">
+                      {searchResults.map((result) => (
+                        <li key={`${result.href}-${result.title}`}>
+                          <Link
+                            to={result.href}
+                            onClick={closeSearch}
+                            className="group flex items-start justify-between gap-4 rounded-lg px-4 py-4 transition-colors hover:bg-stone-100"
+                          >
+                            <div>
+                              <p className="font-sans text-lg font-medium text-ink group-hover:text-gold transition-colors">
+                                {result.title}
+                              </p>
+                              <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.25em] text-stone-400">
+                                {result.category}
+                              </p>
+                            </div>
+                            <ArrowUpRight size={16} className="mt-1 shrink-0 text-stone-300 group-hover:text-gold transition-colors" />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="font-sans text-stone-500 text-base">
+                      “{searchQuery}” için sonuç bulunamadı. Farklı bir kelime deneyin.
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div className="mt-6">
+                  <p className="font-sans text-stone-400 text-[11px] font-medium tracking-[0.3em] uppercase mb-4">
+                    Popüler aramalar
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {POPULAR_SEARCHES.map((item) => (
+                      <button
+                        key={item.query}
+                        type="button"
+                        onClick={() => setSearchQuery(item.query)}
+                        className="rounded-full border border-stone-200 px-4 py-2 text-sm text-stone-600 transition-colors hover:border-gold hover:text-gold"
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </motion.div>
           </motion.div>
         )}
