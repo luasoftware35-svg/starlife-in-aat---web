@@ -30,7 +30,12 @@ export default function BlogPostGrid({ posts, basePath = '' }) {
             </div>
           </Link>
           <div className="mt-5">
-            <div className="flex items-center gap-4 text-ink/50 text-xs tracking-widest uppercase">
+            <div className="flex flex-wrap items-center gap-3 text-ink/50 text-xs tracking-widest uppercase">
+              {post.category && (
+                <span className="rounded-full border border-gold/30 px-2.5 py-1 text-[10px] font-semibold tracking-[0.2em] text-gold">
+                  {post.category}
+                </span>
+              )}
               <span className="flex items-center gap-1.5"><Calendar size={12} /> {post.date}</span>
               <span className="flex items-center gap-1.5"><User size={12} /> {post.author}</span>
             </div>

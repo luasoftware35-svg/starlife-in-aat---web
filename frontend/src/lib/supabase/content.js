@@ -48,8 +48,8 @@ function toDateLabel(value) {
 const CACHE_TTL_MS = 5 * 60 * 1000;
 const queryCache = new Map();
 
-const BLOG_LIST_COLUMNS = 'id, title, slug, excerpt, cover_image, created_at';
-const BLOG_DETAIL_COLUMNS = 'id, title, slug, excerpt, cover_image, content, created_at';
+const BLOG_LIST_COLUMNS = 'id, title, slug, excerpt, cover_image, created_at, category';
+const BLOG_DETAIL_COLUMNS = 'id, title, slug, excerpt, cover_image, content, created_at, category';
 
 async function fetchRows(table, {
   orderBy = 'created_at',
@@ -174,6 +174,7 @@ export function mapBlogPost(row, { variant = 'detail' } = {}) {
     date: row.date || toDateLabel(row.created_at),
     author: row.author || 'Starlife İnşaat',
     image: optimizeImageUrl(image, { width: imageWidth, quality: 75 }),
+    category: row.category || '',
   };
 }
 

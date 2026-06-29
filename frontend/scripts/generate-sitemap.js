@@ -67,12 +67,7 @@ const TAAHHUT_SLUGS = [
   'istanbul-arnavutkoy-sazlibosna-4-etap-11-bolge-konut-insaati',
 ];
 
-const BLOG_SLUGS = [
-  'deprem-dayanikli-bina-nasil-olur',
-  'akilli-ev-teknolojileri-2025',
-  'surdurulebilir-mimari-trendleri',
-  'diyarbakir-konut-piyasasi-analizi',
-];
+const BLOG_SLUGS = require('./blog-slugs.cjs');
 
 const urls = [
   ...STATIC_PATHS.map((pathname) => ({ pathname, priority: pathname === '/' ? '1.0' : '0.8' })),

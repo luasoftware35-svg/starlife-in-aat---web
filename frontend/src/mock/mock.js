@@ -59,12 +59,7 @@ export const PROJECTS = [
   { id: 11, title: 'Bilge Sitesi', status: 'Tamamlanan', location: 'Diyarbakır', year: '', image: 'https://lzgeijdlqadtryfwthqr.supabase.co/storage/v1/object/public/media/project-import/bilge-sitesi.webp', tag: 'Konut' },
 ];
 
-export const BLOG_POSTS = [
-  { id: 1, title: 'Deprem Dayanıklı Bina Nasıl Olur?', excerpt: 'Modern mühendislik çözümleri ile deprem dayanıklı binaların temel kriterlerini inceledik.', date: '12 Mart 2025', author: 'Starlife İnşaat', image: 'https://images.pexels.com/photos/4458205/pexels-photo-4458205.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940' },
-  { id: 2, title: 'Akıllı Ev Teknolojileri 2025', excerpt: 'Yeni nesil konut projelerinde akıllı ev sistemleri nasıl entegre ediliyor?', date: '05 Mart 2025', author: 'Starlife İnşaat', image: 'https://images.pexels.com/photos/34573691/pexels-photo-34573691.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940' },
-  { id: 3, title: 'Sürdürülebilir Mimari Trendleri', excerpt: 'Çevre dostu malzemeler ve enerji verimli tasarım uygulamaları.', date: '20 Şubat 2025', author: 'Starlife İnşaat', image: 'https://images.pexels.com/photos/3818947/pexels-photo-3818947.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940' },
-  { id: 4, title: 'Diyarbakır Konut Piyasası Analizi', excerpt: 'Bölgemizde gayrimenkul yatırımları ve gelecek beklentileri.', date: '10 Şubat 2025', author: 'Starlife İnşaat', image: 'https://images.pexels.com/photos/6082416/pexels-photo-6082416.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940' },
-];
+export { BLOG_POSTS, BLOG_SLUGS, EXISTING_BLOG_SLUGS, ALL_BLOG_SLUGS } from './blogPosts';
 
 export const COMPANIES = [
   {

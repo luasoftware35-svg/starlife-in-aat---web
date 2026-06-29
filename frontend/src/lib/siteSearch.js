@@ -1,5 +1,4 @@
 import {
-  BLOG_POSTS,
   COMPANIES,
   ERD_NAV,
   HOLDING_NAV,
@@ -8,6 +7,7 @@ import {
   STARLIFE_NAV,
   YAPI_GUVENLIGI,
 } from '../mock/mock';
+import { BLOG_POSTS } from '../mock/blogPosts';
 import { TAAHHUT_PROJECTS } from '../mock/taahhutProjects';
 import { slugify } from './supabase/content';
 
@@ -73,9 +73,9 @@ function buildSearchIndex() {
 
   const blog = BLOG_POSTS.map((post) => ({
     title: post.title,
-    href: `/blog/${slugify(post.title)}`,
-    category: 'Haber',
-    keywords: `${post.title} ${post.excerpt}`,
+    href: `/blog/${post.slug || slugify(post.title)}`,
+    category: post.category || 'Haber',
+    keywords: `${post.title} ${post.excerpt} ${post.category || ''}`,
   }));
 
   const safety = YAPI_GUVENLIGI.map((item) => ({
