@@ -5,6 +5,7 @@ import { ArrowLeft, Calendar, MapPin } from 'lucide-react';
 import SubsiteHeader from '../../components/shared/SubsiteHeader';
 import SubsiteFooter from '../../components/shared/SubsiteFooter';
 import PageHero from '../../components/shared/PageHero';
+import { useProjectFilterState } from '../../components/shared/ProjectFilterBar';
 import { STARLIFE_NAV } from '../../mock/mock';
 import { TAAHHUT_PROJECTS } from '../../mock/taahhutProjects';
 import { fadeUp } from '../../lib/animations';
@@ -12,10 +13,15 @@ import { fadeUp } from '../../lib/animations';
 const HERO_IMAGE = 'https://images.pexels.com/photos/3818947/pexels-photo-3818947.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600';
 
 export default function StarlifeTaahhutListe({ filter, title, breadcrumbLabel }) {
-  const filtered = useMemo(
+  const sourceProjects = useMemo(
     () => TAAHHUT_PROJECTS.filter((project) => project.status === filter),
     [filter],
   );
+
+  const { filtered, filterBar } = useProjectFilterState(sourceProjects, {
+    lockedStatus: filter,
+    showStatusFilter: false,
+  });
 
   const breadcrumb = useMemo(
     () => [
@@ -37,8 +43,10 @@ export default function StarlifeTaahhutListe({ filter, title, breadcrumbLabel })
             to="/starlife-insaat/taahhutisleri"
             className="inline-flex items-center gap-2 text-gold text-[11px] font-medium tracking-[0.3em] uppercase mb-10"
           >
-            <ArrowLeft size={14} /> Taahhüt İşlerine Dön
+            <ArrowLeft size={14} aria-hidden="true" /> Taahhüt İşlerine Dön
           </Link>
+
+          {filterBar}
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((project, index) => (
@@ -54,6 +62,7 @@ export default function StarlifeTaahhutListe({ filter, title, breadcrumbLabel })
                   <img
                     src={project.image}
                     alt={project.title}
+                    loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/30 to-transparent" />
@@ -65,12 +74,12 @@ export default function StarlifeTaahhutListe({ filter, title, breadcrumbLabel })
                     <div className="flex items-center gap-4 mt-2 text-white/55 text-xs">
                       {project.location && (
                         <span className="flex items-center gap-1">
-                          <MapPin size={11} /> {project.location}
+                          <MapPin size={11} aria-hidden="true" /> {project.location}
                         </span>
                       )}
                       {project.year && (
                         <span className="flex items-center gap-1">
-                          <Calendar size={11} /> {project.year}
+                          <Calendar size={11} aria-hidden="true" /> {project.year}
                         </span>
                       )}
                     </div>
@@ -81,7 +90,7 @@ export default function StarlifeTaahhutListe({ filter, title, breadcrumbLabel })
           </div>
 
           {filtered.length === 0 && (
-            <p className="text-center text-ink/50 mt-10">Bu kategoride taahhüt işi bulunamadı.</p>
+            <p className="text-center text-ink/50 mt-10">Aramanıza uygun taahhüt işi bulunamadı.</p>
           )}
         </div>
       </section>

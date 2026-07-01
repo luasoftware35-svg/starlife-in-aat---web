@@ -26,6 +26,7 @@ export default function PolicyPageShell({
           brandPrefix={brandPrefix}
           brandSuffix={brandSuffix}
           contactHref={`${basePath}/iletisim`}
+          basePath={basePath}
         />
       ) : (
         <HoldingHeader />

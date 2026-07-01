@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, Search } from 'lucide-react';
 import NavItem, { useHeaderState } from '../shared/NavItem';
 import BrandLogo from '../shared/BrandLogo';
+import SkipToContent from '../shared/SkipToContent';
+import SiteSearchOverlay, { useSiteSearchOverlay } from '../shared/SiteSearchOverlay';
 import { HOLDING_NAV } from '../../mock/mock';
 
 const MOBILE_VARIANTS = {
@@ -85,6 +87,7 @@ function MobileMenu({ open, onClose }) {
 export default function HoldingHeader({ transparent = false }) {
   const location = useLocation();
   const { scrolled, mobileOpen, openMobile, closeMobile } = useHeaderState(location.pathname);
+  const { open, openSearch, closeSearch } = useSiteSearchOverlay();
   const isActive = (href) => location.pathname === href;
   const showBg = !transparent || scrolled;
   const handleOpenMobile = (event) => {
@@ -94,7 +97,9 @@ export default function HoldingHeader({ transparent = false }) {
   };
 
   return (
-    <header
+    <>
+      <SkipToContent />
+      <header
       className={`fixed top-0 left-0 w-full z-[100] h-16 transition-all duration-300 ${
         showBg ? 'bg-white/90 backdrop-blur-md border-b border-stone-200/60' : 'backdrop-blur-md bg-white/60 border-b border-white/40'
       }`}
@@ -111,6 +116,14 @@ export default function HoldingHeader({ transparent = false }) {
         </nav>
 
         <div className="flex items-center gap-4">
+          <button
+            type="button"
+            onClick={openSearch}
+            className="grid h-11 w-11 place-items-center text-stone-700 hover:text-gold transition-colors"
+            aria-label="Site araması"
+          >
+            <Search size={18} strokeWidth={1.5} />
+          </button>
           <Link
             to="/iletisim"
             className="hidden md:inline-block border border-gold text-gold text-[11px] tracking-[0.25em] font-medium px-5 py-2 hover:bg-gold hover:text-white transition-all duration-300"
@@ -133,5 +146,7 @@ export default function HoldingHeader({ transparent = false }) {
         <MobileMenu open={mobileOpen} onClose={closeMobile} />
       </AnimatePresence>
     </header>
+      <SiteSearchOverlay open={open} onClose={closeSearch} basePath="" />
+    </>
   );
 }

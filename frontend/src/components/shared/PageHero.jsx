@@ -10,7 +10,9 @@ export default function PageHero({ title, breadcrumb = [], image, height = '52vh
 
   return (
     <section
-      className="relative w-full min-h-[360px] overflow-hidden"
+      id="main-content"
+      tabIndex={-1}
+      className="relative w-full min-h-[360px] overflow-hidden outline-none"
       style={{ height: `max(${height}, 360px)` }}
     >
       <div className="absolute inset-0 pointer-events-none">

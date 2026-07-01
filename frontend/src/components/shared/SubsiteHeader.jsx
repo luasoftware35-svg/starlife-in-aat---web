@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, Search } from 'lucide-react';
 import NavItem, { useHeaderState } from './NavItem';
 import BrandLogo from './BrandLogo';
+import SkipToContent from './SkipToContent';
+import SiteSearchOverlay, { useSiteSearchOverlay } from './SiteSearchOverlay';
 
 const MOBILE_VARIANTS = {
   initial: { x: '100%' },
@@ -76,9 +78,11 @@ function MobileNav({ navItems, brandPrefix, brandSuffix, accentClass, onClose, o
   );
 }
 
-export default function SubsiteHeader({ navItems, brandPrefix, brandSuffix, contactHref, accentClass = 'text-pomegranate' }) {
+export default function SubsiteHeader({ navItems, brandPrefix, brandSuffix, contactHref, basePath, accentClass = 'text-pomegranate' }) {
   const location = useLocation();
   const { scrolled, mobileOpen, openMobile, closeMobile } = useHeaderState(location.pathname);
+  const { open, openSearch, closeSearch } = useSiteSearchOverlay();
+  const searchBasePath = basePath || contactHref?.replace(/\/iletisim$/, '') || '';
   const isActive = (href) => location.pathname === href;
   const handleOpenMobile = (event) => {
     event.preventDefault();
@@ -87,7 +91,9 @@ export default function SubsiteHeader({ navItems, brandPrefix, brandSuffix, cont
   };
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-[100] h-16 transition-all duration-300 ${
+    <>
+      <SkipToContent />
+      <header className={`fixed top-0 left-0 w-full z-[100] h-16 transition-all duration-300 ${
       scrolled ? 'bg-white/90 backdrop-blur-md border-b border-stone-200/60' : 'backdrop-blur-md bg-white/60 border-b border-white/40'
     }`}>
       <div className="h-full max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 flex items-center justify-between gap-6">
@@ -102,6 +108,14 @@ export default function SubsiteHeader({ navItems, brandPrefix, brandSuffix, cont
         </nav>
 
         <div className="flex items-center gap-4">
+          <button
+            type="button"
+            onClick={openSearch}
+            className="grid h-11 w-11 place-items-center text-stone-700 hover:text-gold transition-colors"
+            aria-label="Site araması"
+          >
+            <Search size={18} strokeWidth={1.5} />
+          </button>
           <Link to={contactHref} className="hidden md:inline-block border border-gold text-gold text-[11px] tracking-[0.25em] font-medium px-5 py-2 hover:bg-gold hover:text-white transition-all duration-300">
             Bize Ulaşın
           </Link>
@@ -121,5 +135,7 @@ export default function SubsiteHeader({ navItems, brandPrefix, brandSuffix, cont
         <MobileNav navItems={navItems} brandPrefix={brandPrefix} brandSuffix={brandSuffix} accentClass={accentClass} onClose={closeMobile} open={mobileOpen} />
       </AnimatePresence>
     </header>
+      <SiteSearchOverlay open={open} onClose={closeSearch} basePath={searchBasePath} />
+    </>
   );
 }

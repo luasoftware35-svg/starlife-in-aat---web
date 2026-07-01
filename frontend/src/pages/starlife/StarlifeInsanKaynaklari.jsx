@@ -51,11 +51,26 @@ export default function StarlifeInsanKaynaklari() {
           >
             <h3 className="font-bold text-xl">Başvuru Formu</h3>
             <div className="mt-6 space-y-4">
-              <input required placeholder="Ad Soyad *" aria-label="Ad Soyad" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
-              <input required type="email" placeholder="E-posta *" aria-label="E-posta" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
-              <input required placeholder="Telefon *" aria-label="Telefon" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
-              <input placeholder="Pozisyon" aria-label="Pozisyon" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
-              <textarea required rows={4} placeholder="Özgeçmiş özeti *" aria-label="Özgeçmiş özeti" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors resize-none" />
+              <div>
+                <label htmlFor="hr-name" className="mb-2 block text-[11px] tracking-[0.25em] uppercase text-ink/50">Ad Soyad *</label>
+                <input required id="hr-name" placeholder="Adınız ve soyadınız" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
+              </div>
+              <div>
+                <label htmlFor="hr-email" className="mb-2 block text-[11px] tracking-[0.25em] uppercase text-ink/50">E-posta *</label>
+                <input required id="hr-email" type="email" placeholder="ornek@mail.com" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
+              </div>
+              <div>
+                <label htmlFor="hr-phone" className="mb-2 block text-[11px] tracking-[0.25em] uppercase text-ink/50">Telefon *</label>
+                <input required id="hr-phone" placeholder="05xx xxx xx xx" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
+              </div>
+              <div>
+                <label htmlFor="hr-position" className="mb-2 block text-[11px] tracking-[0.25em] uppercase text-ink/50">Pozisyon</label>
+                <input id="hr-position" placeholder="Başvurmak istediğiniz pozisyon" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
+              </div>
+              <div>
+                <label htmlFor="hr-summary" className="mb-2 block text-[11px] tracking-[0.25em] uppercase text-ink/50">Özgeçmiş özeti *</label>
+                <textarea required id="hr-summary" rows={4} placeholder="Deneyim ve yetkinliklerinizi kısaca yazın" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors resize-none" />
+              </div>
               <KvkkConsentCheckbox
                 checked={kvkkAccepted}
                 onChange={(value) => {

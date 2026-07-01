@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useCallback, useRef, lazy, Suspense, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence, useAnimationControls } from 'framer-motion';
+import { motion, useAnimationControls } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { Menu, Search, ArrowUpRight, X } from 'lucide-react';
+import { Menu, Search, ArrowUpRight, Pause, Play } from 'lucide-react';
 import { HERO_SLIDES } from '../mock/mock';
 import { mapHeroSlide, useSupabaseRows } from '../lib/supabase/content';
 import { optimizeImageUrl } from '../lib/imageUtils';
 import BrandLogo from '../components/shared/BrandLogo';
-import { POPULAR_SEARCHES, searchSite } from '../lib/siteSearch';
+import SkipToContent from '../components/shared/SkipToContent';
+import SiteSearchOverlay, { useSiteSearchOverlay } from '../components/shared/SiteSearchOverlay';
 
 const MegaMenu = lazy(() => import('../components/holding/MegaMenu'));
 
@@ -24,10 +25,10 @@ const textMotion = (delay = 0) => ({
 export default function LandingPage() {
   const [active, setActive] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const [paused, setPaused] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
   const pausedRef = useRef(false);
+  const { open: siteSearchOpen, openSearch: showSiteSearch, closeSearch: hideSiteSearch } = useSiteSearchOverlay();
   const progressControls = useAnimationControls();
   const slides = useSupabaseRows(
     'hero_slides',
@@ -38,10 +39,18 @@ export default function LandingPage() {
   const slideCount = slides.length || 1;
 
   useEffect(() => {
-    if (paused) return undefined;
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => setReduceMotion(media.matches);
+    sync();
+    media.addEventListener('change', sync);
+    return () => media.removeEventListener('change', sync);
+  }, []);
+
+  useEffect(() => {
+    if (paused || reduceMotion) return undefined;
     const t = setInterval(() => setActive((p) => (p + 1) % slideCount), SLIDE_INTERVAL_MS);
     return () => clearInterval(t);
-  }, [paused, slideCount]);
+  }, [paused, reduceMotion, slideCount]);
 
   useEffect(() => {
     if (active >= slideCount) setActive(0);
@@ -53,18 +62,18 @@ export default function LandingPage() {
 
   useEffect(() => {
     progressControls.set({ scaleX: 0 });
-    if (!pausedRef.current) {
+    if (!pausedRef.current && !reduceMotion) {
       progressControls.start({ scaleX: 1, transition: { duration: SLIDE_INTERVAL_MS / 1000, ease: 'linear' } });
     }
-  }, [active, progressControls]);
+  }, [active, progressControls, reduceMotion]);
 
   useEffect(() => {
-    if (paused) {
+    if (paused || reduceMotion) {
       progressControls.stop();
       return;
     }
     progressControls.start({ scaleX: 1, transition: { duration: SLIDE_INTERVAL_MS / 1000, ease: 'linear' } });
-  }, [paused, progressControls]);
+  }, [paused, reduceMotion, progressControls]);
 
   const goToSlide = useCallback((i) => {
     setActive(i);
@@ -72,12 +81,6 @@ export default function LandingPage() {
   }, []);
   const openMenu = useCallback(() => setMenuOpen(true), []);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
-  const openSearch = useCallback(() => setSearchOpen(true), []);
-  const closeSearch = useCallback(() => {
-    setSearchOpen(false);
-    setSearchQuery('');
-  }, []);
-  const searchResults = useMemo(() => searchSite(searchQuery), [searchQuery]);
   const slide = slides[active] || slides[0];
   const lcpImage = useMemo(
     () => optimizeImageUrl(slides[0]?.image, { width: 1600, quality: 75 }),
@@ -87,8 +90,12 @@ export default function LandingPage() {
   const total = String(slideCount).padStart(2, '0');
 
   return (
+    <>
+      <SkipToContent />
     <main
-      className="relative h-[100dvh] w-full overflow-hidden flex flex-col-reverse md:flex-row bg-mist"
+      id="main-content"
+      tabIndex={-1}
+      className="relative h-[100dvh] w-full overflow-hidden flex flex-col-reverse md:flex-row bg-mist outline-none"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -269,9 +276,21 @@ export default function LandingPage() {
           <span className="w-12 h-[2px] bg-gold/70" />
         </div>
 
-        {/* Mobile slide counter */}
-        <div className="absolute bottom-4 right-5 md:hidden font-sans text-white/65 text-[11px] font-medium tracking-[0.3em]">
-          <span className="text-gold-light">{num}</span> / {total}
+        {/* Mobile slide counter + pause */}
+        <div className="absolute bottom-4 right-5 md:hidden flex items-center gap-3">
+          {!reduceMotion && (
+            <button
+              type="button"
+              onClick={() => setPaused((value) => !value)}
+              className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-black/20 text-white"
+              aria-label={paused ? 'Slayt geçişini devam ettir' : 'Slayt geçişini duraklat'}
+            >
+              {paused ? <Play size={14} /> : <Pause size={14} />}
+            </button>
+          )}
+          <div className="font-sans text-white/65 text-[11px] font-medium tracking-[0.3em]">
+            <span className="text-gold-light">{num}</span> / {total}
+          </div>
         </div>
 
         {/* Progress bar — visual interval indicator */}
@@ -297,7 +316,17 @@ export default function LandingPage() {
         </Link>
 
         <div className="flex items-center gap-3 md:gap-7">
-          <button onClick={openSearch} className="text-stone-700 hover:text-gold transition-colors p-2 -mr-2" aria-label="search">
+          {!reduceMotion && (
+            <button
+              type="button"
+              onClick={() => setPaused((value) => !value)}
+              className="hidden md:grid h-10 w-10 place-items-center text-stone-700 hover:text-gold transition-colors"
+              aria-label={paused ? 'Slayt geçişini devam ettir' : 'Slayt geçişini duraklat'}
+            >
+              {paused ? <Play size={16} /> : <Pause size={16} />}
+            </button>
+          )}
+          <button onClick={showSiteSearch} className="text-stone-700 hover:text-gold transition-colors p-2 -mr-2" aria-label="Site araması">
             <Search size={17} strokeWidth={1.5} />
           </button>
           <a
@@ -319,81 +348,8 @@ export default function LandingPage() {
         </Suspense>
       )}
 
-      {/* Search overlay */}
-      <AnimatePresence>
-        {searchOpen && (
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[70] bg-white/95 backdrop-blur-xl flex items-start justify-center px-6 pt-32 md:pt-44"
-            onClick={closeSearch}
-          >
-            <motion.div initial={{ y: -20 }} animate={{ y: 0 }} className="w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
-              <div className="flex items-center gap-4 border-b border-gold/30 pb-4">
-                <Search size={20} strokeWidth={1.5} className="text-gold shrink-0" />
-                <input
-                  autoFocus
-                  value={searchQuery}
-                  onChange={(event) => setSearchQuery(event.target.value)}
-                  placeholder="Aramak istediğinizi yazın..."
-                  className="flex-1 bg-transparent outline-none text-ink font-sans font-light text-2xl md:text-4xl placeholder:text-stone-300"
-                />
-                <button onClick={closeSearch} aria-label="Close"><X size={20} strokeWidth={1.5} className="text-stone-500 hover:text-ink" /></button>
-              </div>
-
-              {searchQuery.trim() ? (
-                <div className="mt-8 max-h-[50vh] overflow-y-auto">
-                  {searchResults.length > 0 ? (
-                    <ul className="space-y-2">
-                      {searchResults.map((result) => (
-                        <li key={`${result.href}-${result.title}`}>
-                          <Link
-                            to={result.href}
-                            onClick={closeSearch}
-                            className="group flex items-start justify-between gap-4 rounded-lg px-4 py-4 transition-colors hover:bg-stone-100"
-                          >
-                            <div>
-                              <p className="font-sans text-lg font-medium text-ink group-hover:text-gold transition-colors">
-                                {result.title}
-                              </p>
-                              <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.25em] text-stone-400">
-                                {result.category}
-                              </p>
-                            </div>
-                            <ArrowUpRight size={16} className="mt-1 shrink-0 text-stone-300 group-hover:text-gold transition-colors" />
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="font-sans text-stone-500 text-base">
-                      “{searchQuery}” için sonuç bulunamadı. Farklı bir kelime deneyin.
-                    </p>
-                  )}
-                </div>
-              ) : (
-                <div className="mt-6">
-                  <p className="font-sans text-stone-400 text-[11px] font-medium tracking-[0.3em] uppercase mb-4">
-                    Popüler aramalar
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {POPULAR_SEARCHES.map((item) => (
-                      <button
-                        key={item.query}
-                        type="button"
-                        onClick={() => setSearchQuery(item.query)}
-                        className="rounded-full border border-stone-200 px-4 py-2 text-sm text-stone-600 transition-colors hover:border-gold hover:text-gold"
-                      >
-                        {item.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <SiteSearchOverlay open={siteSearchOpen} onClose={hideSiteSearch} basePath="" />
     </main>
+    </>
   );
 }

@@ -9,6 +9,18 @@ function generateCaptcha() {
   return { a, b, answer: a + b };
 }
 
+function Field({ id, label, darkMode, children }) {
+  const labelClass = darkMode ? 'text-white/70' : 'text-charcoal/70';
+  return (
+    <div>
+      <label htmlFor={id} className={`mb-2 block text-[11px] tracking-[0.25em] uppercase ${labelClass}`}>
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+}
+
 export default function ContactForm({ darkMode = true, policyBasePath = '' }) {
   const [captcha] = useState(generateCaptcha);
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '', captcha: '' });
@@ -46,11 +58,19 @@ export default function ContactForm({ darkMode = true, policyBasePath = '' }) {
   return (
     <form onSubmit={onSubmit} className="w-full space-y-7" noValidate>
       <div className="grid md:grid-cols-2 gap-7">
-        <input required name="name" value={form.name} onChange={onChange} placeholder="Ad Soyad *" aria-label="Ad Soyad" className={inputBase} />
-        <input required type="email" name="email" value={form.email} onChange={onChange} placeholder="Mail Adresiniz *" aria-label="E-posta" className={inputBase} />
+        <Field id="contact-name" label="Ad Soyad *" darkMode={darkMode}>
+          <input required id="contact-name" name="name" value={form.name} onChange={onChange} placeholder="Adınız ve soyadınız" className={inputBase} />
+        </Field>
+        <Field id="contact-email" label="E-posta *" darkMode={darkMode}>
+          <input required id="contact-email" type="email" name="email" value={form.email} onChange={onChange} placeholder="ornek@mail.com" className={inputBase} />
+        </Field>
       </div>
-      <input required name="phone" value={form.phone} onChange={onChange} placeholder="Telefon *" aria-label="Telefon" className={inputBase} />
-      <textarea required name="message" value={form.message} onChange={onChange} placeholder="Mesajınız *" aria-label="Mesaj" rows={4} className={inputBase + ' resize-none'} />
+      <Field id="contact-phone" label="Telefon *" darkMode={darkMode}>
+        <input required id="contact-phone" name="phone" value={form.phone} onChange={onChange} placeholder="05xx xxx xx xx" className={inputBase} />
+      </Field>
+      <Field id="contact-message" label="Mesaj *" darkMode={darkMode}>
+        <textarea required id="contact-message" name="message" value={form.message} onChange={onChange} placeholder="Mesajınızı yazın" rows={4} className={inputBase + ' resize-none'} />
+      </Field>
 
       <KvkkConsentCheckbox
         checked={kvkkAccepted}
@@ -59,11 +79,16 @@ export default function ContactForm({ darkMode = true, policyBasePath = '' }) {
         darkMode={darkMode}
       />
 
-      <div className="grid md:grid-cols-2 gap-7 items-center pt-2">
+      <div className="grid md:grid-cols-2 gap-7 items-end pt-2">
         <div className={`${labelColor} text-[13px] font-light`}>
-          Soru *: <span className="font-medium text-pomegranate-light">{captcha.a} + {captcha.b} = ?</span>
+          <label htmlFor="contact-captcha">Doğrulama sorusu *</label>
+          <p className="mt-1">
+            <span className="font-medium text-pomegranate-light">{captcha.a} + {captcha.b} = ?</span>
+          </p>
         </div>
-        <input required name="captcha" value={form.captcha} onChange={onChange} placeholder="Cevap *" aria-label="Doğrulama cevabı" className={inputBase} />
+        <Field id="contact-captcha" label="Cevap *" darkMode={darkMode}>
+          <input required id="contact-captcha" name="captcha" value={form.captcha} onChange={onChange} placeholder="Sonucu girin" className={inputBase} />
+        </Field>
       </div>
 
       <motion.button
@@ -80,21 +105,21 @@ export default function ContactForm({ darkMode = true, policyBasePath = '' }) {
         {submitting ? 'Gönderiliyor...' : (
           <>
             <span>Gönder</span>
-            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
           </>
         )}
       </motion.button>
 
       {status === 'success' && (
-        <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+        <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} role="status"
           className="text-pomegranate-light text-sm font-light">Mesajınızı Aldık · Teşekkür ederiz.</motion.p>
       )}
       {status === 'error' && (
-        <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+        <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} role="alert"
           className="text-pomegranate-light text-sm font-light">Doğrulama hatası. Lütfen captcha cevabınızı kontrol edin.</motion.p>
       )}
       {status === 'consent' && (
-        <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+        <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} role="alert"
           className="text-pomegranate-light text-sm font-light">Devam etmek için KVKK aydınlatma metnini onaylamanız gerekmektedir.</motion.p>
       )}
     </form>
