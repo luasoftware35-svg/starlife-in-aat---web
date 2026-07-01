@@ -185,6 +185,6 @@ create policy "Authenticated delete media" on storage.objects for delete using (
 insert into public.site_settings (key, value, group_name)
 values
   ('site.title', 'Starlife İnşaat', 'general'),
-  ('contact.phone', '+90 000 000 00 00', 'contact'),
-  ('contact.email', 'luasoftware35@gmail.com', 'contact')
+  ('contact.phone', '0412 504 10 08', 'contact'),
+  ('contact.email', 'tanitimmedya@starlifeinsaat.com', 'contact')
 on conflict (key) do nothing;

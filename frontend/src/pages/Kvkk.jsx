@@ -2,6 +2,7 @@ import React from 'react';
 import HoldingHeader from '../components/holding/HoldingHeader';
 import HoldingFooter from '../components/holding/HoldingFooter';
 import PageHero from '../components/shared/PageHero';
+import { COMPANY } from '../mock/mock';
 
 export default function Kvkk() {
   return (
@@ -20,7 +21,7 @@ export default function Kvkk() {
           <h3 className="text-xl font-bold text-ink mt-6">3. Haklarınız</h3>
           <p>KVKK'nın 11. maddesi uyarınca, veri sahipleri olarak; kişisel verilerinizin işlenip işlenmediğini öğrenme, işlenmiş ise bilgi talep etme, işleme amacını ve uygun kullanılıp kullanılmadığını öğrenme haklarına sahipsiniz.</p>
           <h3 className="text-xl font-bold text-ink mt-6">4. İletişim</h3>
-          <p>Sorularınız için luasoftware35@gmail.com adresine ulaşabilirsiniz.</p>
+          <p>Sorularınız için {COMPANY.email} adresine veya {COMPANY.phone} numarasına ulaşabilirsiniz.</p>
         </div>
       </section>
 
