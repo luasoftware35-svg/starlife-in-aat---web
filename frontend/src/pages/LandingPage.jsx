@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef, lazy, Suspense, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useAnimationControls } from 'framer-motion';
+import { motion, AnimatePresence, useAnimationControls } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Menu, Search, ArrowUpRight, Pause, Play } from 'lucide-react';
 import { HERO_SLIDES } from '../mock/mock';
