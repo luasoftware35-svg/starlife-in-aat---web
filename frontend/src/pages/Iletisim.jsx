@@ -5,6 +5,7 @@ import HoldingHeader from '../components/holding/HoldingHeader';
 import HoldingFooter from '../components/holding/HoldingFooter';
 import PageHero from '../components/shared/PageHero';
 import ContactForm from '../components/shared/ContactForm';
+import MapEmbed from '../components/shared/MapEmbed';
 import { COMPANY } from '../mock/mock';
 import { fadeUp } from '../lib/animations';
 
@@ -21,7 +22,7 @@ export default function Iletisim() {
             <h2 className="text-ink text-3xl md:text-4xl font-black mt-3">En kısa sürede sizinle irtibata geçeceğiz</h2>
             <p className="text-ink/60 text-sm mt-3">Sorularınız, talepleriniz veya proje fikirleriniz için formu doldurun.</p>
             <div className="mt-10">
-              <ContactForm darkMode={false} />
+              <ContactForm darkMode={false} policyBasePath="" />
             </div>
           </motion.div>
         </div>
@@ -54,12 +55,7 @@ export default function Iletisim() {
             </div>
 
             <div className="mt-10 overflow-hidden">
-              <iframe
-                title="Starlife Map"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14969.947003694955!2d40.1654883680318!3d37.92940969748189!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40751fc6f04755bb%3A0xfc933c3a1f79563!2zU3RhciBMaWZlIMSwbsWfYWF0!5e0!3m2!1str!2str!4v1742219374172!5m2!1str!2str"
-                className="w-full h-72 grayscale hover:grayscale-0 transition-all duration-500"
-                loading="lazy"
-              />
+              <MapEmbed title="Starlife İnşaat Konum Haritası" />
             </div>
           </motion.div>
         </div>

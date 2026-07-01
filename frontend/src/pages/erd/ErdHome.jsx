@@ -92,7 +92,7 @@ export default function ErdHome() {
           <h3 className="font-serif-display text-white font-medium text-3xl md:text-5xl mt-5 leading-tight tracking-tight">
             Projelerimiz hakkında <span className="italic text-pomegranate-light">bilgi alın</span>
           </h3>
-          <div className="mt-10 md:mt-12"><ContactForm darkMode /></div>
+          <div className="mt-10 md:mt-12"><ContactForm darkMode policyBasePath="/erd-insaat" /></div>
         </div>
       </section>
 

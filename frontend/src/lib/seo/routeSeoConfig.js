@@ -49,8 +49,12 @@ export const ROUTE_SEO = {
   '/politika/kvkk-metni': {
     title: 'KVKK Aydınlatma Metni',
     description: 'Starlife İnşaat Kişisel Verilerin Korunması Kanunu (KVKK) aydınlatma metni.',
-    keywords: 'KVKK, kişisel veriler, Starlife gizlilik',
-    noindex: true,
+    keywords: 'KVKK, kişisel veriler, Starlife gizlilik, aydınlatma metni',
+  },
+  '/politika/cerez-politikasi': {
+    title: 'Çerez Politikası',
+    description: 'Starlife İnşaat web sitesi çerez politikası ve üçüncü taraf hizmet bilgilendirmesi.',
+    keywords: 'çerez politikası, cookie policy, Starlife gizlilik',
   },
   '/starlife-insaat': {
     title: 'Starlife İnşaat | Güvenli ve Modern Yaşam Alanları',
@@ -120,7 +124,12 @@ export const ROUTE_SEO = {
   '/starlife-insaat/politika/kvkk-metni': {
     title: 'KVKK Aydınlatma Metni',
     description: 'Starlife İnşaat KVKK aydınlatma metni.',
-    noindex: true,
+    keywords: 'KVKK, Starlife gizlilik',
+  },
+  '/starlife-insaat/politika/cerez-politikasi': {
+    title: 'Çerez Politikası',
+    description: 'Starlife İnşaat çerez politikası.',
+    keywords: 'çerez politikası, Starlife',
   },
   '/starlife-insaat/yapiguvenligi/deprem-dayanikliligi': {
     title: 'Deprem Dayanıklılığı',
@@ -164,6 +173,16 @@ export const ROUTE_SEO = {
     description: 'İnvest İnşaat iletişim bilgileri ve proje talepleri.',
     keywords: 'İnvest İnşaat iletişim',
   },
+  '/invest-insaat/politika/kvkk-metni': {
+    title: 'KVKK Aydınlatma Metni',
+    description: 'İnvest İnşaat KVKK aydınlatma metni.',
+    keywords: 'KVKK, İnvest İnşaat gizlilik',
+  },
+  '/invest-insaat/politika/cerez-politikasi': {
+    title: 'Çerez Politikası',
+    description: 'İnvest İnşaat çerez politikası.',
+    keywords: 'çerez politikası, İnvest İnşaat',
+  },
   '/erd-insaat': {
     title: 'ERD İnşaat | İnsan Odaklı Tasarım, Yüksek Kalite',
     description:
@@ -184,6 +203,16 @@ export const ROUTE_SEO = {
     title: 'ERD İnşaat İletişim',
     description: 'ERD İnşaat iletişim bilgileri ve proje talepleri.',
     keywords: 'ERD İnşaat iletişim',
+  },
+  '/erd-insaat/politika/kvkk-metni': {
+    title: 'KVKK Aydınlatma Metni',
+    description: 'ERD İnşaat KVKK aydınlatma metni.',
+    keywords: 'KVKK, ERD İnşaat gizlilik',
+  },
+  '/erd-insaat/politika/cerez-politikasi': {
+    title: 'Çerez Politikası',
+    description: 'ERD İnşaat çerez politikası.',
+    keywords: 'çerez politikası, ERD İnşaat',
   },
 };
 

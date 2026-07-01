@@ -226,7 +226,7 @@ export default function StarlifeHome() {
             En kısa sürede sizinle <span className="italic text-pomegranate">irtibata</span> geçeceğiz
           </h3>
           <div className="mt-10 md:mt-12">
-            <ContactForm darkMode={false} />
+            <ContactForm darkMode={false} policyBasePath="/starlife-insaat" />
           </div>
         </div>
       </section>

@@ -11,6 +11,8 @@ const STATIC_PATHS = [
   '/kurumsal/operasyon-haritasi',
   '/blog',
   '/iletisim',
+  '/politika/kvkk-metni',
+  '/politika/cerez-politikasi',
   '/starlife-insaat',
   '/starlife-insaat/kurumsal/hakkimizda',
   '/starlife-insaat/insankaynaklari',
@@ -22,6 +24,8 @@ const STATIC_PATHS = [
   '/starlife-insaat/projeler/devam-eden-projeler',
   '/starlife-insaat/blog',
   '/starlife-insaat/iletisim',
+  '/starlife-insaat/politika/kvkk-metni',
+  '/starlife-insaat/politika/cerez-politikasi',
   '/starlife-insaat/yapiguvenligi/deprem-dayanikliligi',
   '/starlife-insaat/yapiguvenligi/yangin-guvenligi',
   '/starlife-insaat/yapiguvenligi/muhendislik-cozumleri',
@@ -30,10 +34,14 @@ const STATIC_PATHS = [
   '/invest-insaat/kurumsal/invest-insaat',
   '/invest-insaat/blog',
   '/invest-insaat/iletisim',
+  '/invest-insaat/politika/kvkk-metni',
+  '/invest-insaat/politika/cerez-politikasi',
   '/erd-insaat',
   '/erd-insaat/kurumsal/erd-insaat',
   '/erd-insaat/blog',
   '/erd-insaat/iletisim',
+  '/erd-insaat/politika/kvkk-metni',
+  '/erd-insaat/politika/cerez-politikasi',
 ];
 
 const PROJECT_SLUGS = [

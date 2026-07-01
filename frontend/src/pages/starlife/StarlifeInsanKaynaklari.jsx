@@ -4,11 +4,24 @@ import { Briefcase, Send } from 'lucide-react';
 import SubsiteHeader from '../../components/shared/SubsiteHeader';
 import SubsiteFooter from '../../components/shared/SubsiteFooter';
 import PageHero from '../../components/shared/PageHero';
+import KvkkConsentCheckbox from '../../components/shared/KvkkConsentCheckbox';
 import { STARLIFE_NAV } from '../../mock/mock';
 import { fadeUp } from '../../lib/animations';
 
 export default function StarlifeInsanKaynaklari() {
   const [submitted, setSubmitted] = useState(false);
+  const [kvkkAccepted, setKvkkAccepted] = useState(false);
+  const [consentError, setConsentError] = useState(false);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (!kvkkAccepted) {
+      setConsentError(true);
+      return;
+    }
+    setConsentError(false);
+    setSubmitted(true);
+  };
 
   return (
     <div className="bg-white text-ink min-h-screen">
@@ -32,17 +45,29 @@ export default function StarlifeInsanKaynaklari() {
           </motion.div>
 
           <motion.form
-            onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
+            onSubmit={onSubmit}
             variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
             className="bg-gray-50 p-8 md:p-10"
           >
             <h3 className="font-bold text-xl">Başvuru Formu</h3>
             <div className="mt-6 space-y-4">
-              <input required placeholder="Ad Soyad *" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
-              <input required type="email" placeholder="E-posta *" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
-              <input required placeholder="Telefon *" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
-              <input placeholder="Pozisyon" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
-              <textarea required rows={4} placeholder="Özgeçmiş özeti *" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors resize-none" />
+              <input required placeholder="Ad Soyad *" aria-label="Ad Soyad" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
+              <input required type="email" placeholder="E-posta *" aria-label="E-posta" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
+              <input required placeholder="Telefon *" aria-label="Telefon" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
+              <input placeholder="Pozisyon" aria-label="Pozisyon" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
+              <textarea required rows={4} placeholder="Özgeçmiş özeti *" aria-label="Özgeçmiş özeti" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors resize-none" />
+              <KvkkConsentCheckbox
+                checked={kvkkAccepted}
+                onChange={(value) => {
+                  setKvkkAccepted(value);
+                  if (value) setConsentError(false);
+                }}
+                policyBasePath="/starlife-insaat"
+                id="hr-kvkk-consent"
+              />
+              {consentError && (
+                <p className="text-pomegranate text-sm">Devam etmek için KVKK aydınlatma metnini onaylamanız gerekmektedir.</p>
+              )}
               <button type="submit" className="bg-gold text-ink font-bold px-8 py-3 w-full tracking-widest text-xs uppercase hover:bg-ink hover:text-gold transition-colors duration-300 flex items-center justify-center gap-3">
                 Gönder <Send size={14} />
               </button>

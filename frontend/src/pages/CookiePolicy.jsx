@@ -1,9 +1,9 @@
 import React from 'react';
 import PolicyPageShell, { LegalDocument } from '../components/shared/PolicyPageShell';
-import { getKvkkSections } from '../content/legalTexts';
+import { getCookiePolicySections } from '../content/legalTexts';
 import { policyPaths } from '../lib/policyPaths';
 
-export default function Kvkk({
+export default function CookiePolicy({
   layout = 'holding',
   navItems = [],
   brandPrefix = '',
@@ -17,11 +17,11 @@ export default function Kvkk({
   return (
     <PolicyPageShell
       layout={layout}
-      title="KVKK Aydınlatma Metni"
+      title="Çerez Politikası"
       breadcrumb={[
         { label: 'Ana Sayfa', href: homeHref },
-        { label: 'Politika', href: paths.kvkk },
-        { label: 'KVKK Metni' },
+        { label: 'Politika', href: paths.cookies },
+        { label: 'Çerez Politikası' },
       ]}
       navItems={navItems}
       brandPrefix={brandPrefix}
@@ -31,13 +31,13 @@ export default function Kvkk({
     >
       <LegalDocument
         intro={{
-          title: 'Kişisel Verilerin Korunması Kanunu (KVKK) Aydınlatma Metni',
+          title: 'Çerez Politikası',
           paragraphs: [
-            'Starlife İnşaat olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında kişisel verilerinizin güvenliğini sağlamayı, şeffaf bilgilendirme yapmayı ve veri sahiplerinin haklarına saygı göstermeyi ilke ediniyoruz.',
-            'Bu metin; web sitemizi ziyaret eden kullanıcılar, iletişim formu dolduran kişiler ve insan kaynakları başvurusu yapan adaylar için hazırlanmıştır.',
+            'Bu Çerez Politikası, Starlife İnşaat web sitesinde kullanılan çerezler ve benzeri teknolojiler hakkında sizi bilgilendirmek amacıyla hazırlanmıştır.',
+            'Siteyi kullanmaya devam ederek zorunlu çerezlerin kullanımını kabul etmiş olursunuz. Üçüncü taraf çerezleri için çerez bildirim bandı üzerinden tercih belirleyebilirsiniz.',
           ],
         }}
-        sections={getKvkkSections()}
+        sections={getCookiePolicySections()}
       />
     </PolicyPageShell>
   );

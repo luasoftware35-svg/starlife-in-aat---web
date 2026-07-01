@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import KvkkConsentCheckbox from './KvkkConsentCheckbox';
 
 function generateCaptcha() {
   const a = Math.floor(Math.random() * 8) + 1;
@@ -8,9 +9,10 @@ function generateCaptcha() {
   return { a, b, answer: a + b };
 }
 
-export default function ContactForm({ darkMode = true }) {
+export default function ContactForm({ darkMode = true, policyBasePath = '' }) {
   const [captcha] = useState(generateCaptcha);
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '', captcha: '' });
+  const [kvkkAccepted, setKvkkAccepted] = useState(false);
   const [status, setStatus] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -18,6 +20,10 @@ export default function ContactForm({ darkMode = true }) {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    if (!kvkkAccepted) {
+      setStatus('consent');
+      return;
+    }
     setSubmitting(true);
     setTimeout(() => {
       if (Number(form.captcha) !== captcha.answer) {
@@ -25,6 +31,7 @@ export default function ContactForm({ darkMode = true }) {
       } else {
         setStatus('success');
         setForm({ name: '', email: '', phone: '', message: '', captcha: '' });
+        setKvkkAccepted(false);
       }
       setSubmitting(false);
     }, 700);
@@ -37,19 +44,26 @@ export default function ContactForm({ darkMode = true }) {
   const labelColor = darkMode ? 'text-white/65' : 'text-charcoal/65';
 
   return (
-    <form onSubmit={onSubmit} className="w-full space-y-7">
+    <form onSubmit={onSubmit} className="w-full space-y-7" noValidate>
       <div className="grid md:grid-cols-2 gap-7">
-        <input required name="name" value={form.name} onChange={onChange} placeholder="Ad Soyad *" className={inputBase} />
-        <input required type="email" name="email" value={form.email} onChange={onChange} placeholder="Mail Adresiniz *" className={inputBase} />
+        <input required name="name" value={form.name} onChange={onChange} placeholder="Ad Soyad *" aria-label="Ad Soyad" className={inputBase} />
+        <input required type="email" name="email" value={form.email} onChange={onChange} placeholder="Mail Adresiniz *" aria-label="E-posta" className={inputBase} />
       </div>
-      <input required name="phone" value={form.phone} onChange={onChange} placeholder="Telefon *" className={inputBase} />
-      <textarea required name="message" value={form.message} onChange={onChange} placeholder="Mesajınız *" rows={4} className={inputBase + ' resize-none'} />
+      <input required name="phone" value={form.phone} onChange={onChange} placeholder="Telefon *" aria-label="Telefon" className={inputBase} />
+      <textarea required name="message" value={form.message} onChange={onChange} placeholder="Mesajınız *" aria-label="Mesaj" rows={4} className={inputBase + ' resize-none'} />
+
+      <KvkkConsentCheckbox
+        checked={kvkkAccepted}
+        onChange={setKvkkAccepted}
+        policyBasePath={policyBasePath}
+        darkMode={darkMode}
+      />
 
       <div className="grid md:grid-cols-2 gap-7 items-center pt-2">
         <div className={`${labelColor} text-[13px] font-light`}>
           Soru *: <span className="font-medium text-pomegranate-light">{captcha.a} + {captcha.b} = ?</span>
         </div>
-        <input required name="captcha" value={form.captcha} onChange={onChange} placeholder="Cevap *" className={inputBase} />
+        <input required name="captcha" value={form.captcha} onChange={onChange} placeholder="Cevap *" aria-label="Doğrulama cevabı" className={inputBase} />
       </div>
 
       <motion.button
@@ -78,6 +92,10 @@ export default function ContactForm({ darkMode = true }) {
       {status === 'error' && (
         <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
           className="text-pomegranate-light text-sm font-light">Doğrulama hatası. Lütfen captcha cevabınızı kontrol edin.</motion.p>
+      )}
+      {status === 'consent' && (
+        <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+          className="text-pomegranate-light text-sm font-light">Devam etmek için KVKK aydınlatma metnini onaylamanız gerekmektedir.</motion.p>
       )}
     </form>
   );

@@ -4,6 +4,10 @@ import { MapPin, Mail, Phone, ArrowUpRight } from 'lucide-react';
 import SocialLinks from '../shared/SocialLinks';
 import BrandLogo from '../shared/BrandLogo';
 import { COMPANY } from '../../mock/mock';
+import { policyPaths } from '../../lib/policyPaths';
+
+const legalPaths = policyPaths('');
+const currentYear = new Date().getFullYear();
 
 export default function HoldingFooter() {
   return (
@@ -51,8 +55,11 @@ export default function HoldingFooter() {
       </div>
 
       <div className="max-w-[1400px] mx-auto mt-16 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-3">
-        <p className="text-white/35 text-[11px] tracking-[0.1em] font-light">Tüm Hakları Saklıdır © 2025 Starlife İnşaat</p>
-        <Link to="/politika/kvkk-metni" className="text-white/35 text-[11px] tracking-[0.1em] font-light hover:text-gold transition-colors">KVKK Metni</Link>
+        <p className="text-white/35 text-[11px] tracking-[0.1em] font-light">Tüm Hakları Saklıdır © {currentYear} Starlife İnşaat</p>
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+          <Link to={legalPaths.kvkk} className="text-white/35 text-[11px] tracking-[0.1em] font-light hover:text-gold transition-colors">KVKK Metni</Link>
+          <Link to={legalPaths.cookies} className="text-white/35 text-[11px] tracking-[0.1em] font-light hover:text-gold transition-colors">Çerez Politikası</Link>
+        </div>
       </div>
     </footer>
   );

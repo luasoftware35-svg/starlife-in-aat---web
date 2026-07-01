@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import ScrollToTop from './components/ScrollToTop';
 import RouteSeo from './components/seo/RouteSeo';
+import CookieBanner from './components/shared/CookieBanner';
 import PageLoader from './components/shared/PageLoader';
 import LandingPage from './pages/LandingPage';
 
@@ -16,6 +17,8 @@ const Iletisim = lazy(() => import('./pages/Iletisim'));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogDetail = lazy(() => import('./pages/BlogDetail'));
 const Kvkk = lazy(() => import('./pages/Kvkk'));
+const CookiePolicy = lazy(() => import('./pages/CookiePolicy'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 const StarlifeHome = lazy(() => import('./pages/starlife/StarlifeHome'));
 const StarlifeHakkimizda = lazy(() => import('./pages/starlife/StarlifeHakkimizda'));
@@ -76,6 +79,33 @@ const erdAboutProps = {
   misyon: 'Yüksek kalite ve güvenlik standartlarıyla, yaşam alanlarını daha değerli ve konforlu hale getirmek.',
 };
 
+const starlifePolicyProps = {
+  layout: 'subsite',
+  navItems: STARLIFE_NAV,
+  brandPrefix: 'STAR',
+  brandSuffix: 'LİFE',
+  basePath: '/starlife-insaat',
+  footerDescription: 'Güvenli ve modern yaşam alanları.',
+};
+
+const investPolicyProps = {
+  layout: 'subsite',
+  navItems: INVEST_NAV,
+  brandPrefix: 'İNVEST',
+  brandSuffix: '',
+  basePath: '/invest-insaat',
+  footerDescription: 'Geleceğe değer katan yapılar.',
+};
+
+const erdPolicyProps = {
+  layout: 'subsite',
+  navItems: ERD_NAV,
+  brandPrefix: 'ERD',
+  brandSuffix: ' İNŞAAT',
+  basePath: '/erd-insaat',
+  footerDescription: 'İnsan odaklı tasarım, yüksek kalite.',
+};
+
 function YapiGuvenligiRoute() {
   const params = useParams();
   return (
@@ -91,6 +121,7 @@ function App() {
       <BrowserRouter>
         <ScrollToTop />
         <RouteSeo />
+        <CookieBanner />
         <Toaster
           position="top-right"
           toastOptions={{
@@ -159,6 +190,7 @@ function App() {
           <Route path="/blog/:slug" element={<SuspensePage><BlogDetail /></SuspensePage>} />
           <Route path="/iletisim" element={<SuspensePage><Iletisim /></SuspensePage>} />
           <Route path="/politika/kvkk-metni" element={<SuspensePage><Kvkk /></SuspensePage>} />
+          <Route path="/politika/cerez-politikasi" element={<SuspensePage><CookiePolicy /></SuspensePage>} />
 
           {/* Starlife */}
           <Route path="/starlife-insaat" element={<SuspensePage><StarlifeHome /></SuspensePage>} />
@@ -176,7 +208,8 @@ function App() {
           <Route path="/starlife-insaat/blog" element={<SuspensePage><SubsiteBlog navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" basePath="/starlife-insaat" /></SuspensePage>} />
           <Route path="/starlife-insaat/blog/:slug" element={<SuspensePage><BlogDetail navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" basePath="/starlife-insaat" /></SuspensePage>} />
           <Route path="/starlife-insaat/iletisim" element={<SuspensePage><SubsiteIletisim navItems={STARLIFE_NAV} brandPrefix="STAR" brandSuffix="LİFE" basePath="/starlife-insaat" /></SuspensePage>} />
-          <Route path="/starlife-insaat/politika/kvkk-metni" element={<SuspensePage><Kvkk /></SuspensePage>} />
+          <Route path="/starlife-insaat/politika/kvkk-metni" element={<SuspensePage><Kvkk {...starlifePolicyProps} /></SuspensePage>} />
+          <Route path="/starlife-insaat/politika/cerez-politikasi" element={<SuspensePage><CookiePolicy {...starlifePolicyProps} /></SuspensePage>} />
 
           {/* Invest */}
           <Route path="/invest-insaat" element={<SuspensePage><InvestHome /></SuspensePage>} />
@@ -184,6 +217,8 @@ function App() {
           <Route path="/invest-insaat/blog" element={<SuspensePage><SubsiteBlog navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" /></SuspensePage>} />
           <Route path="/invest-insaat/blog/:slug" element={<SuspensePage><BlogDetail navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" /></SuspensePage>} />
           <Route path="/invest-insaat/iletisim" element={<SuspensePage><SubsiteIletisim navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" /></SuspensePage>} />
+          <Route path="/invest-insaat/politika/kvkk-metni" element={<SuspensePage><Kvkk {...investPolicyProps} /></SuspensePage>} />
+          <Route path="/invest-insaat/politika/cerez-politikasi" element={<SuspensePage><CookiePolicy {...investPolicyProps} /></SuspensePage>} />
 
           {/* ERD */}
           <Route path="/erd-insaat" element={<SuspensePage><ErdHome /></SuspensePage>} />
@@ -191,6 +226,10 @@ function App() {
           <Route path="/erd-insaat/blog" element={<SuspensePage><SubsiteBlog navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" /></SuspensePage>} />
           <Route path="/erd-insaat/blog/:slug" element={<SuspensePage><BlogDetail navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" /></SuspensePage>} />
           <Route path="/erd-insaat/iletisim" element={<SuspensePage><SubsiteIletisim navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" /></SuspensePage>} />
+          <Route path="/erd-insaat/politika/kvkk-metni" element={<SuspensePage><Kvkk {...erdPolicyProps} /></SuspensePage>} />
+          <Route path="/erd-insaat/politika/cerez-politikasi" element={<SuspensePage><CookiePolicy {...erdPolicyProps} /></SuspensePage>} />
+
+          <Route path="*" element={<SuspensePage><NotFound /></SuspensePage>} />
         </Routes>
       </BrowserRouter>
     </div>

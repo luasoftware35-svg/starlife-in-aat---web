@@ -4,8 +4,11 @@ import { MapPin, Mail, Phone, ArrowUpRight } from 'lucide-react';
 import SocialLinks from './SocialLinks';
 import BrandLogo from './BrandLogo';
 import { COMPANY } from '../../mock/mock';
+import { policyPaths } from '../../lib/policyPaths';
 
 export default function SubsiteFooter({ brandPrefix, brandSuffix, basePath = '/', accentClass = 'text-pomegranate', description }) {
+  const legalPaths = policyPaths(basePath);
+  const currentYear = new Date().getFullYear();
   return (
     <footer className="bg-ink border-t border-white/10 pt-20 pb-8 px-6 md:px-12 lg:px-20">
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-10">
@@ -46,8 +49,11 @@ export default function SubsiteFooter({ brandPrefix, brandSuffix, basePath = '/'
       </div>
 
       <div className="max-w-[1400px] mx-auto mt-16 pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-3">
-        <p className="text-white/35 text-[11px] tracking-[0.1em] font-light">Tüm Hakları Saklıdır © 2025 Starlife İnşaat</p>
-        <Link to="/politika/kvkk-metni" className="text-white/35 text-[11px] tracking-[0.1em] font-light hover:text-gold transition-colors">KVKK Metni</Link>
+        <p className="text-white/35 text-[11px] tracking-[0.1em] font-light">Tüm Hakları Saklıdır © {currentYear} Starlife İnşaat</p>
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+          <Link to={legalPaths.kvkk} className="text-white/35 text-[11px] tracking-[0.1em] font-light hover:text-gold transition-colors">KVKK Metni</Link>
+          <Link to={legalPaths.cookies} className="text-white/35 text-[11px] tracking-[0.1em] font-light hover:text-gold transition-colors">Çerez Politikası</Link>
+        </div>
       </div>
     </footer>
   );
