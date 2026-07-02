@@ -5,6 +5,7 @@ import HoldingHeader from '../components/holding/HoldingHeader';
 import HoldingFooter from '../components/holding/HoldingFooter';
 import PageHero from '../components/shared/PageHero';
 import { mapLocation, useSupabaseRows } from '../lib/supabase/content';
+import { mapFallbackImage } from '../lib/fallbackImages';
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -18,7 +19,7 @@ const locations = [
     year: '2024-2026',
     cx: '14%',
     cy: '26%',
-    project: { name: 'İstanbul Konut Projesi', desc: 'Modern şehir yaşamı için tasarlanmış premium konut projesi.', image: '/images/projects/istanbul.jpg', units: 120, sqm: 8500, year: '2024-2026', status: 'DEVAM EDİYOR' },
+    project: { name: 'İstanbul Konut Projesi', desc: 'Modern şehir yaşamı için tasarlanmış premium konut projesi.', image: mapFallbackImage('İstanbul'), units: 120, sqm: 8500, year: '2024-2026', status: 'DEVAM EDİYOR' },
   },
   {
     id: 2,
@@ -29,7 +30,7 @@ const locations = [
     year: '2025',
     cx: '38%',
     cy: '38%',
-    project: { name: 'Ankara Karma Proje', desc: 'Ticari ve konut kullanımını bir arada sunan karma proje.', image: '/images/projects/ankara.jpg', units: 85, sqm: 12000, year: '2025', status: 'DEVAM EDİYOR' },
+    project: { name: 'Ankara Karma Proje', desc: 'Ticari ve konut kullanımını bir arada sunan karma proje.', image: mapFallbackImage('Ankara'), units: 85, sqm: 12000, year: '2025', status: 'DEVAM EDİYOR' },
   },
   {
     id: 3,
@@ -40,7 +41,7 @@ const locations = [
     year: '2023',
     cx: '22%',
     cy: '22%',
-    project: { name: 'Kocaeli Residence', desc: 'Sanayi şehrinin kalbinde huzurlu yaşam alanları.', image: '/images/projects/kocaeli.jpg', units: 60, sqm: 4200, year: '2023', status: 'TAMAMLANDI' },
+    project: { name: 'Kocaeli Residence', desc: 'Sanayi şehrinin kalbinde huzurlu yaşam alanları.', image: mapFallbackImage('Kocaeli'), units: 60, sqm: 4200, year: '2023', status: 'TAMAMLANDI' },
   },
   {
     id: 4,
@@ -51,7 +52,7 @@ const locations = [
     year: '2022',
     cx: '27%',
     cy: '30%',
-    project: { name: 'Bilecik Konut', desc: 'Doğayla iç içe, modern yaşam standartlarında konutlar.', image: '/images/projects/bilecik.jpg', units: 40, sqm: 3100, year: '2022', status: 'TAMAMLANDI' },
+    project: { name: 'Bilecik Konut', desc: 'Doğayla iç içe, modern yaşam standartlarında konutlar.', image: mapFallbackImage('Bilecik'), units: 40, sqm: 3100, year: '2022', status: 'TAMAMLANDI' },
   },
   {
     id: 5,
@@ -62,7 +63,7 @@ const locations = [
     year: '2024-2025',
     cx: '20%',
     cy: '56%',
-    project: { name: 'Denizli Residence', desc: "Ege'nin sıcaklığında modern yaşam kompleksi.", image: '/images/projects/denizli.jpg', units: 72, sqm: 5800, year: '2024-2025', status: 'DEVAM EDİYOR' },
+    project: { name: 'Denizli Residence', desc: "Ege'nin sıcaklığında modern yaşam kompleksi.", image: mapFallbackImage('Denizli'), units: 72, sqm: 5800, year: '2024-2025', status: 'DEVAM EDİYOR' },
   },
   {
     id: 6,
@@ -73,7 +74,7 @@ const locations = [
     year: '2025-2026',
     cx: '30%',
     cy: '70%',
-    project: { name: 'Lara Coastal Villas', desc: 'Akdeniz kıyısında, doğal taş ve travertenin ışıkla diyaloğunu kuran limitli sayıda villa serisi.', image: '/images/projects/antalya.jpg', units: 42, sqm: 16500, year: '2025-2026', status: 'DEVAM EDİYOR' },
+    project: { name: 'Lara Coastal Villas', desc: 'Akdeniz kıyısında, doğal taş ve travertenin ışıkla diyaloğunu kuran limitli sayıda villa serisi.', image: mapFallbackImage('Antalya'), units: 42, sqm: 16500, year: '2025-2026', status: 'DEVAM EDİYOR' },
   },
   {
     id: 7,
@@ -84,7 +85,7 @@ const locations = [
     year: '2024-2026',
     cx: '62%',
     cy: '68%',
-    project: { name: 'Urfa Konut Projesi', desc: 'Tarihi dokunun modern yorumu ile şekillenen yaşam alanları.', image: '/images/projects/urfa.jpg', units: 95, sqm: 7200, year: '2024-2026', status: 'DEVAM EDİYOR' },
+    project: { name: 'Urfa Konut Projesi', desc: 'Tarihi dokunun modern yorumu ile şekillenen yaşam alanları.', image: mapFallbackImage('Şanlıurfa'), units: 95, sqm: 7200, year: '2024-2026', status: 'DEVAM EDİYOR' },
   },
   {
     id: 8,
@@ -95,7 +96,7 @@ const locations = [
     year: '2024-2026',
     cx: '65%',
     cy: '52%',
-    project: { name: 'Malatya Residence', desc: "Doğu Anadolu'nun merkezinde kaliteli ve güvenli yaşam.", image: '/images/projects/malatya.jpg', units: 55, sqm: 4600, year: '2024-2026', status: 'DEVAM EDİYOR' },
+    project: { name: 'Malatya Residence', desc: "Doğu Anadolu'nun merkezinde kaliteli ve güvenli yaşam.", image: mapFallbackImage('Malatya'), units: 55, sqm: 4600, year: '2024-2026', status: 'DEVAM EDİYOR' },
   },
   {
     id: 9,
@@ -106,7 +107,7 @@ const locations = [
     year: '2024-2026',
     cx: '70%',
     cy: '48%',
-    project: { name: 'Elazığ Konut', desc: 'Depreme dayanıklı modern yapı teknolojisiyle inşa edilen konut projesi.', image: '/images/projects/elazig.jpg', units: 48, sqm: 3800, year: '2024-2026', status: 'DEVAM EDİYOR' },
+    project: { name: 'Elazığ Konut', desc: 'Depreme dayanıklı modern yapı teknolojisiyle inşa edilen konut projesi.', image: mapFallbackImage('Elazığ'), units: 48, sqm: 3800, year: '2024-2026', status: 'DEVAM EDİYOR' },
   },
   {
     id: 10,
@@ -117,7 +118,7 @@ const locations = [
     year: '2024-2025',
     cx: '74%',
     cy: '60%',
-    project: { name: 'Starlife Residence', desc: "Starlife İnşaat'ın Diyarbakır'daki amiral gemisi konut projesi.", image: '/images/projects/diyarbakir.jpg', units: 110, sqm: 9200, year: '2024-2025', status: 'DEVAM EDİYOR' },
+    project: { name: 'Starlife Residence', desc: "Starlife İnşaat'ın Diyarbakır'daki amiral gemisi konut projesi.", image: mapFallbackImage('Diyarbakır'), units: 110, sqm: 9200, year: '2024-2025', status: 'DEVAM EDİYOR' },
   },
   {
     id: 11,
@@ -128,7 +129,7 @@ const locations = [
     year: '2024-2025',
     cx: '82%',
     cy: '66%',
-    project: { name: 'Şırnak Konut Projesi', desc: 'Sınır şehrinde modern ve güvenli yaşam alanları.', image: '/images/projects/sirnak.jpg', units: 35, sqm: 2900, year: '2024-2025', status: 'DEVAM EDİYOR' },
+    project: { name: 'Şırnak Konut Projesi', desc: 'Sınır şehrinde modern ve güvenli yaşam alanları.', image: mapFallbackImage('Şırnak'), units: 35, sqm: 2900, year: '2024-2025', status: 'DEVAM EDİYOR' },
   },
 ];
 

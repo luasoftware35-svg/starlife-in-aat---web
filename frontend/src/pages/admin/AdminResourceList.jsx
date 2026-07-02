@@ -58,6 +58,7 @@ export default function AdminResourceList({ resource: resourceProp }) {
           <p className="text-sm text-zinc-500">Supabase table: {config.table}</p>
           <h2 className="text-2xl font-semibold text-white">{config.label}</h2>
         </div>
+        {config.readOnly ? null : (
         <Link
           to={`${config.basePath}/yeni`}
           className="inline-flex items-center justify-center gap-2 rounded-full bg-gold px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-gold-light"
@@ -65,6 +66,7 @@ export default function AdminResourceList({ resource: resourceProp }) {
           <Plus className="h-4 w-4" />
           Yeni Kayıt
         </Link>
+        )}
       </div>
 
       {loading ? (
@@ -73,7 +75,7 @@ export default function AdminResourceList({ resource: resourceProp }) {
         <DataTable
           columns={config.columns}
           rows={rows}
-          editBasePath={config.editBasePath}
+          editBasePath={config.readOnly ? null : config.editBasePath}
           onDelete={setDeleteTarget}
           emptyText="Henüz kayıt yok."
         />

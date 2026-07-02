@@ -2,6 +2,7 @@ import React from 'react';
 import PolicyPageShell, { LegalDocument } from '../components/shared/PolicyPageShell';
 import { getCookiePolicySections } from '../content/legalTexts';
 import { policyPaths } from '../lib/policyPaths';
+import { useCompany } from '../lib/siteSettings';
 
 export default function CookiePolicy({
   layout = 'holding',
@@ -11,6 +12,7 @@ export default function CookiePolicy({
   basePath = '',
   footerDescription,
 }) {
+  const company = useCompany();
   const paths = policyPaths(basePath);
   const homeHref = basePath || '/';
 
@@ -37,7 +39,7 @@ export default function CookiePolicy({
             'Siteyi kullanmaya devam ederek zorunlu çerezlerin kullanımını kabul etmiş olursunuz. Üçüncü taraf çerezleri için çerez bildirim bandı üzerinden tercih belirleyebilirsiniz.',
           ],
         }}
-        sections={getCookiePolicySections()}
+        sections={getCookiePolicySections(company)}
       />
     </PolicyPageShell>
   );

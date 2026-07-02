@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import KvkkConsentCheckbox from './KvkkConsentCheckbox';
+import { submitContactForm } from '../../lib/formSubmissions';
+import { isSupabaseConfigured } from '../../lib/supabase/client';
 
 function generateCaptcha() {
   const a = Math.floor(Math.random() * 8) + 1;
@@ -21,7 +23,7 @@ function Field({ id, label, darkMode, children }) {
   );
 }
 
-export default function ContactForm({ darkMode = true, policyBasePath = '' }) {
+export default function ContactForm({ darkMode = true, policyBasePath = '', source = 'holding' }) {
   const [captcha] = useState(generateCaptcha);
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '', captcha: '' });
   const [kvkkAccepted, setKvkkAccepted] = useState(false);
@@ -30,23 +32,39 @@ export default function ContactForm({ darkMode = true, policyBasePath = '' }) {
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (!kvkkAccepted) {
       setStatus('consent');
       return;
     }
+    if (Number(form.captcha) !== captcha.answer) {
+      setStatus('error');
+      return;
+    }
+    if (!isSupabaseConfigured) {
+      setStatus('config');
+      return;
+    }
+
     setSubmitting(true);
-    setTimeout(() => {
-      if (Number(form.captcha) !== captcha.answer) {
-        setStatus('error');
-      } else {
-        setStatus('success');
-        setForm({ name: '', email: '', phone: '', message: '', captcha: '' });
-        setKvkkAccepted(false);
-      }
+    try {
+      await submitContactForm({
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        message: form.message,
+        kvkkAccepted,
+        source,
+      });
+      setStatus('success');
+      setForm({ name: '', email: '', phone: '', message: '', captcha: '' });
+      setKvkkAccepted(false);
+    } catch {
+      setStatus('failed');
+    } finally {
       setSubmitting(false);
-    }, 700);
+    }
   };
 
   const inputBase = darkMode
@@ -118,9 +136,17 @@ export default function ContactForm({ darkMode = true, policyBasePath = '' }) {
         <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} role="alert"
           className="text-pomegranate-light text-sm font-light">Doğrulama hatası. Lütfen captcha cevabınızı kontrol edin.</motion.p>
       )}
+      {status === 'failed' && (
+        <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} role="alert"
+          className="text-pomegranate-light text-sm font-light">Mesaj gönderilemedi. Lütfen daha sonra tekrar deneyin veya telefon ile ulaşın.</motion.p>
+      )}
       {status === 'consent' && (
         <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} role="alert"
           className="text-pomegranate-light text-sm font-light">Devam etmek için KVKK aydınlatma metnini onaylamanız gerekmektedir.</motion.p>
+      )}
+      {status === 'config' && (
+        <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} role="alert"
+          className="text-pomegranate-light text-sm font-light">Form servisi yapılandırılmamış. Lütfen doğrudan e-posta veya telefon ile iletişime geçin.</motion.p>
       )}
     </form>
   );

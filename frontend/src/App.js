@@ -6,6 +6,7 @@ import ScrollToTop from './components/ScrollToTop';
 import RouteSeo from './components/seo/RouteSeo';
 import CookieBanner from './components/shared/CookieBanner';
 import PageLoader from './components/shared/PageLoader';
+import { SiteSettingsProvider } from './lib/siteSettings';
 import LandingPage from './pages/LandingPage';
 
 import { STARLIFE_NAV, INVEST_NAV, ERD_NAV } from './mock/mock';
@@ -13,6 +14,9 @@ import { STARLIFE_NAV, INVEST_NAV, ERD_NAV } from './mock/mock';
 const KurumsalHakkimizda = lazy(() => import('./pages/KurumsalHakkimizda'));
 const KurumsalYonetim = lazy(() => import('./pages/KurumsalYonetim'));
 const OperasyonHaritasi = lazy(() => import('./pages/OperasyonHaritasi'));
+const KurumsalReferanslar = lazy(() => import('./pages/KurumsalReferanslar'));
+const KurumsalKaliteGuvenlik = lazy(() => import('./pages/KurumsalKaliteGuvenlik'));
+const KurumsalYatirimciIliskileri = lazy(() => import('./pages/KurumsalYatirimciIliskileri'));
 const Iletisim = lazy(() => import('./pages/Iletisim'));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogDetail = lazy(() => import('./pages/BlogDetail'));
@@ -36,6 +40,7 @@ const ErdHome = lazy(() => import('./pages/erd/ErdHome'));
 const SubsiteBlog = lazy(() => import('./pages/SubsiteBlog'));
 const SubsiteIletisim = lazy(() => import('./pages/SubsiteIletisim'));
 const SubsiteAbout = lazy(() => import('./pages/SubsiteAbout'));
+const SubsiteProjects = lazy(() => import('./pages/SubsiteProjects'));
 
 const AdminRouteGuard = lazy(() => import('./components/admin/AdminRouteGuard'));
 const AdminContentPage = lazy(() => import('./pages/admin/AdminContentPage'));
@@ -117,6 +122,7 @@ function YapiGuvenligiRoute() {
 
 function App() {
   return (
+    <SiteSettingsProvider>
     <div className="App">
       <BrowserRouter>
         <ScrollToTop />
@@ -161,7 +167,11 @@ function App() {
               <Route path="footer" element={<SuspensePage><AdminContentPage type="footer" /></SuspensePage>} />
               <Route path="hakkimizda" element={<SuspensePage><AdminContentPage type="about" /></SuspensePage>} />
               <Route path="iletisim" element={<SuspensePage><AdminContentPage type="contact" /></SuspensePage>} />
-              <Route path="medya" element={<SuspensePage><AdminMedia /></SuspensePage>} />
+              <Route path="taahhut" element={<SuspensePage><AdminResourceList resource="taahhut" /></SuspensePage>} />
+              <Route path="taahhut/yeni" element={<SuspensePage><AdminResourceForm resource="taahhut" /></SuspensePage>} />
+              <Route path="taahhut/duzenle/:id" element={<SuspensePage><AdminResourceForm resource="taahhut" /></SuspensePage>} />
+              <Route path="mesajlar" element={<SuspensePage><AdminResourceList resource="contactMessages" /></SuspensePage>} />
+              <Route path="basvurular" element={<SuspensePage><AdminResourceList resource="jobApplications" /></SuspensePage>} />
               <Route path="projects" element={<SuspensePage><AdminResourceList resource="projects" /></SuspensePage>} />
               <Route path="projects/new" element={<SuspensePage><AdminResourceForm resource="projects" /></SuspensePage>} />
               <Route path="projects/edit/:id" element={<SuspensePage><AdminResourceForm resource="projects" /></SuspensePage>} />
@@ -186,6 +196,9 @@ function App() {
           <Route path="/kurumsal/hakkimizda" element={<SuspensePage><KurumsalHakkimizda /></SuspensePage>} />
           <Route path="/kurumsal/yonetim" element={<SuspensePage><KurumsalYonetim /></SuspensePage>} />
           <Route path="/kurumsal/operasyon-haritasi" element={<SuspensePage><OperasyonHaritasi /></SuspensePage>} />
+          <Route path="/kurumsal/referanslar-ve-sertifikalar" element={<SuspensePage><KurumsalReferanslar /></SuspensePage>} />
+          <Route path="/kurumsal/kalite-ve-guvenlik" element={<SuspensePage><KurumsalKaliteGuvenlik /></SuspensePage>} />
+          <Route path="/kurumsal/yatirimci-iliskileri" element={<SuspensePage><KurumsalYatirimciIliskileri /></SuspensePage>} />
           <Route path="/blog" element={<SuspensePage><Blog /></SuspensePage>} />
           <Route path="/blog/:slug" element={<SuspensePage><BlogDetail /></SuspensePage>} />
           <Route path="/iletisim" element={<SuspensePage><Iletisim /></SuspensePage>} />
@@ -214,6 +227,7 @@ function App() {
           {/* Invest */}
           <Route path="/invest-insaat" element={<SuspensePage><InvestHome /></SuspensePage>} />
           <Route path="/invest-insaat/kurumsal/invest-insaat" element={<SuspensePage><SubsiteAbout {...investAboutProps} /></SuspensePage>} />
+          <Route path="/invest-insaat/projeler" element={<SuspensePage><SubsiteProjects company="invest" navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" title="İnvest Projeleri" footerDescription="Geleceğe değer katan yapılar." heroImage="https://images.pexels.com/photos/34700467/pexels-photo-34700467.png?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600" /></SuspensePage>} />
           <Route path="/invest-insaat/blog" element={<SuspensePage><SubsiteBlog navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" /></SuspensePage>} />
           <Route path="/invest-insaat/blog/:slug" element={<SuspensePage><BlogDetail navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" /></SuspensePage>} />
           <Route path="/invest-insaat/iletisim" element={<SuspensePage><SubsiteIletisim navItems={INVEST_NAV} brandPrefix="İNVEST" brandSuffix="" basePath="/invest-insaat" /></SuspensePage>} />
@@ -223,6 +237,7 @@ function App() {
           {/* ERD */}
           <Route path="/erd-insaat" element={<SuspensePage><ErdHome /></SuspensePage>} />
           <Route path="/erd-insaat/kurumsal/erd-insaat" element={<SuspensePage><SubsiteAbout {...erdAboutProps} /></SuspensePage>} />
+          <Route path="/erd-insaat/projeler" element={<SuspensePage><SubsiteProjects company="erd" navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" title="ERD Projeleri" footerDescription="İnsan odaklı tasarım, yüksek kalite." heroImage="https://images.pexels.com/photos/31197870/pexels-photo-31197870.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600" /></SuspensePage>} />
           <Route path="/erd-insaat/blog" element={<SuspensePage><SubsiteBlog navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" /></SuspensePage>} />
           <Route path="/erd-insaat/blog/:slug" element={<SuspensePage><BlogDetail navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" /></SuspensePage>} />
           <Route path="/erd-insaat/iletisim" element={<SuspensePage><SubsiteIletisim navItems={ERD_NAV} brandPrefix="ERD" brandSuffix=" İNŞAAT" basePath="/erd-insaat" /></SuspensePage>} />
@@ -233,6 +248,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </div>
+    </SiteSettingsProvider>
   );
 }
 

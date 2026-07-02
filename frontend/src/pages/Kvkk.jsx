@@ -2,6 +2,7 @@ import React from 'react';
 import PolicyPageShell, { LegalDocument } from '../components/shared/PolicyPageShell';
 import { getKvkkSections } from '../content/legalTexts';
 import { policyPaths } from '../lib/policyPaths';
+import { useCompany } from '../lib/siteSettings';
 
 export default function Kvkk({
   layout = 'holding',
@@ -11,6 +12,7 @@ export default function Kvkk({
   basePath = '',
   footerDescription,
 }) {
+  const company = useCompany();
   const paths = policyPaths(basePath);
   const homeHref = basePath || '/';
 
@@ -37,7 +39,7 @@ export default function Kvkk({
             'Bu metin; web sitemizi ziyaret eden kullanıcılar, iletişim formu dolduran kişiler ve insan kaynakları başvurusu yapan adaylar için hazırlanmıştır.',
           ],
         }}
-        sections={getKvkkSections()}
+        sections={getKvkkSections(company)}
       />
     </PolicyPageShell>
   );

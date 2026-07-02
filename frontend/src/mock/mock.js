@@ -7,7 +7,7 @@ export const COMPANY = {
   founder: 'Numan Erdoğan',
   address: 'Ceysa Serhat Plaza B Blok Kat 2 No:2 Kayapınar/Diyarbakır',
   phone: '0412 504 10 08',
-  email: 'tanitimmedya@starlifeinsaat.com',
+  email: 'iletisim@starlifeinsaat.com',
 };
 
 export const SOCIALS = [
@@ -98,6 +98,9 @@ export const HOLDING_NAV = [
       { label: 'Hakkımızda', href: '/kurumsal/hakkimizda' },
       { label: 'Yönetim Kurulu', href: '/kurumsal/yonetim' },
       { label: 'Operasyon Haritası', href: '/kurumsal/operasyon-haritasi' },
+      { label: 'Referanslar & Sertifikalar', href: '/kurumsal/referanslar-ve-sertifikalar' },
+      { label: 'Kalite & Güvenlik', href: '/kurumsal/kalite-ve-guvenlik' },
+      { label: 'Yatırımcı İlişkileri', href: '/kurumsal/yatirimci-iliskileri' },
     ]
   },
   {
@@ -147,6 +150,7 @@ export const STARLIFE_NAV = [
 export const INVEST_NAV = [
   { label: 'Anasayfa', href: '/invest-insaat' },
   { label: 'Kurumsal', children: [{ label: 'İnvest İnşaat', href: '/invest-insaat/kurumsal/invest-insaat' }] },
+  { label: 'Projeler', href: '/invest-insaat/projeler' },
   { label: 'Bizden Haberler', href: '/invest-insaat/blog' },
   { label: 'İletişim', href: '/invest-insaat/iletisim' },
 ];
@@ -154,6 +158,7 @@ export const INVEST_NAV = [
 export const ERD_NAV = [
   { label: 'Anasayfa', href: '/erd-insaat' },
   { label: 'Kurumsal', children: [{ label: 'ERD İnşaat', href: '/erd-insaat/kurumsal/erd-insaat' }] },
+  { label: 'Projeler', href: '/erd-insaat/projeler' },
   { label: 'Bizden Haberler', href: '/erd-insaat/blog' },
   { label: 'İletişim', href: '/erd-insaat/iletisim' },
 ];

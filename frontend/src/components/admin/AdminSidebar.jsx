@@ -1,11 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { BarChart3, Building2, FileText, Home, Images, LayoutTemplate, Mail, MapPinned, PanelTop, Settings, SquareMenu, Users, WandSparkles } from 'lucide-react';
+import { BarChart3, Building2, FileText, Home, Images, Inbox, LayoutTemplate, Mail, MapPinned, PanelTop, Settings, SquareMenu, Users, WandSparkles, HardHat } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const adminLinks = [
   { to: '/admin', label: 'Dashboard', icon: BarChart3, end: true },
   { to: '/admin/projeler', label: 'Projeler', icon: Building2 },
+  { to: '/admin/taahhut', label: 'Taahhüt', icon: HardHat },
   { to: '/admin/sirketler', label: 'Şirketler', icon: Home },
   { to: '/admin/harita', label: 'Harita', icon: MapPinned },
   { to: '/admin/yonetim', label: 'Yönetim', icon: Users },
@@ -15,6 +16,8 @@ const adminLinks = [
   { to: '/admin/hakkimizda', label: 'Hakkımızda', icon: LayoutTemplate },
   { to: '/admin/iletisim', label: 'İletişim', icon: Mail },
   { to: '/admin/blog', label: 'Blog', icon: FileText },
+  { to: '/admin/mesajlar', label: 'Mesajlar', icon: Inbox },
+  { to: '/admin/basvurular', label: 'Başvurular', icon: Mail },
   { to: '/admin/medya', label: 'Medya', icon: Images },
   { to: '/admin/ayarlar', label: 'Ayarlar', icon: Settings },
 ];

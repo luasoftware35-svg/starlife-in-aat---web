@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import { MapPin, Mail, Phone, ArrowUpRight } from 'lucide-react';
 import SocialLinks from './SocialLinks';
 import BrandLogo from './BrandLogo';
-import { COMPANY } from '../../mock/mock';
+import { useCompany } from '../../lib/siteSettings';
 import { policyPaths } from '../../lib/policyPaths';
 
 export default function SubsiteFooter({ brandPrefix, brandSuffix, basePath = '/', accentClass = 'text-pomegranate', description }) {
+  const company = useCompany();
   const legalPaths = policyPaths(basePath);
   const currentYear = new Date().getFullYear();
   return (
@@ -41,9 +42,9 @@ export default function SubsiteFooter({ brandPrefix, brandSuffix, basePath = '/'
         <div>
           <h4 className="text-gold text-[11px] tracking-[0.35em] uppercase mb-6 font-medium">İletişim</h4>
           <ul className="space-y-5">
-            <li className="flex gap-3 text-white/60 text-sm font-light leading-relaxed"><MapPin size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><span>{COMPANY.address}</span></li>
-            <li className="flex gap-3 text-white/60 text-sm font-light"><Mail size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><a href={`mailto:${COMPANY.email}`} className="break-all hover:text-gold transition-colors">{COMPANY.email}</a></li>
-            <li className="flex gap-3 text-white/60 text-sm font-light"><Phone size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><a href={`tel:${COMPANY.phone.replace(/\s/g, '')}`} className="hover:text-gold transition-colors">{COMPANY.phone}</a></li>
+            <li className="flex gap-3 text-white/60 text-sm font-light leading-relaxed"><MapPin size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><span>{company.address}</span></li>
+            <li className="flex gap-3 text-white/60 text-sm font-light"><Mail size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><a href={`mailto:${company.email}`} className="break-all hover:text-gold transition-colors">{company.email}</a></li>
+            <li className="flex gap-3 text-white/60 text-sm font-light"><Phone size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><a href={`tel:${company.phone.replace(/\s/g, '')}`} className="hover:text-gold transition-colors">{company.phone}</a></li>
           </ul>
         </div>
       </div>

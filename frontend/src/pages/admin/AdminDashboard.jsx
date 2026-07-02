@@ -44,8 +44,9 @@ export default function AdminDashboard() {
         <p className="text-xs uppercase tracking-[0.28em] text-gold">Content Workflow</p>
         <h2 className="mt-3 text-2xl font-semibold text-white">Starlife içerik yönetimi</h2>
         <p className="mt-3 max-w-3xl text-sm leading-7 text-zinc-400">
-          Bu panel React Router içinde izole çalışır. Public site mevcut hardcoded içerikleriyle korunur; Supabase tabloları hazır olduğunda
-          admin ekranları projeler, blog, hero, ekip, harita ve ayarlar için CRUD işlemlerini aynı yardımcı fonksiyonlar üzerinden yürütür.
+          Supabase tabloları hazır olduğunda admin ekranları projeler, taahhüt, blog, hero, ekip, harita, ayarlar,
+          iletişim mesajları ve İK başvuruları için CRUD işlemlerini yürütür. Canlı site site_settings tablosundan
+          iletişim bilgilerini okur.
         </p>
       </section>
     </div>

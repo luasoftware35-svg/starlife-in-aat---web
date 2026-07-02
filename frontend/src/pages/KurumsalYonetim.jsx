@@ -5,6 +5,7 @@ import HoldingHeader from '../components/holding/HoldingHeader';
 import HoldingFooter from '../components/holding/HoldingFooter';
 import PageHero from '../components/shared/PageHero';
 import { mapTeamMember, useSupabaseRows } from '../lib/supabase/content';
+import { teamFallbackImage } from '../lib/fallbackImages';
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -15,25 +16,25 @@ const team = [
   {
     name: 'Numan Erdoğan',
     title: 'CEO & Kurucu',
-    image: '/images/team/numan-erdogan.jpg',
+    image: teamFallbackImage('Numan Erdoğan'),
     bio: 'Starlife İnşaat vizyonunu şekillendiren liderlik anlayışıyla, kaliteli ve güvenli yaşam alanları üretme hedefi doğrultusunda çalışmalarını sürdürmektedir.',
   },
   {
     name: 'Ahmet Erdoğan',
     title: 'Yönetim Kurulu Üyesi',
-    image: '/images/team/ahmet-erdogan.jpg',
+    image: teamFallbackImage('Ahmet Erdoğan'),
     bio: 'Yönetim kurulu üyesi olarak proje geliştirme, kurumsal büyüme ve sürdürülebilir yapı standartlarının güçlendirilmesi süreçlerinde aktif rol almaktadır.',
   },
   {
     name: 'Mahmut Erdoğan',
     title: 'Yönetim Kurulu Üyesi',
-    image: '/images/team/mahmut-erdogan.jpg',
+    image: teamFallbackImage('Mahmut Erdoğan'),
     bio: 'Yönetim kurulu üyesi olarak operasyonel süreçlerin geliştirilmesi, kalite standartlarının korunması ve uzun vadeli değer üreten projelerin hayata geçirilmesine katkı sunmaktadır.',
   },
   {
     name: 'Ayetullah Yağmur',
     title: 'Genel Koordinatör',
-    image: '/images/team/ayetullah-yagmur.jpg',
+    image: teamFallbackImage('Ayetullah Yağmur'),
     bio: 'Genel koordinatör olarak grup şirketleri arası operasyonel uyumu sağlamak, proje süreçlerini koordine etmek ve kurumsal hedeflerin sahada etkin biçimde uygulanmasına liderlik etmektedir.',
   },
 ];

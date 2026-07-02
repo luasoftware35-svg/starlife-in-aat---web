@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import { MapPin, Mail, Phone, ArrowUpRight } from 'lucide-react';
 import SocialLinks from '../shared/SocialLinks';
 import BrandLogo from '../shared/BrandLogo';
-import { COMPANY } from '../../mock/mock';
+import { useCompany } from '../../lib/siteSettings';
 import { policyPaths } from '../../lib/policyPaths';
 
 const legalPaths = policyPaths('');
 const currentYear = new Date().getFullYear();
 
 export default function HoldingFooter() {
+  const company = useCompany();
   return (
     <footer className="bg-ink border-t border-white/10 pt-20 pb-8 px-6 md:px-12 lg:px-20">
       <div className="max-w-[1400px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-10">
@@ -18,7 +19,7 @@ export default function HoldingFooter() {
             <BrandLogo variant="light" width={140} height={40} />
           </Link>
           <p className="text-white/55 text-base mt-5 max-w-xs leading-relaxed font-light">
-            {COMPANY.slogan}. 2009'dan bu yana güvenli ve modern yaşam alanları inşa ediyoruz.
+            {company.slogan}. 2009'dan bu yana güvenli ve modern yaşam alanları inşa ediyoruz.
           </p>
           <div className="mt-7">
             <SocialLinks theme="dark" />
@@ -47,9 +48,9 @@ export default function HoldingFooter() {
         <div>
           <h4 className="text-gold text-[11px] tracking-[0.35em] uppercase mb-6 font-medium">İletişim</h4>
           <ul className="space-y-5">
-            <li className="flex gap-3 text-white/60 text-sm font-light leading-relaxed"><MapPin size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><span>{COMPANY.address}</span></li>
-            <li className="flex gap-3 text-white/60 text-sm font-light"><Mail size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><a href={`mailto:${COMPANY.email}`} className="break-all hover:text-gold transition-colors">{COMPANY.email}</a></li>
-            <li className="flex gap-3 text-white/60 text-sm font-light"><Phone size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><a href={`tel:${COMPANY.phone.replace(/\s/g, '')}`} className="hover:text-gold transition-colors">{COMPANY.phone}</a></li>
+            <li className="flex gap-3 text-white/60 text-sm font-light leading-relaxed"><MapPin size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><span>{company.address}</span></li>
+            <li className="flex gap-3 text-white/60 text-sm font-light"><Mail size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><a href={`mailto:${company.email}`} className="break-all hover:text-gold transition-colors">{company.email}</a></li>
+            <li className="flex gap-3 text-white/60 text-sm font-light"><Phone size={15} strokeWidth={1.5} className="text-gold mt-0.5 shrink-0" /><a href={`tel:${company.phone.replace(/\s/g, '')}`} className="hover:text-gold transition-colors">{company.phone}</a></li>
           </ul>
         </div>
       </div>

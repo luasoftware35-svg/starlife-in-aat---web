@@ -1,15 +1,15 @@
-import { COMPANY } from '../mock/mock';
+import { COMPANY as DEFAULT_COMPANY } from '../mock/mock';
 
-export function getKvkkSections() {
+export function getKvkkSections(company = DEFAULT_COMPANY) {
   return [
     {
       title: '1. Veri Sorumlusu',
       paragraphs: [
-        `6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında veri sorumlusu sıfatıyla ${COMPANY.name} ("Şirket") kişisel verilerinizin güvenliğini sağlamayı, mevzuata uygun şekilde işlemeyi ve korunmasını sağlamayı taahhüt eder.`,
-        `Veri Sorumlusu: ${COMPANY.name}`,
-        `Adres: ${COMPANY.address}`,
-        `Telefon: ${COMPANY.phone}`,
-        `E-posta: ${COMPANY.email}`,
+        `6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında veri sorumlusu sıfatıyla ${company.name} ("Şirket") kişisel verilerinizin güvenliğini sağlamayı, mevzuata uygun şekilde işlemeyi ve korunmasını sağlamayı taahhüt eder.`,
+        `Veri Sorumlusu: ${company.name}`,
+        `Adres: ${company.address}`,
+        `Telefon: ${company.phone}`,
+        `E-posta: ${company.email}`,
       ],
     },
     {
@@ -81,7 +81,7 @@ export function getKvkkSections() {
     {
       title: '8. Başvuru Yöntemi',
       paragraphs: [
-        `Haklarınıza ilişkin taleplerinizi ${COMPANY.email} e-posta adresine veya ${COMPANY.address} adresine yazılı olarak iletebilirsiniz. Başvurularınız en geç 30 gün içinde sonuçlandırılır.`,
+        `Haklarınıza ilişkin taleplerinizi ${company.email} e-posta adresine veya ${company.address} adresine yazılı olarak iletebilirsiniz. Başvurularınız en geç 30 gün içinde sonuçlandırılır.`,
         'Başvurularınızda kimliğinizi doğrulayıcı bilgiler bulunmalıdır. Talebiniz reddedilirse gerekçesi yazılı olarak bildirilir.',
       ],
     },
@@ -95,7 +95,7 @@ export function getKvkkSections() {
   ];
 }
 
-export function getCookiePolicySections() {
+export function getCookiePolicySections(company = DEFAULT_COMPANY) {
   return [
     {
       title: '1. Çerez Nedir?',
@@ -132,7 +132,7 @@ export function getCookiePolicySections() {
       title: '5. Kişisel Veriler ve İletişim',
       paragraphs: [
         'Çerezler aracılığıyla elde edilen veriler KVKK kapsamında kişisel veri niteliğinde olabilir. Detaylı bilgi için KVKK Aydınlatma Metnimizi inceleyebilirsiniz.',
-        `Sorularınız için ${COMPANY.email} adresine veya ${COMPANY.phone} numarasına ulaşabilirsiniz.`,
+        `Sorularınız için ${company.email} adresine veya ${company.phone} numarasına ulaşabilirsiniz.`,
       ],
     },
   ];

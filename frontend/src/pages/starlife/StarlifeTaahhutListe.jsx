@@ -8,14 +8,16 @@ import PageHero from '../../components/shared/PageHero';
 import { useProjectFilterState } from '../../components/shared/ProjectFilterBar';
 import { STARLIFE_NAV } from '../../mock/mock';
 import { TAAHHUT_PROJECTS } from '../../mock/taahhutProjects';
+import { useTaahhutProjects } from '../../lib/supabase/content';
 import { fadeUp } from '../../lib/animations';
 
 const HERO_IMAGE = 'https://images.pexels.com/photos/3818947/pexels-photo-3818947.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1600';
 
 export default function StarlifeTaahhutListe({ filter, title, breadcrumbLabel }) {
+  const taahhutProjects = useTaahhutProjects(TAAHHUT_PROJECTS);
   const sourceProjects = useMemo(
-    () => TAAHHUT_PROJECTS.filter((project) => project.status === filter),
-    [filter],
+    () => taahhutProjects.filter((project) => project.status === filter),
+    [filter, taahhutProjects],
   );
 
   const { filtered, filterBar } = useProjectFilterState(sourceProjects, {

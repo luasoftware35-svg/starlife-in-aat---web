@@ -6,10 +6,11 @@ import HoldingFooter from '../components/holding/HoldingFooter';
 import PageHero from '../components/shared/PageHero';
 import ContactForm from '../components/shared/ContactForm';
 import MapEmbed from '../components/shared/MapEmbed';
-import { COMPANY } from '../mock/mock';
+import { useCompany } from '../lib/siteSettings';
 import { fadeUp } from '../lib/animations';
 
 export default function Iletisim() {
+  const company = useCompany();
   return (
     <div className="bg-white text-ink min-h-screen">
       <HoldingHeader />
@@ -22,7 +23,7 @@ export default function Iletisim() {
             <h2 className="text-ink text-3xl md:text-4xl font-black mt-3">En kısa sürede sizinle irtibata geçeceğiz</h2>
             <p className="text-ink/60 text-sm mt-3">Sorularınız, talepleriniz veya proje fikirleriniz için formu doldurun.</p>
             <div className="mt-10">
-              <ContactForm darkMode={false} policyBasePath="" />
+              <ContactForm darkMode={false} policyBasePath="" source="holding" />
             </div>
           </motion.div>
         </div>
@@ -34,9 +35,9 @@ export default function Iletisim() {
 
             <div className="mt-10 space-y-8">
               {[
-                { icon: MapPin, label: 'ADRES', value: COMPANY.address },
-                { icon: Mail, label: 'MAİL', value: COMPANY.email, href: `mailto:${COMPANY.email}` },
-                { icon: Phone, label: 'TEL', value: COMPANY.phone, href: `tel:${COMPANY.phone.replace(/\s/g, '')}` },
+                { icon: MapPin, label: 'ADRES', value: company.address },
+                { icon: Mail, label: 'MAİL', value: company.email, href: `mailto:${company.email}` },
+                { icon: Phone, label: 'TEL', value: company.phone, href: `tel:${company.phone.replace(/\s/g, '')}` },
               ].map((i) => (
                 <div key={i.label} className="flex gap-4 sm:gap-5 items-start">
                   <div className="w-12 h-12 bg-pomegranate/10 flex items-center justify-center text-pomegranate shrink-0">

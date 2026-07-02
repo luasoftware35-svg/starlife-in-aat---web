@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from './client';
 import { optimizeImageUrl } from '../imageUtils';
+import { DEFAULT_PROJECT_IMAGE, mapFallbackImage, teamFallbackImage } from '../fallbackImages';
 
 const PROJECT_STATUS_LABELS = {
   devam: 'Devam Eden',
@@ -156,7 +157,7 @@ export function mapTeamMember(row) {
     id: row.id || row.user_id || row.name,
     name: row.name,
     title: row.title || row.role || '',
-    image: row.image || row.image_url || '',
+    image: row.image || row.image_url || teamFallbackImage(row.name),
     bio: row.bio || row.biography || row.description || '',
   };
 }
@@ -248,6 +249,41 @@ export function useBlogPost(slug, fallbackRows = []) {
   return state;
 }
 
+export function mapTaahhutProject(row, index = 0) {
+  const gallery = Array.isArray(row.images) ? row.images.filter(Boolean) : [];
+  const cover = row.cover_image || gallery[0] || DEFAULT_PROJECT_IMAGE;
+
+  return {
+    id: row.id || index + 1,
+    slug: slugify(row.slug || row.title || row.id),
+    title: row.title,
+    status: row.status || 'Tamamlanan',
+    description: row.description || '',
+    year: row.year || '',
+    tag: row.tag || 'Konut',
+    units: Number(row.units || 0),
+    institution: row.institution || 'TOKİ',
+    sqm: Number(row.sqm || 0),
+    sqmLabel: row.sqm_label || row.sqmLabel || (row.sqm ? `${Number(row.sqm).toLocaleString('tr-TR')} M²` : ''),
+    location: row.location || '',
+    image: cover,
+    images: gallery.length ? gallery : [cover],
+  };
+}
+
+export function useTaahhutProjects(fallbackRows = []) {
+  return useSupabaseRows(
+    'taahhut_projects',
+    {
+      orderBy: 'order_index',
+      ascending: true,
+      filters: [{ column: 'active', value: true }],
+    },
+    fallbackRows,
+    mapTaahhutProject,
+  );
+}
+
 export function mapLocation(row) {
   if (row.project) return row;
 
@@ -267,7 +303,7 @@ export function mapLocation(row) {
     project: {
       name: row.title || row.city,
       desc: row.description || '',
-      image: row.image || row.cover_image || '/images/projects/istanbul.jpg',
+      image: row.image || row.cover_image || mapFallbackImage(row.city),
       units,
       sqm,
       year,

@@ -1,26 +1,56 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Briefcase, Send } from 'lucide-react';
+import { Briefcase, Send, Upload } from 'lucide-react';
 import SubsiteHeader from '../../components/shared/SubsiteHeader';
 import SubsiteFooter from '../../components/shared/SubsiteFooter';
 import PageHero from '../../components/shared/PageHero';
 import KvkkConsentCheckbox from '../../components/shared/KvkkConsentCheckbox';
 import { STARLIFE_NAV } from '../../mock/mock';
 import { fadeUp } from '../../lib/animations';
+import { submitJobApplication } from '../../lib/formSubmissions';
+import { isSupabaseConfigured } from '../../lib/supabase/client';
+
+const foundedYear = 2009;
+const experienceYears = new Date().getFullYear() - foundedYear;
 
 export default function StarlifeInsanKaynaklari() {
-  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({ name: '', email: '', phone: '', position: '', summary: '' });
+  const [cvFile, setCvFile] = useState(null);
   const [kvkkAccepted, setKvkkAccepted] = useState(false);
   const [consentError, setConsentError] = useState(false);
+  const [status, setStatus] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const onChange = (event) => {
+    setForm((current) => ({ ...current, [event.target.name]: event.target.value }));
+  };
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
     if (!kvkkAccepted) {
       setConsentError(true);
       return;
     }
+    if (!isSupabaseConfigured) {
+      setStatus('config');
+      return;
+    }
+
     setConsentError(false);
-    setSubmitted(true);
+    setSubmitting(true);
+    setStatus(null);
+
+    try {
+      await submitJobApplication({ ...form, cvFile, kvkkAccepted });
+      setStatus('success');
+      setForm({ name: '', email: '', phone: '', position: '', summary: '' });
+      setCvFile(null);
+      setKvkkAccepted(false);
+    } catch (error) {
+      setStatus(error.message || 'failed');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -34,42 +64,54 @@ export default function StarlifeInsanKaynaklari() {
             <Briefcase className="text-gold" size={40} />
             <h2 className="font-black text-3xl md:text-4xl mt-5">Aramıza Katılın</h2>
             <p className="text-ink/70 leading-relaxed mt-5">
-              Starlife İnşaat olarak, yetenekli ve tutkulu profesyonellerle birlikte büyüyoruz. Mimari, mühendislik, saha yönetimi, satış ve idari pozisyonlarda kariyer fırsatları sunuyoruz. CV’nizi yanındaki form ile bize ulaştırabilirsiniz.
+              Starlife İnşaat olarak, yetenekli ve tutkulu profesyonellerle birlikte büyüyoruz. Mimari, mühendislik, saha yönetimi, satış ve idari pozisyonlarda kariyer fırsatları sunuyoruz. CV&apos;nizi yanındaki form ile bize ulaştırabilirsiniz.
             </p>
             <ul className="mt-8 space-y-3 text-ink/70 text-sm">
               <li className="flex gap-3"><span className="text-gold">•</span> Profesyonel çalışma ortamı</li>
               <li className="flex gap-3"><span className="text-gold">•</span> Kariyer gelişim olanakları</li>
               <li className="flex gap-3"><span className="text-gold">•</span> Sosyal haklar ve yan ödemeler</li>
-              <li className="flex gap-3"><span className="text-gold">•</span> Sektörde 15+ yıllık tecrübe</li>
+              <li className="flex gap-3"><span className="text-gold">•</span> {foundedYear}&apos;dan bu yana {experienceYears}+ yıllık sektör tecrübesi</li>
             </ul>
           </motion.div>
 
           <motion.form
             onSubmit={onSubmit}
-            variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
             className="bg-gray-50 p-8 md:p-10"
+            noValidate
           >
             <h3 className="font-bold text-xl">Başvuru Formu</h3>
             <div className="mt-6 space-y-4">
               <div>
                 <label htmlFor="hr-name" className="mb-2 block text-[11px] tracking-[0.25em] uppercase text-ink/50">Ad Soyad *</label>
-                <input required id="hr-name" placeholder="Adınız ve soyadınız" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
+                <input required id="hr-name" name="name" value={form.name} onChange={onChange} placeholder="Adınız ve soyadınız" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
               </div>
               <div>
                 <label htmlFor="hr-email" className="mb-2 block text-[11px] tracking-[0.25em] uppercase text-ink/50">E-posta *</label>
-                <input required id="hr-email" type="email" placeholder="ornek@mail.com" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
+                <input required id="hr-email" name="email" type="email" value={form.email} onChange={onChange} placeholder="ornek@mail.com" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
               </div>
               <div>
                 <label htmlFor="hr-phone" className="mb-2 block text-[11px] tracking-[0.25em] uppercase text-ink/50">Telefon *</label>
-                <input required id="hr-phone" placeholder="05xx xxx xx xx" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
+                <input required id="hr-phone" name="phone" value={form.phone} onChange={onChange} placeholder="05xx xxx xx xx" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
               </div>
               <div>
                 <label htmlFor="hr-position" className="mb-2 block text-[11px] tracking-[0.25em] uppercase text-ink/50">Pozisyon</label>
-                <input id="hr-position" placeholder="Başvurmak istediğiniz pozisyon" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
+                <input id="hr-position" name="position" value={form.position} onChange={onChange} placeholder="Başvurmak istediğiniz pozisyon" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors" />
               </div>
               <div>
                 <label htmlFor="hr-summary" className="mb-2 block text-[11px] tracking-[0.25em] uppercase text-ink/50">Özgeçmiş özeti *</label>
-                <textarea required id="hr-summary" rows={4} placeholder="Deneyim ve yetkinliklerinizi kısaca yazın" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors resize-none" />
+                <textarea required id="hr-summary" name="summary" value={form.summary} onChange={onChange} rows={4} placeholder="Deneyim ve yetkinliklerinizi kısaca yazın" className="w-full bg-white border border-gray-200 px-4 py-3 text-sm focus:border-gold outline-none transition-colors resize-none" />
+              </div>
+              <div>
+                <label htmlFor="hr-cv" className="mb-2 block text-[11px] tracking-[0.25em] uppercase text-ink/50">CV Yükle (PDF / Word, max 5 MB)</label>
+                <label htmlFor="hr-cv" className="flex cursor-pointer items-center gap-3 border border-dashed border-gray-300 bg-white px-4 py-3 text-sm text-ink/70 hover:border-gold transition-colors">
+                  <Upload size={16} className="text-gold" />
+                  <span>{cvFile ? cvFile.name : 'Dosya seçin'}</span>
+                  <input id="hr-cv" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="sr-only" onChange={(event) => setCvFile(event.target.files?.[0] || null)} />
+                </label>
               </div>
               <KvkkConsentCheckbox
                 checked={kvkkAccepted}
@@ -81,12 +123,16 @@ export default function StarlifeInsanKaynaklari() {
                 id="hr-kvkk-consent"
               />
               {consentError && (
-                <p className="text-pomegranate text-sm">Devam etmek için KVKK aydınlatma metnini onaylamanız gerekmektedir.</p>
+                <p className="text-pomegranate text-sm" role="alert">Devam etmek için KVKK aydınlatma metnini onaylamanız gerekmektedir.</p>
               )}
-              <button type="submit" className="bg-gold text-ink font-bold px-8 py-3 w-full tracking-widest text-xs uppercase hover:bg-ink hover:text-gold transition-colors duration-300 flex items-center justify-center gap-3">
-                Gönder <Send size={14} />
+              <button type="submit" disabled={submitting} className="bg-gold text-ink font-bold px-8 py-3 w-full tracking-widest text-xs uppercase hover:bg-ink hover:text-gold transition-colors duration-300 flex items-center justify-center gap-3 disabled:opacity-60">
+                {submitting ? 'Gönderiliyor...' : <>Gönder <Send size={14} /></>}
               </button>
-              {submitted && <p className="text-gold text-sm">Başvurunuz Alındı</p>}
+              {status === 'success' && <p className="text-gold text-sm" role="status">Başvurunuz alındı. En kısa sürede sizinle iletişime geçeceğiz.</p>}
+              {status === 'config' && <p className="text-pomegranate text-sm" role="alert">Başvuru servisi yapılandırılmamış. Lütfen iletisim@starlifeinsaat.com adresine CV gönderin.</p>}
+              {status && status !== 'success' && status !== 'config' && (
+                <p className="text-pomegranate text-sm" role="alert">{status === 'failed' ? 'Başvuru gönderilemedi. Lütfen tekrar deneyin.' : status}</p>
+              )}
             </div>
           </motion.form>
         </div>

@@ -80,6 +80,24 @@ export const settingsSchema = z.object({
   group_name: optionalText,
 });
 
+export const taahhutSchema = z.object({
+  title: z.string().trim().min(2, 'Başlık zorunludur.'),
+  slug: z.string().trim().min(2, 'Slug zorunludur.'),
+  description: optionalText,
+  status: z.string().trim().min(1, 'Durum zorunludur.'),
+  year: optionalText,
+  tag: optionalText,
+  location: optionalText,
+  institution: optionalText,
+  units: z.coerce.number().int().optional(),
+  sqm: z.coerce.number().int().optional(),
+  sqm_label: optionalText,
+  cover_image: optionalUrl,
+  images: z.array(z.string().trim().url('Geçerli bir URL girin.')).nullable().optional(),
+  order_index: z.coerce.number().int().min(0).optional(),
+  active: z.boolean().optional(),
+});
+
 export const resourceSchemas = {
   projects: projectSchema,
   blog: blogSchema,
@@ -87,4 +105,5 @@ export const resourceSchemas = {
   team: teamSchema,
   map: mapLocationSchema,
   settings: settingsSchema,
+  taahhut: taahhutSchema,
 };

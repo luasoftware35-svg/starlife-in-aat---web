@@ -8,7 +8,7 @@ import PageHero from '../../components/shared/PageHero';
 import Seo from '../../components/seo/Seo';
 import { STARLIFE_NAV } from '../../mock/mock';
 import { TAAHHUT_PROJECTS } from '../../mock/taahhutProjects';
-import { slugify } from '../../lib/supabase/content';
+import { slugify, useTaahhutProjects } from '../../lib/supabase/content';
 import { buildBreadcrumbSchema, buildProjectSchema } from '../../lib/seo/schema';
 import { buildCanonical } from '../../lib/seo/siteConfig';
 
@@ -17,11 +17,13 @@ export default function StarlifeTaahhutDetail() {
   const { pathname } = useLocation();
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
+  const taahhutProjects = useTaahhutProjects(TAAHHUT_PROJECTS);
+
   const project = useMemo(
-    () => TAAHHUT_PROJECTS.find(
+    () => taahhutProjects.find(
       (item) => item.slug === slug || slugify(item.title) === slug,
     ),
-    [slug],
+    [slug, taahhutProjects],
   );
 
   const gallery = useMemo(() => {
@@ -31,8 +33,8 @@ export default function StarlifeTaahhutDetail() {
 
   const related = useMemo(() => {
     if (!project) return [];
-    return TAAHHUT_PROJECTS.filter((item) => item.id !== project.id).slice(0, 4);
-  }, [project]);
+    return taahhutProjects.filter((item) => item.id !== project.id).slice(0, 4);
+  }, [project, taahhutProjects]);
 
   const lightboxImage = lightboxIndex !== null ? gallery[lightboxIndex] : null;
 
