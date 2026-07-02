@@ -34,7 +34,7 @@ const team = [
   {
     name: 'Ayetullah Yağmur',
     title: 'Genel Koordinatör',
-    image: teamFallbackImage('Ayetullah Yağmur'),
+    image: '',
     bio: 'Genel koordinatör olarak grup şirketleri arası operasyonel uyumu sağlamak, proje süreçlerini koordine etmek ve kurumsal hedeflerin sahada etkin biçimde uygulanmasına liderlik etmektedir.',
   },
 ];

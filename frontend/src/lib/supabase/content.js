@@ -153,11 +153,13 @@ export function mapHeroSlide(row) {
 }
 
 export function mapTeamMember(row) {
+  const hasPhoto = Boolean(row.image || row.image_url);
+  const useFallback = row.name !== 'Ayetullah Yağmur';
   return {
     id: row.id || row.user_id || row.name,
     name: row.name,
     title: row.title || row.role || '',
-    image: row.image || row.image_url || teamFallbackImage(row.name),
+    image: hasPhoto ? (row.image || row.image_url) : (useFallback ? teamFallbackImage(row.name) : ''),
     bio: row.bio || row.biography || row.description || '',
   };
 }

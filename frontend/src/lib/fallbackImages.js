@@ -6,7 +6,6 @@ export const TEAM_FALLBACK_IMAGES = {
   'Numan Erdoğan': 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=800&w=600',
   'Ahmet Erdoğan': 'https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=800&w=600',
   'Mahmut Erdoğan': 'https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=800&w=600',
-  'Ayetullah Yağmur': 'https://images.pexels.com/photos/3777943/pexels-photo-3777943.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=800&w=600',
 };
 
 export const MAP_FALLBACK_IMAGES = {
