@@ -30,6 +30,7 @@ export const blogSchema = z.object({
   title: z.string().trim().min(2, 'Blog başlığı zorunludur.'),
   slug: z.string().trim().min(2, 'Slug zorunludur.'),
   excerpt: optionalText,
+  category: optionalText,
   cover_image: optionalUrl,
   content: optionalText,
   published: z.boolean().optional(),

@@ -5,39 +5,9 @@ import HoldingHeader from '../components/holding/HoldingHeader';
 import HoldingFooter from '../components/holding/HoldingFooter';
 import PageHero from '../components/shared/PageHero';
 import { mapTeamMember, useSupabaseRows } from '../lib/supabase/content';
-import { teamFallbackImage } from '../lib/fallbackImages';
+import { isSupabaseConfigured } from '../lib/supabase/client';
 
 const EASE = [0.22, 1, 0.36, 1];
-
-const LEADER_NAME = 'Numan Erdoğan';
-const BOARD_ORDER = ['Ahmet Erdoğan', 'Mahmut Erdoğan', 'Ayetullah Yağmur'];
-
-const team = [
-  {
-    name: 'Numan Erdoğan',
-    title: 'CEO & Kurucu',
-    image: teamFallbackImage('Numan Erdoğan'),
-    bio: 'Starlife İnşaat vizyonunu şekillendiren liderlik anlayışıyla, kaliteli ve güvenli yaşam alanları üretme hedefi doğrultusunda çalışmalarını sürdürmektedir.',
-  },
-  {
-    name: 'Ahmet Erdoğan',
-    title: 'Yönetim Kurulu Üyesi',
-    image: teamFallbackImage('Ahmet Erdoğan'),
-    bio: 'Yönetim kurulu üyesi olarak proje geliştirme, kurumsal büyüme ve sürdürülebilir yapı standartlarının güçlendirilmesi süreçlerinde aktif rol almaktadır.',
-  },
-  {
-    name: 'Mahmut Erdoğan',
-    title: 'Yönetim Kurulu Üyesi',
-    image: teamFallbackImage('Mahmut Erdoğan'),
-    bio: 'Yönetim kurulu üyesi olarak operasyonel süreçlerin geliştirilmesi, kalite standartlarının korunması ve uzun vadeli değer üreten projelerin hayata geçirilmesine katkı sunmaktadır.',
-  },
-  {
-    name: 'Ayetullah Yağmur',
-    title: 'Genel Koordinatör',
-    image: '',
-    bio: 'Genel koordinatör olarak grup şirketleri arası operasyonel uyumu sağlamak, proje süreçlerini koordine etmek ve kurumsal hedeflerin sahada etkin biçimde uygulanmasına liderlik etmektedir.',
-  },
-];
 
 const container = {
   hidden: {},
@@ -48,6 +18,12 @@ const card = {
   hidden: { opacity: 0, y: 28 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
 };
+
+function splitTeamMembers(members) {
+  if (!members.length) return { leader: null, board: [] };
+  const sorted = [...members].sort((a, b) => (a.order_index ?? 999) - (b.order_index ?? 999));
+  return { leader: sorted[0], board: sorted.slice(1) };
+}
 
 function TeamCard({ member, onSelect, className = '' }) {
   return (
@@ -77,23 +53,6 @@ function TeamCard({ member, onSelect, className = '' }) {
   );
 }
 
-function mergeTeamMembers(members) {
-  const names = new Set(members.map((member) => member.name));
-  const extras = team
-    .filter((member) => !names.has(member.name))
-    .map((member) => ({ ...member, id: member.name }));
-
-  return [...members, ...extras];
-}
-function splitTeamMembers(members) {
-  const leader = members.find((member) => member.name === LEADER_NAME) || members[0];
-  const board = BOARD_ORDER
-    .map((name) => members.find((member) => member.name === name))
-    .filter(Boolean);
-
-  return { leader, board };
-}
-
 function TeamImage({ src, alt }) {
   const [failed, setFailed] = useState(false);
 
@@ -120,10 +79,9 @@ export default function KurumsalYonetim() {
   const teamMembers = useSupabaseRows(
     'team_members',
     { orderBy: 'order_index', ascending: true, filters: [{ column: 'active', value: true }] },
-    team,
+    [],
     mapTeamMember,
   );
-  const displayMembers = useMemo(() => mergeTeamMembers(teamMembers), [teamMembers]);
 
   useEffect(() => {
     if (!selectedMember) return undefined;
@@ -133,7 +91,7 @@ export default function KurumsalYonetim() {
     };
   }, [selectedMember]);
 
-  const { leader, board } = splitTeamMembers(displayMembers);
+  const { leader, board } = useMemo(() => splitTeamMembers(teamMembers), [teamMembers]);
 
   return (
     <div className="bg-mist min-h-screen text-ink">
@@ -157,38 +115,47 @@ export default function KurumsalYonetim() {
               Vizyonumuzu Şekillendiren İsimler
             </h2>
             <p className="text-stone-500 font-light text-base mt-4 max-w-xl leading-relaxed">
-              Starlife İnşaat'ı bugünlere taşıyan deneyimli liderlik kadromuz.
+              Starlife İnşaat&apos;ı bugünlere taşıyan deneyimli liderlik kadromuz. Bu liste admin panelindeki
+              {' '}<strong className="font-medium text-ink">Yönetim Kurulu</strong> kayıtlarından gelir.
             </p>
           </div>
 
-          <motion.div
-            variants={container}
-            initial="hidden"
-            animate="visible"
-            className="max-w-5xl mx-auto mt-12 md:mt-16"
-          >
-            {leader && (
-              <div className="flex justify-center mb-10 md:mb-14">
-                <TeamCard
-                  member={leader}
-                  onSelect={setSelectedMember}
-                  className="w-full max-w-sm"
-                />
-              </div>
-            )}
-
-            {board.length > 0 && (
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-10 lg:gap-12">
-                {board.map((member) => (
+          {teamMembers.length === 0 ? (
+            <div className="rounded-2xl border border-stone-200 bg-white px-6 py-12 text-center text-stone-500">
+              {isSupabaseConfigured
+                ? 'Henüz yönetim kurulu üyesi eklenmemiş. Admin panelinden Yönetim bölümüne kayıt ekleyin.'
+                : 'Supabase yapılandırması bulunamadı.'}
+            </div>
+          ) : (
+            <motion.div
+              variants={container}
+              initial="hidden"
+              animate="visible"
+              className="max-w-5xl mx-auto mt-12 md:mt-16"
+            >
+              {leader && (
+                <div className="flex justify-center mb-10 md:mb-14">
                   <TeamCard
-                    key={member.id || member.name}
-                    member={member}
+                    member={leader}
                     onSelect={setSelectedMember}
+                    className="w-full max-w-sm"
                   />
-                ))}
-              </div>
-            )}
-          </motion.div>
+                </div>
+              )}
+
+              {board.length > 0 && (
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-10 lg:gap-12">
+                  {board.map((member) => (
+                    <TeamCard
+                      key={member.id || member.name}
+                      member={member}
+                      onSelect={setSelectedMember}
+                    />
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
         </div>
       </section>
 

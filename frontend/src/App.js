@@ -43,7 +43,6 @@ const SubsiteAbout = lazy(() => import('./pages/SubsiteAbout'));
 const SubsiteProjects = lazy(() => import('./pages/SubsiteProjects'));
 
 const AdminRouteGuard = lazy(() => import('./components/admin/AdminRouteGuard'));
-const AdminContentPage = lazy(() => import('./pages/admin/AdminContentPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
 const AdminLogin = lazy(() => import('./pages/admin/AdminLogin'));
@@ -162,11 +161,6 @@ function App() {
               <Route path="ayarlar" element={<SuspensePage><AdminSettings /></SuspensePage>} />
               <Route path="ayarlar/yeni" element={<SuspensePage><AdminResourceForm resource="settings" /></SuspensePage>} />
               <Route path="ayarlar/duzenle/:id" element={<SuspensePage><AdminResourceForm resource="settings" /></SuspensePage>} />
-              <Route path="sirketler" element={<SuspensePage><AdminContentPage type="companies" /></SuspensePage>} />
-              <Route path="header" element={<SuspensePage><AdminContentPage type="header" /></SuspensePage>} />
-              <Route path="footer" element={<SuspensePage><AdminContentPage type="footer" /></SuspensePage>} />
-              <Route path="hakkimizda" element={<SuspensePage><AdminContentPage type="about" /></SuspensePage>} />
-              <Route path="iletisim" element={<SuspensePage><AdminContentPage type="contact" /></SuspensePage>} />
               <Route path="taahhut" element={<SuspensePage><AdminResourceList resource="taahhut" /></SuspensePage>} />
               <Route path="taahhut/yeni" element={<SuspensePage><AdminResourceForm resource="taahhut" /></SuspensePage>} />
               <Route path="taahhut/duzenle/:id" element={<SuspensePage><AdminResourceForm resource="taahhut" /></SuspensePage>} />
@@ -184,9 +178,6 @@ function App() {
               <Route path="settings" element={<SuspensePage><AdminSettings /></SuspensePage>} />
               <Route path="settings/new" element={<SuspensePage><AdminResourceForm resource="settings" /></SuspensePage>} />
               <Route path="settings/edit/:id" element={<SuspensePage><AdminResourceForm resource="settings" /></SuspensePage>} />
-              <Route path="companies" element={<SuspensePage><AdminContentPage type="companies" /></SuspensePage>} />
-              <Route path="about" element={<SuspensePage><AdminContentPage type="about" /></SuspensePage>} />
-              <Route path="contact" element={<SuspensePage><AdminContentPage type="contact" /></SuspensePage>} />
               <Route path="media" element={<SuspensePage><AdminMedia /></SuspensePage>} />
             </Route>
           </Route>

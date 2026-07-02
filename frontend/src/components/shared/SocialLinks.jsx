@@ -1,6 +1,6 @@
 import React from 'react';
 import { Facebook, Instagram, Twitter, Linkedin, Youtube } from 'lucide-react';
-import { SOCIALS } from '../../mock/mock';
+import { useSocials } from '../../lib/siteSettings';
 
 const iconMap = {
   Facebook: Facebook,
@@ -11,14 +11,18 @@ const iconMap = {
 };
 
 export default function SocialLinks({ vertical = false, size = 16, className = '', theme = 'light' }) {
+  const socials = useSocials();
   const styles = theme === 'dark'
     ? 'border-white/20 text-white/70 hover:text-pomegranate-light hover:border-pomegranate-light'
     : 'border-ink/15 text-ink/60 hover:text-white hover:border-pomegranate hover:bg-pomegranate';
 
+  if (!socials.length) return null;
+
   return (
     <div className={`flex ${vertical ? 'flex-col' : 'flex-row'} gap-3 ${className}`}>
-      {SOCIALS.map((s) => {
+      {socials.map((s) => {
         const Icon = iconMap[s.name];
+        if (!Icon || !s.href) return null;
         return (
           <a
             key={s.name}

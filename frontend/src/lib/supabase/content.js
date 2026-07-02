@@ -98,11 +98,16 @@ export function useSupabaseRows(table, options, fallbackRows = [], mapper = (row
   useEffect(() => {
     let mounted = true;
 
+    if (!supabase) {
+      setRows(fallback);
+      return () => {
+        mounted = false;
+      };
+    }
+
     fetchRows(table, stableOptions)
       .then((data) => {
-        if (mounted && data.length) {
-          setRows(data.map(mapper));
-        }
+        if (mounted) setRows((data || []).map(mapper));
       })
       .catch(() => {
         if (mounted) setRows(fallback);
@@ -161,6 +166,7 @@ export function mapTeamMember(row) {
     title: row.title || row.role || '',
     image: hasPhoto ? (row.image || row.image_url) : (useFallback ? teamFallbackImage(row.name) : ''),
     bio: row.bio || row.biography || row.description || '',
+    order_index: Number(row.order_index ?? 0),
   };
 }
 

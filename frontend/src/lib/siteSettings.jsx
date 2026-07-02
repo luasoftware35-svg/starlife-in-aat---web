@@ -1,12 +1,21 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { COMPANY as DEFAULT_COMPANY } from '../mock/mock';
+import { COMPANY as DEFAULT_COMPANY, SOCIALS as DEFAULT_SOCIALS } from '../mock/mock';
 import { supabase } from './supabase/client';
 
 const SiteSettingsContext = createContext({
   company: DEFAULT_COMPANY,
+  socials: DEFAULT_SOCIALS,
   settings: {},
   loading: false,
 });
+
+const SOCIAL_KEY_MAP = {
+  'social.facebook': 'Facebook',
+  'social.instagram': 'Instagram',
+  'social.twitter': 'Twitter',
+  'social.linkedin': 'Linkedin',
+  'social.youtube': 'Youtube',
+};
 
 const SETTING_MAP = {
   'contact.email': 'email',
@@ -26,6 +35,17 @@ function mergeCompany(defaults, settingsMap) {
     merged[field] = field === 'founded' ? Number(value) || defaults.founded : value;
   });
   return merged;
+}
+
+function mergeSocials(defaults, settingsMap) {
+  const fromSettings = Object.entries(SOCIAL_KEY_MAP)
+    .map(([key, name]) => {
+      const href = settingsMap[key];
+      return href ? { name, href } : null;
+    })
+    .filter(Boolean);
+
+  return fromSettings.length ? fromSettings : defaults;
 }
 
 async function fetchSettingsMap() {
@@ -54,7 +74,8 @@ export function SiteSettingsProvider({ children }) {
   }, []);
 
   const company = useMemo(() => mergeCompany(DEFAULT_COMPANY, settings), [settings]);
-  const value = useMemo(() => ({ company, settings, loading }), [company, settings, loading]);
+  const socials = useMemo(() => mergeSocials(DEFAULT_SOCIALS, settings), [settings]);
+  const value = useMemo(() => ({ company, socials, settings, loading }), [company, socials, settings, loading]);
 
   return (
     <SiteSettingsContext.Provider value={value}>
@@ -69,6 +90,10 @@ export function useSiteSettings() {
 
 export function useCompany() {
   return useContext(SiteSettingsContext).company;
+}
+
+export function useSocials() {
+  return useContext(SiteSettingsContext).socials;
 }
 
 export { fetchSettingsMap, mergeCompany };

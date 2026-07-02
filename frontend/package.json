@@ -72,6 +72,7 @@
     "start": "craco start",
     "start:admin-api": "node server/admin-api.js",
     "build": "node scripts/generate-sitemap.js && craco build",
+    "sync:cms": "node scripts/sync-cms-to-supabase.cjs",
     "test": "craco test"
   },
   "browserslist": {
